@@ -1,0 +1,32 @@
+{
+  "name": "vue-ganttastic",
+  "version": "0.9.0",
+  "description": "A simple and customizable Gantt chart component for Vue.js",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "bili --name index --plugin vue --vue.css false"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "keywords": [
+    "gantt",
+    "chart",
+    "bar",
+    "diagram",
+    "vue",
+    "vuejs",
+    "ganttastic"
+  ],
+  "author": "Marko Zunic",
+  "license": "MIT",
+  "devDependencies": {
+    "bili": "^4.8.1",
+    "rollup-plugin-vue": "^5.1.6",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "moment": "^2.24.0"
+  }
+}
