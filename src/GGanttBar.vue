@@ -151,6 +151,10 @@ export default {
       this.onBarEvent(e, this)
     },
 
+    onContextmenu(e){
+      this.onBarEvent(e, this)
+    },
+
     onMousedown(e){
       e.preventDefault()
       if(e.button === 2 || this.barConfig.immobile){
