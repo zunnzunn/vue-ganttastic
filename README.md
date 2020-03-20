@@ -1,4 +1,5 @@
 # vue-ganttastic
+<img src="https://user-images.githubusercontent.com/28678851/77186503-45358300-6ad3-11ea-9392-7f670eb1ca8c.png" width="600"/>
 
 A simple and easy-to-use Gantt chart component for Vue.js
 
@@ -17,7 +18,7 @@ Use <code>g-gantt-chart</code> in your template, pass the desired chart start an
 to the default template slot.  
 Pass an array containing your bar objects to every row using the <code>bars</code> prop, while specifying the name of the properties in your bar objects that stand for the bar start and bar end time using the props <code>bar-start</code> and <code>bar-end</code>  
 
-For more detailed information, such as how to style the bars or additional configuration options, please refer to the [docs]() on the project's homepage (coming soon).
+For more detailed information, such as how to style the bars or additional configuration options, please refer to the [docs](https://infectoone.github.io/vue-ganttastic-homepage/#/docs) on the project's homepage (coming soon).
 
 The following code showcases a simple usage example in a .vue SFC (Single File Component)
 ```html
