@@ -3,6 +3,9 @@
 
 A simple and easy-to-use Gantt chart component for Vue.js
 
+## Homepage
+[Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
+
 ## Installation
 If you use <kbd>npm</kbd> in your project, you can install vue-ganttastic simply with:
 ```
