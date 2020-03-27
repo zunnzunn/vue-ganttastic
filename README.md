@@ -96,6 +96,18 @@ export default {
 ## Contributing
 Pull requests are warmly welcomed, while every major change or proposal ought to be discussed in an issue first. As the project is still new, I will gladly accept suggestions, proposals, contributions etc.
 
+### Contributing - How to run the project
+  1. Clone the project
+  2. Install the Vue CLI service, if you don't already have it installed:
+      ```
+        npm install -g @vue/cli
+        npm install -g @vue/cli-service-global
+      ```
+  3. <code>Playground.vue</code> is a dedicated Vue SFC where all    Vue-Ganttastic components can be
+     played around with and tested out. Get it running using:
+      ```
+        vue serve src/Playground.vue
+      ```
 ## Dependencies
 [Moment.js](https://momentjs.com/)
 

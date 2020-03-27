@@ -78,7 +78,9 @@ export default {
                               // or is it dragged along some other bar from the same bundle
       cursorOffsetX: 0,
       mousemoveCallback: null,  // gets initialized when starting to drag
-                                // possible values: drag, dragByHandleLeft, dragByHandleRight
+                                // possible values: drag, dragByHandleLeft, dragByHandleRight,
+      barStartBeforeDrag: null,
+      barEndBeforeDrag: null,
     }
   },
 
@@ -178,6 +180,8 @@ export default {
     /* --------------------------------------------------------- */
     initDrag(e){  // "e" must be the mousedown event
       this.isDragging = true
+      this.barStartBeforeDrag = this.bar[this.barStart]
+      this.barEndBeforeDrag = this.bar[this.barEnd]
       let barX = this.$refs["g-gantt-bar"].getBoundingClientRect().left
       this.cursorOffsetX = e.clientX - barX
       let mousedownType = e.target.className
@@ -250,6 +254,11 @@ export default {
         this.onDragendBar(e, this)
         this.isMainBarOfDrag = false
       }
+    },
+
+    snapBack(){
+      this.barStartMoment = this.barStartBeforeDrag
+      this.barEndMoment = this.barEndBeforeDrag
     },
 
     manageOverlapping(){

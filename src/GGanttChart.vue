@@ -56,7 +56,8 @@ export default {
     grid: Boolean,
     highlightedHours: {type: Array, default: () => []},
     width: {type: String, default: "100%"},   // the total width of the entire ganttastic component in %
-    pushOnOverlap: {type: Boolean}
+    pushOnOverlap: {type: Boolean},
+    snapBackOnOverlap: {type: Boolean},
   },
 
   data(){
@@ -126,14 +127,33 @@ export default {
       })
     },
 
+    shouldSnapBackBar(ganttBar){
+      if(this.snapBackOnOverlap){
+        let {overlapBar} = ganttBar.getOverlapBarAndType(ganttBar.bar)
+        return !!overlapBar
+      }
+      return false
+    },
+
+    snapBackBundleIfNeeded(ganttBar){
+      let barsFromBundle = this.getBarsFromBundle(ganttBar.barConfig.bundle)
+      if(this.shouldSnapBackBar(ganttBar) || barsFromBundle.some(gBar => this.shouldSnapBackBar(gBar))){
+        ganttBar.snapBack()
+        barsFromBundle.forEach(gBar => gBar.snapBack())
+        return true
+      }
+      return false
+    },
+
     onBarEvent(e, ganttBar){
       this.$emit(`${e.type}-bar`, {event: e, bar: ganttBar.bar})
     },
     
     onDragendBar(e, ganttBar){
-      let movedBarsInDrag = this.movedBarsInDrag
+      let didSnapBack = this.snapBackBundleIfNeeded(ganttBar)
+      let movedBars = didSnapBack ? new Set() : this.movedBarsInDrag
       this.movedBarsInDrag = new Set()
-      this.$emit("dragend-bar", {event: e, bar: ganttBar.bar, movedBars: movedBarsInDrag})
+      this.$emit("dragend-bar", {event: e, bar: ganttBar.bar, movedBars})
     },
 
     // ------------------------------------------------------------------------
@@ -260,7 +280,9 @@ export default {
       moveBarsFromBundleOfPushedBar: (bar, minuteDiff, overlapType) => this.moveBarsFromBundleOfPushedBar(bar, minuteDiff, overlapType),
       setDragLimitsOfGanttBar : (ganttBar) => this.setDragLimitsOfGanttBar(ganttBar),
       onBarEvent: (e, ganttBar) => this.onBarEvent(e, ganttBar),
-      onDragendBar: (e, ganttBar) => this.onDragendBar(e, ganttBar)
+      onDragendBar: (e, ganttBar) => this.onDragendBar(e, ganttBar),
+      shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
+      snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar)
     }
   }
 }
