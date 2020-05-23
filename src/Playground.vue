@@ -6,7 +6,7 @@
         :chart-end="chartEnd"
         :grid="grid"
         :hide-timeaxis="hideTimeaxis"
-        :push-on-overlap="false"
+        :push-on-overlap="true"
         snap-back-on-overlap
         :highlighted-hours="highlightedHours"
         :row-label-width="`${rowLabelWidth}%`"
@@ -14,9 +14,6 @@
         :theme="selectedTheme"
       >
         <template v-for="row in rowList">
-          <div style="width: 100%; padding: 5px; background: white;" :key="`div${row.label}`">
-            test
-          </div>
           <g-gantt-row 
             :key="row.label"
             :label="row.label"

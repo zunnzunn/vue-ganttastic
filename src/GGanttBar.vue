@@ -7,6 +7,7 @@
       @mouseenter.stop="onMouseenter($event)"
       @mouseleave.stop ="onMouseleave($event)"
       @mousedown.stop="onMousedown($event)"
+      @click.stop="onClick($event)"
       @dblclick="onDblclick($event)"
       @contextmenu="onContextmenu($event)"
     >
@@ -157,6 +158,14 @@ export default {
       this.onBarEvent(e, this)
     },
 
+    onClick(e){
+      this.onBarEvent(e, this)
+    },
+
+    onDblclick(e) {
+      this.onBarEvent(e, this)
+    },
+
     onMousedown(e){
       e.preventDefault()
       if(e.button === 2 || this.barConfig.immobile){
@@ -165,6 +174,11 @@ export default {
       this.setDragLimitsOfGanttBar(this)
       // initialize the dragging on next mousemove event:
       window.addEventListener("mousemove", this.onFirstMousemove, {once: true})
+      // if next mousemove happens after mouse up (if user just presses mouse button down, then up, without moving):
+      window.addEventListener("mouseup",
+        () => window.removeEventListener("mousemove", this.onFirstMousemove), 
+        {once: true}
+      )
       this.onBarEvent(e, this)
     },
 
