@@ -3,6 +3,7 @@
     class="g-gantt-row"
     ref="g-gantt-row"
     :style="{height: `${$parent.rowHeight}px`}"
+    v-on="$listeners"
   >
     <div 
       class="g-gantt-row-label"
@@ -16,6 +17,8 @@
       class="g-gantt-row-bars-container"
       ref="barContainer"
       :style="barsContainerStyle"
+      @dragover="onDragover($event)"
+      @drop="onDrop($event)"
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
     > 
@@ -42,6 +45,7 @@
 
 <script>
 import GGanttBar from './GGanttBar.vue'
+import moment from 'moment'
 
 export default {
 
@@ -59,7 +63,13 @@ export default {
     highlightOnHover: Boolean,
   },
 
-  inject: ["ganttChartProps", "getThemeColors"],
+  inject: [
+    "ganttChartProps",
+    "getThemeColors",
+    "getHourCount",
+    "getChartStart",
+    "getChartEnd"
+  ],
 
   data(){
     return {
@@ -92,6 +102,19 @@ export default {
   },
 
   methods:{
+
+    onDragover(e) {
+      e.preventDefault()   // enables dropping content on row
+    },
+
+    onDrop(e){
+      let barContainer = this.$refs.barContainer.getBoundingClientRect()
+      let xPos = e.clientX - barContainer.left
+      let hourDiffFromStart = (xPos/barContainer.width) * this.getHourCount()
+      let time = moment(this.getChartStart()).add(hourDiffFromStart, "hours")
+      let bar = this.bars.find(bar => time.isBetween(bar[this.barStart], bar[this.barEnd]))
+      this.$emit("drop", {event: e, bar, time: time.format("YYYY-MM-DD HH:mm:ss")})
+    },
 
     onMouseover(){
       if(this.highlightOnHover){
