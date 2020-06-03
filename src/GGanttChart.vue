@@ -107,7 +107,7 @@ export default {
         this.ganttBarChildrenList.forEach(ganttBarChild => {
           if(ganttBarChild.barConfig.bundle === gGanttBar.barConfig.bundle && ganttBarChild !== gGanttBar){
             ganttBarChild.initDrag(e)
-            this.movedBarsInDrag.add(ganttBarChild)
+            this.movedBarsInDrag.add(ganttBarChild.bar)
           }
         })
       }
@@ -240,11 +240,15 @@ export default {
       let allBarsLeftOrRight = []
       if(side === "left"){
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
-          return gBar.$parent === bar.$parent && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
+          return gBar.$options.name === GGanttBar.name 
+                && gBar.$parent === bar.$parent 
+                && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
         })
       } else {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
-          return gBar.$parent === bar.$parent && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
+          return gBar.$options.name === GGanttBar.name 
+                  && gBar.$parent === bar.$parent 
+                  && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
         })
       }
       if(allBarsLeftOrRight.length > 0){

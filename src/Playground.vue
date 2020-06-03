@@ -12,6 +12,7 @@
         :row-label-width="`${rowLabelWidth}%`"
         :row-height="rowHeight"
         :theme="selectedTheme"
+        @dragend-bar="onDragend($event)"
       >
         <template v-for="row in rowList">
           <g-gantt-row 
@@ -165,6 +166,12 @@ export default {
       ]
     }
   },
+
+  methods: {
+    onDragend(e){
+      console.log(e)
+    }
+  }
 }
 </script>
 

@@ -1,6 +1,6 @@
 {
   "name": "vue-ganttastic",
-  "version": "0.9.6",
+  "version": "0.9.8",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "rollup-plugin-vue": "^5.1.9",
     "vue-template-compiler": "^2.6.11"
   },
-  "dependencies": {
+  "peerDependencies": {
     "moment": "^2.26.0"
   }
 }

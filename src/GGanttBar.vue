@@ -248,6 +248,9 @@ export default {
     },
 
     isPosOutOfDragRange(xStart, xEnd){
+      if(!this.ganttChartProps.pushOnOverlap) {
+        return false
+      }
       if(xStart && this.dragLimitLeft !== null && xStart < this.dragLimitLeft+2){
         return true
       }
