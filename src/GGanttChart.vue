@@ -242,12 +242,14 @@ export default {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return gBar.$options.name === GGanttBar.name 
                 && gBar.$parent === bar.$parent 
+                && gBar.$refs['g-gantt-bar']
                 && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
         })
       } else {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return gBar.$options.name === GGanttBar.name 
                   && gBar.$parent === bar.$parent 
+                  && gBar.$refs['g-gantt-bar']
                   && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
         })
       }
