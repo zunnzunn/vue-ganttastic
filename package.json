@@ -1,6 +1,6 @@
 {
   "name": "vue-ganttastic",
-  "version": "0.9.8",
+  "version": "0.9.11",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "repository": {
     "type": "git",

@@ -79,7 +79,11 @@ export default {
       return GanttasticThemeColors[this.theme] || GanttasticThemeColors.default
     },
 
-    ganttBarChildrenList(){
+  },
+
+  methods: {
+
+    getGanttBarChildrenList(){
       let ganttBarChildren = []
       let ganttRowChildrenList = this.$children.filter(childComp => childComp.$options.name === GGanttRow.name)
       ganttRowChildrenList.forEach(row => {
@@ -87,24 +91,20 @@ export default {
         ganttBarChildren.push(...ganttBarChildrenOfRow)
       })
       return ganttBarChildren
-    }
-
-  },
-
-  methods: {
+    },
 
     getBarsFromBundle(bundleId){
       if(bundleId === undefined || bundleId === null){
         return []
       }
-      return this.ganttBarChildrenList.filter(ganttBarChild => ganttBarChild.barConfig.bundle === bundleId)
+      return this.getGanttBarChildrenList().filter(ganttBarChild => ganttBarChild.barConfig.bundle === bundleId)
     },
 
     initDragOfBarsFromBundle(gGanttBar, e){
       gGanttBar.initDrag(e)
       this.movedBarsInDrag.add(gGanttBar.bar)
       if(gGanttBar.barConfig.bundle !== null && gGanttBar.barConfig.bundle !== undefined){
-        this.ganttBarChildrenList.forEach(ganttBarChild => {
+        this.getGanttBarChildrenList().forEach(ganttBarChild => {
           if(ganttBarChild.barConfig.bundle === gGanttBar.barConfig.bundle && ganttBarChild !== gGanttBar){
             ganttBarChild.initDrag(e)
             this.movedBarsInDrag.add(ganttBarChild.bar)
@@ -119,7 +119,7 @@ export default {
       if(bundleId === undefined || bundleId === null){
         return
       }
-      this.ganttBarChildrenList.forEach(ganttBarChild => {
+      this.getGanttBarChildrenList().forEach(ganttBarChild => {
         if(ganttBarChild.barConfig.bundle === bundleId && ganttBarChild.bar !== pushedBar){
           ganttBarChild.moveBarByMinutesAndPush(minuteDiff, overlapType)
           this.movedBarsInDrag.add(ganttBarChild.bar)
