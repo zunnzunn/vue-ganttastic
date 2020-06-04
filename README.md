@@ -7,13 +7,15 @@ A simple and easy-to-use Gantt chart component for Vue.js
 [Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
 
 ## Installation
-If you use <kbd>npm</kbd> in your project, you can install vue-ganttastic simply with:
+You can install and use Vue-Ganttastic in your project using <kbd>npm</kbd>:
 ```
 npm install vue-ganttastic
 ```
-If you do not use <kbd>npm</kbd> in your project, you may alternatively copy and paste all files from the 
-<code>components</code> folder and
-and import the components <code>GGanttChart</code> and <code>GGanttRow</code> wherever you need them
+
+[Moment.js](https://momentjs.com/) is a peer-dependency of Vue-Ganttastic. In order for Vue-Ganttastic to work correctly, you need to install it in your project:
+```
+npm install moment
+```
 
 ## Basic Usage
 Import the components <code>GGanttChart</code> and <code>GGanttRow</code>.  
@@ -47,7 +49,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
 <script>
 
-import {GGanttChart, GGanttBar} from 'vue-ganttastic'
+import {GGanttChart, GGanttRow} from 'vue-ganttastic'
 
 export default {
 
@@ -55,7 +57,7 @@ export default {
 
   components:{
     GGanttChart,
-    GGanttBar
+    GGanttRow
   },
 
   data(){
@@ -106,7 +108,7 @@ Pull requests are warmly welcomed, while every major change or proposal ought to
         npm install -g @vue/cli
         npm install -g @vue/cli-service-global
       ```
-  3. <code>Playground.vue</code> is a dedicated Vue SFC where all    Vue-Ganttastic components can be
+  3. <code>Playground.vue</code> is a dedicated Vue SFC where all    Vue-Ganttastic features can be
      played around with and tested out. Get it running using:
       ```
         vue serve src/Playground.vue
