@@ -168,7 +168,7 @@ export default {
         return
       }
       for(let side of ["left", "right"]){
-        let [totalGapDistance, bundleBarsOnPath] = this.countGapDistanceToNextImmobileBar(bar, 0, side)
+        let [totalGapDistance, bundleBarsOnPath] = this.countGapDistanceToNextImmobileBar(bar, null, side, false)
         for(let i=0; i< bundleBarsOnPath.length; i++){
           let barFromBundle = bundleBarsOnPath[i].bar
           let gapDist = bundleBarsOnPath[i].gapDistance
@@ -185,9 +185,9 @@ export default {
             })
           })
         }
-        if(totalGapDistance && side === "left"){
+        if(totalGapDistance != null && side === "left"){
           bar.dragLimitLeft = bar.$refs['g-gantt-bar'].offsetLeft -  totalGapDistance
-        } else if(totalGapDistance && side === "right"){
+        } else if(totalGapDistance != null && side === "right"){
           bar.dragLimitRight = bar.$refs['g-gantt-bar'].offsetLeft+ bar.$refs['g-gantt-bar'].offsetWidth + totalGapDistance
         }
       }
@@ -202,7 +202,7 @@ export default {
     // returns the gap distance to the next immobile bar
     // in the row where the given bar (parameter) is (added to gapDistanceSoFar)
     // and a list of all bars on that path that belong to a bundle
-    countGapDistanceToNextImmobileBar(bar, gapDistanceSoFar, side="left"){
+    countGapDistanceToNextImmobileBar(bar, gapDistanceSoFar, side="left", ignoreShadows = true){
       let bundleBarsAndGapDist = bar.barConfig.bundle ? [{bar, gapDistance: gapDistanceSoFar}] : []
       let currentBar = bar
       let nextBar = this.getNextGanttBar(currentBar, side)
@@ -211,7 +211,7 @@ export default {
         while(nextBar){
           let nextBarOffsetRight = nextBar.$refs['g-gantt-bar'].offsetLeft + nextBar.$refs['g-gantt-bar'].offsetWidth
           gapDistanceSoFar += currentBar.$refs['g-gantt-bar'].offsetLeft - nextBarOffsetRight
-          if(nextBar.barConfig.immobile){
+          if(nextBar.barConfig.immobile || (nextBar.barConfig.isShadow && !ignoreShadows)){
             return [gapDistanceSoFar, bundleBarsAndGapDist]
           } else if(nextBar.barConfig.bundle){
             bundleBarsAndGapDist.push({bar: nextBar, gapDistance: gapDistanceSoFar})

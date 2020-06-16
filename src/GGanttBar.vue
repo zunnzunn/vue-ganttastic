@@ -107,7 +107,14 @@ export default {
     },
 
     barConfig(){
-      return this.bar.ganttBarConfig || {}
+      if(this.bar.ganttBarConfig) {
+        return {
+          ...this.bar.ganttBarConfig,
+          background: this.bar.ganttBarConfig.isShadow ? "grey" : this.bar.ganttBarConfig.background || this.bar.ganttBarConfig.backgroundColor,
+          opacity: this.bar.ganttBarConfig.isShadow ? "0.3" : this.bar.ganttBarConfig.opacity
+        }
+      }
+      return {}
     },
 
     barStyle(){ 
@@ -168,17 +175,19 @@ export default {
 
     onMousedown(e){
       e.preventDefault()
-      if(e.button === 2 || this.barConfig.immobile){
+      if(e.button === 2){
         return
       }
-      this.setDragLimitsOfGanttBar(this)
-      // initialize the dragging on next mousemove event:
-      window.addEventListener("mousemove", this.onFirstMousemove, {once: true})
-      // if next mousemove happens after mouse up (if user just presses mouse button down, then up, without moving):
-      window.addEventListener("mouseup",
-        () => window.removeEventListener("mousemove", this.onFirstMousemove), 
-        {once: true}
-      )
+      if(!this.barConfig.immobile && !this.barConfig.isShadow) {
+        this.setDragLimitsOfGanttBar(this)
+        // initialize the dragging on next mousemove event:
+        window.addEventListener("mousemove", this.onFirstMousemove, {once: true})
+        // if next mousemove happens after mouse up (if user just presses mouse button down, then up, without moving):
+        window.addEventListener("mouseup",
+          () => window.removeEventListener("mousemove", this.onFirstMousemove), 
+          {once: true}
+        )
+      }
       this.onBarEvent(e, this)
     },
 
