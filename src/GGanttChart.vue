@@ -128,7 +128,7 @@ export default {
     },
 
     shouldSnapBackBar(ganttBar){
-      if(this.snapBackOnOverlap){
+      if(this.snapBackOnOverlap && ganttBar.barConfig.pushOnOverlap !== false){
         let {overlapBar} = ganttBar.getOverlapBarAndType(ganttBar.bar)
         return !!overlapBar
       }

@@ -288,7 +288,7 @@ export default {
     },
 
     manageOverlapping(){
-      if(!this.ganttChartProps.pushOnOverlap){
+      if(!this.ganttChartProps.pushOnOverlap || this.barConfig.pushOnOverlap === false){
         return
       }
       let currentBar = this.bar
@@ -325,7 +325,7 @@ export default {
       let barEndMoment = moment(bar[this.barEnd])
       let overlapLeft, overlapRight, overlapInBetween
       let overlapBar = this.allBarsInRow.find(otherBar => {
-        if(otherBar === bar){
+        if(otherBar === bar || otherBar.ganttBarConfig.pushOnOverlap === false){
           return false
         }
         let otherBarStart = moment(otherBar[this.barStart])
