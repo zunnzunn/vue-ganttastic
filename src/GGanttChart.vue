@@ -164,7 +164,7 @@ export default {
     // note that if a bar from the same row belongs to a bundle
     // other rows might need to be taken into consideration, too
     setDragLimitsOfGanttBar(bar){
-      if(!this.pushOnOverlap){
+      if(!this.pushOnOverlap || bar.barConfig.pushOnOverlap === false){
         return
       }
       for(let side of ["left", "right"]){

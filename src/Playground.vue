@@ -134,7 +134,7 @@ export default {
               myStart: "2020-03-02 01:00",
               myEnd: "2020-03-02 07:00",
               label: "Bar",
-              ganttBarConfig: {color:"white", backgroundColor: "#5effad"}
+              ganttBarConfig: {color:"white", backgroundColor: "#5effad", pushOnOverlap: false}
             },
             {
               myStart: "2020-03-03 14:00",
