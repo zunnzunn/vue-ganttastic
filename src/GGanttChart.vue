@@ -241,9 +241,10 @@ export default {
       if(side === "left"){
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return gBar.$options.name === GGanttBar.name 
-                && gBar.$parent === bar.$parent 
-                && gBar.$refs['g-gantt-bar']
-                && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.$parent === bar.$parent 
+                  && gBar.$refs['g-gantt-bar']
+                  && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.barConfig.pushOnOverlap !== false
         })
       } else {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
@@ -251,6 +252,7 @@ export default {
                   && gBar.$parent === bar.$parent 
                   && gBar.$refs['g-gantt-bar']
                   && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.barConfig.pushOnOverlap !== false
         })
       }
       if(allBarsLeftOrRight.length > 0){
