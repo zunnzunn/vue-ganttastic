@@ -124,8 +124,8 @@ export default {
         ...(this.barConfig || {}),
         left: `${xStart}px`,
         width: `${xEnd - xStart}px`,
-        height: `${this.ganttChartProps.rowHeight-6}px`,
-        zIndex: this.isDragging ? 2 : 1
+        height: `${this.ganttChartProps.rowHeight - 6}px`,
+        zIndex: this.barConfig.zIndex || (this.isDragging ? 2 : 1)
       }
     },
 
