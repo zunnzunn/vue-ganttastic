@@ -58,6 +58,10 @@ export default {
     width: {type: String, default: "100%"},   // the total width of the entire ganttastic component in %
     pushOnOverlap: {type: Boolean},
     snapBackOnOverlap: {type: Boolean},
+    minGapBetweenBars: {
+      type: Number,
+      default: 0
+    }
   },
 
   data(){
@@ -224,7 +228,7 @@ export default {
         while(nextBar){
           let currentBarOffsetRight = currentBar.$refs['g-gantt-bar'].offsetLeft + currentBar.$refs['g-gantt-bar'].offsetWidth
           gapDistanceSoFar += nextBar.$refs['g-gantt-bar'].offsetLeft - currentBarOffsetRight
-          if(nextBar.barConfig.immobile){
+          if(nextBar.barConfig.immobile || (nextBar.barConfig.isShadow && !ignoreShadows)){
             return [gapDistanceSoFar, bundleBarsAndGapDist]
           } else if(nextBar.barConfig.bundle){
             bundleBarsAndGapDist.push({bar: nextBar, gapDistance: gapDistanceSoFar})
@@ -290,7 +294,8 @@ export default {
       onBarEvent: (e, ganttBar) => this.onBarEvent(e, ganttBar),
       onDragendBar: (e, ganttBar) => this.onDragendBar(e, ganttBar),
       shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
-      snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar)
+      snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
+      getMinGapBetweenBars: () => this.minGapBetweenBars
     }
   }
 }

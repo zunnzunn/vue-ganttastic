@@ -65,7 +65,8 @@ export default {
     "moveBarsFromBundleOfPushedBar",
     "setDragLimitsOfGanttBar",
     "onBarEvent",
-    "onDragendBar"
+    "onDragendBar",
+    "getMinGapBetweenBars",
   ],
 
   data(){
@@ -260,10 +261,10 @@ export default {
       if(!this.ganttChartProps.pushOnOverlap) {
         return false
       }
-      if(xStart && this.dragLimitLeft !== null && xStart < this.dragLimitLeft+2){
+      if(xStart && this.dragLimitLeft !== null && xStart < this.dragLimitLeft + this.getMinGapBetweenBars()){
         return true
       }
-      if(xEnd && this.dragLimitRight !== null && xEnd > this.dragLimitRight-2){
+      if(xEnd && this.dragLimitRight !== null && xEnd > this.dragLimitRight - this.getMinGapBetweenBars()){
         return true
       }
       return false
@@ -301,16 +302,17 @@ export default {
         let overlapEndMoment  = moment(overlapBar[this.barEnd])
         switch(overlapType){
           case "left":
-            minuteDiff = overlapEndMoment.diff(currentStartMoment, "minutes", true)
-            overlapBar[this.barEnd] = currentBar[this.barStart]
+            minuteDiff = overlapEndMoment.diff(currentStartMoment, "minutes", true) + this.getMinGapBetweenBars()
+            overlapBar[this.barEnd] = moment(currentBar[this.barStart]).subtract(this.getMinGapBetweenBars(), "minutes", true)
             overlapBar[this.barStart] = overlapStartMoment.subtract(minuteDiff, "minutes", true)
             break
           case "right":
-            minuteDiff = currentEndMoment.diff(overlapStartMoment, "minutes", true)
-            overlapBar[this.barStart] = currentBar[this.barEnd]
+            minuteDiff = currentEndMoment.diff(overlapStartMoment, "minutes", true) + this.getMinGapBetweenBars()
+            overlapBar[this.barStart] = moment(currentBar[this.barEnd]).add(this.getMinGapBetweenBars(), "minutes", true)
             overlapBar[this.barEnd] = overlapEndMoment.add(minuteDiff, "minutes", true)
             break
           default:
+            // eslint-disable-next-line
             console.warn("One bar is inside of the other one! This should never occur while push-on-overlap is active!")
             return
         }
@@ -353,6 +355,7 @@ export default {
           this.barEndMoment = moment(this.barEndMoment).add(minuteCount, "minutes", true)
           break
         default:
+          // eslint-disable-next-line
           console.warn("wrong direction in moveBarByMinutesAndPush")
           return
       }
