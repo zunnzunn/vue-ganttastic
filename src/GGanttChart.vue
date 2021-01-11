@@ -224,7 +224,7 @@ export default {
         while(nextBar){
           let currentBarOffsetRight = currentBar.$refs['g-gantt-bar'].offsetLeft + currentBar.$refs['g-gantt-bar'].offsetWidth
           gapDistanceSoFar += nextBar.$refs['g-gantt-bar'].offsetLeft - currentBarOffsetRight
-          if(nextBar.barConfig.immobile){
+          if(nextBar.barConfig.immobile || (nextBar.barConfig.isShadow && !ignoreShadows)){
             return [gapDistanceSoFar, bundleBarsAndGapDist]
           } else if(nextBar.barConfig.bundle){
             bundleBarsAndGapDist.push({bar: nextBar, gapDistance: gapDistanceSoFar})

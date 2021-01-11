@@ -303,12 +303,12 @@ export default {
           case "left":
             minuteDiff = overlapEndMoment.diff(currentStartMoment, "minutes", true)
             overlapBar[this.barEnd] = currentBar[this.barStart]
-            overlapBar[this.barStart] = overlapStartMoment.subtract(minuteDiff, "minutes", true)
+            overlapBar[this.barStart] = overlapStartMoment.subtract(minuteDiff, "minutes", true).format("YYYY-MM-DD HH:mm:ss")
             break
           case "right":
             minuteDiff = currentEndMoment.diff(overlapStartMoment, "minutes", true)
             overlapBar[this.barStart] = currentBar[this.barEnd]
-            overlapBar[this.barEnd] = overlapEndMoment.add(minuteDiff, "minutes", true)
+            overlapBar[this.barEnd] = overlapEndMoment.add(minuteDiff, "minutes", true).format("YYYY-MM-DD HH:mm:ss")
             break
           default:
             console.warn("One bar is inside of the other one! This should never occur while push-on-overlap is active!")
