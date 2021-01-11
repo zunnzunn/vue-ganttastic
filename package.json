@@ -28,7 +28,7 @@
   "devDependencies": {
     "bili": "^4.10.0",
     "rollup-plugin-vue": "^5.1.9",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.10"
   },
   "peerDependencies": {
     "moment": "^2.26.0"

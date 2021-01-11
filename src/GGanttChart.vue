@@ -128,7 +128,7 @@ export default {
     },
 
     shouldSnapBackBar(ganttBar){
-      if(this.snapBackOnOverlap){
+      if(this.snapBackOnOverlap && ganttBar.barConfig.pushOnOverlap !== false){
         let {overlapBar} = ganttBar.getOverlapBarAndType(ganttBar.bar)
         return !!overlapBar
       }
@@ -164,7 +164,7 @@ export default {
     // note that if a bar from the same row belongs to a bundle
     // other rows might need to be taken into consideration, too
     setDragLimitsOfGanttBar(bar){
-      if(!this.pushOnOverlap){
+      if(!this.pushOnOverlap || bar.barConfig.pushOnOverlap === false){
         return
       }
       for(let side of ["left", "right"]){
@@ -241,9 +241,10 @@ export default {
       if(side === "left"){
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return gBar.$options.name === GGanttBar.name 
-                && gBar.$parent === bar.$parent 
-                && gBar.$refs['g-gantt-bar']
-                && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.$parent === bar.$parent 
+                  && gBar.$refs['g-gantt-bar']
+                  && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.barConfig.pushOnOverlap !== false
         })
       } else {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
@@ -251,6 +252,7 @@ export default {
                   && gBar.$parent === bar.$parent 
                   && gBar.$refs['g-gantt-bar']
                   && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
+                  && gBar.barConfig.pushOnOverlap !== false
         })
       }
       if(allBarsLeftOrRight.length > 0){
