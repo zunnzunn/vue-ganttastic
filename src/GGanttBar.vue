@@ -303,13 +303,13 @@ export default {
         switch(overlapType){
           case "left":
             minuteDiff = overlapEndMoment.diff(currentStartMoment, "minutes", true) + this.getMinGapBetweenBars()
-            overlapBar[this.barEnd] = moment(currentBar[this.barStart]).subtract(this.getMinGapBetweenBars(), "minutes", true)
-            overlapBar[this.barStart] = overlapStartMoment.subtract(minuteDiff, "minutes", true)
+            overlapBar[this.barEnd] = currentStartMoment.subtract(this.getMinGapBetweenBars(), "minutes", true).format("YYYY-MM-DD HH:mm:ss")
+            overlapBar[this.barStart] = overlapStartMoment.subtract(minuteDiff, "minutes", true).format("YYYY-MM-DD HH:mm:ss")
             break
           case "right":
             minuteDiff = currentEndMoment.diff(overlapStartMoment, "minutes", true) + this.getMinGapBetweenBars()
-            overlapBar[this.barStart] = moment(currentBar[this.barEnd]).add(this.getMinGapBetweenBars(), "minutes", true)
-            overlapBar[this.barEnd] = overlapEndMoment.add(minuteDiff, "minutes", true)
+            overlapBar[this.barStart] = currentEndMoment.add(this.getMinGapBetweenBars(), "minutes", true).format("YYYY-MM-DD HH:mm:ss")
+            overlapBar[this.barEnd] = overlapEndMoment.add(minuteDiff, "minutes", true).format("YYYY-MM-DD HH:mm:ss")
             break
           default:
             // eslint-disable-next-line

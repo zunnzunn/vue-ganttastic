@@ -52,8 +52,8 @@ export default {
     rowLabelWidth: {type: String, default: "10%"},
     rowHeight: {type: Number, default: 40},
     locale: {type: String, default: "en"},
-    theme: String,
-    grid: Boolean,
+    theme: {type: String},
+    grid: {type: Boolean},
     highlightedHours: {type: Array, default: () => []},
     width: {type: String, default: "100%"},   // the total width of the entire ganttastic component in %
     pushOnOverlap: {type: Boolean},
