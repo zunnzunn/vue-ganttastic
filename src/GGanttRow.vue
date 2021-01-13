@@ -18,6 +18,7 @@
       ref="barContainer"
       :style="barsContainerStyle"
       @dragover="onDragover($event)"
+      @dragleave="onDragleave($event)"
       @drop="onDrop($event)"
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
@@ -105,7 +106,15 @@ export default {
 
     onDragover(e) {
       e.preventDefault()   // enables dropping content on row
+      if(this.highlightOnHover){
+        this.$refs["g-gantt-row"].style.backgroundColor = this.getThemeColors().hoverHighlight
+      }
     },
+
+    onDragleave() {
+      this.$refs["g-gantt-row"].style.backgroundColor = null
+    },
+
 
     onDrop(e){
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
