@@ -149,8 +149,8 @@ export default {
       return false
     },
 
-    onBarEvent(e, ganttBar){
-      this.$emit(`${e.type}-bar`, {event: e, bar: ganttBar.bar})
+    onBarEvent({event, type, time}, ganttBar){
+      this.$emit(`${type}-bar`, {event, bar: ganttBar.bar, time})
     },
     
     onDragendBar(e, ganttBar){

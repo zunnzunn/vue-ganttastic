@@ -153,25 +153,28 @@ export default {
         clearTimeout(this.tooltipTimeout)
       }
       this.tooltipTimeout = setTimeout(() => this.showTooltip = true, 800)
-      this.onBarEvent(e, this)
+      this.onBarEvent({event: e, type: e.type}, this)
     },
 
     onMouseleave(e){
       clearTimeout(this.tooltipTimeout)
       this.showTooltip = false
-      this.onBarEvent(e, this)
+      this.onBarEvent({event: e, type: e.type}, this)
     },
 
     onContextmenu(e){
-      this.onBarEvent(e, this)
+      const time = this.mapPositionToTime(e.clientX - this.barContainer.left).format("YYYY-MM-DD HH:mm:ss")
+      this.onBarEvent({event: e, type: e.type, time}, this)
     },
 
     onClick(e){
-      this.onBarEvent(e, this)
+      const time = this.mapPositionToTime(e.clientX - this.barContainer.left).format("YYYY-MM-DD HH:mm:ss")
+      this.onBarEvent({event: e, type: e.type, time}, this)
     },
 
     onDblclick(e) {
-      this.onBarEvent(e, this)
+      const time = this.mapPositionToTime(e.clientX - this.barContainer.left).format("YYYY-MM-DD HH:mm:ss")
+      this.onBarEvent({event: e, type: e.type, time}, this)
     },
 
     onMousedown(e){
@@ -189,7 +192,8 @@ export default {
           {once: true}
         )
       }
-      this.onBarEvent(e, this)
+      const time = this.mapPositionToTime(e.clientX - this.barContainer.left).format("YYYY-MM-DD HH:mm:ss")
+      this.onBarEvent({event: e, type: e.type, time}, this)
     },
 
     onFirstMousemove(e){
@@ -234,7 +238,7 @@ export default {
       this.barStartMoment = this.mapPositionToTime(newXStart)
       this.barEndMoment = this.mapPositionToTime(newXEnd)
       this.manageOverlapping()
-      this.onBarEvent({...e, type: "drag"}, this)
+      this.onBarEvent({event: e, type: "drag"}, this)
     },
 
     dragByHandleLeft(e){
