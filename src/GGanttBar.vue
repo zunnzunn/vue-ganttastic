@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div>
     <div 
       class="g-gantt-bar" 
@@ -262,8 +262,12 @@ export default {
     },
 
     isPosOutOfDragRange(xStart, xEnd){
+      // 不能推动旁边的bar时，拖拽就不停止
       if(!this.ganttChartProps.pushOnOverlap) {
         return false
+      }
+      if(xStart && xStart < 0) {
+        return true
       }
       if(xStart && this.dragLimitLeft !== null && xStart < this.dragLimitLeft + this.getMinGapBetweenBars()){
         return true
