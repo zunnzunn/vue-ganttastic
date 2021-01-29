@@ -61,7 +61,8 @@ export default {
     minGapBetweenBars: {
       type: Number,
       default: 0
-    }
+    },
+    defaultBarLength: { type: Number, default: 1 }
   },
 
   data(){
@@ -295,7 +296,8 @@ export default {
       onDragendBar: (e, ganttBar) => this.onDragendBar(e, ganttBar),
       shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
       snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
-      getMinGapBetweenBars: () => this.minGapBetweenBars
+      getMinGapBetweenBars: () => this.minGapBetweenBars,
+      getDefaultBarLength: () => this.defaultBarLength
     }
   }
 }

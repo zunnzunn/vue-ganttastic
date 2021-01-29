@@ -20,6 +20,7 @@
       @dragover="onDragover($event)"
       @dragleave="onDragleave($event)"
       @drop="onDrop($event)"
+      @dblclick="onDoubleClick($event)"
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
     > 
@@ -69,7 +70,8 @@ export default {
     "getThemeColors",
     "getHourCount",
     "getChartStart",
-    "getChartEnd"
+    "getChartEnd",
+    "getDefaultBarLength"
   ],
 
   data(){
@@ -123,6 +125,18 @@ export default {
       let time = moment(this.getChartStart()).add(hourDiffFromStart, "hours")
       let bar = this.bars.find(bar => time.isBetween(bar[this.barStart], bar[this.barEnd]))
       this.$emit("drop", {event: e, bar, time: time.format("YYYY-MM-DD HH:mm:ss")})
+    },
+
+    onDoubleClick(e){
+      let barContainer = this.$refs.barContainer.getBoundingClientRect()
+      let xPos = e.clientX - barContainer.left
+      let hourDiffFromStart = (xPos/barContainer.width) * this.getHourCount()
+      let time = moment(this.getChartStart()).add(hourDiffFromStart, "hours")
+      let bar = {};
+      bar[this.barStart] = time.format("YYYY-MM-DD HH:mm:ss")
+      bar[this.barEnd] = time.add(this.getDefaultBarLength(), "hours").format("YYYY-MM-DD HH:mm:ss")
+      bar.ganttBarConfig = {handles: true}
+      this.bars.push(bar)
     },
 
     onMouseover(){
