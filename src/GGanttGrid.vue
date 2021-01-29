@@ -37,8 +37,8 @@ export default {
       let momentChartEnd = moment(this.chartEnd)
       let res = []
       while(momentChartStart.isSameOrBefore(momentChartEnd)){
-        res.push(momentChartStart.hour())
-        momentChartStart.add(1,"hour")
+        res.push(momentChartStart.date())
+        momentChartStart.add(1,"day")
       }
       return res
     }
