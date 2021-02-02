@@ -72,8 +72,7 @@ export default {
       childPointCount: null,
       timemarker: null,
       hourFontSize: '11px',
-      monthFormat: 'M月',
-      dayFormat: 'MM-DD',
+      dayFormat: 'MM-DD', // ISO 8601
       mode: this.getTimeaxisMode(),
     }
   },
@@ -138,14 +137,14 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisMonthObject = {
         widthPercentage: widthPercentage,
-        value: datetime.format('YYYY-MM'),
+        value: moment(datetime, 'YYYY-MM'), // ISO 8601 
         ganttDays: [],
       }
       let startDay = datetimeMoment.date()
       for (let i = 0; i <= endDay - startDay; i++) {
         let day = {
-          text: datetimeMoment.format('D日'),
-          fullDatetime: datetimeMoment.format('YYYY-MM-DD'),
+          text: datetimeMoment.format('D'),
+          fullDatetime: datetimeMoment.format('YYYY-MM-DD'),  // ISO 8601
         }
         axisMonthObject.ganttDays.push(day)
         datetimeMoment.add(1, 'day')
@@ -157,14 +156,14 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisDayObject = {
         widthPercentage: widthPercentage,
-        value: datetime.format('YYYY-MM-DD'),
+        value: moment(datetime, 'YYYY-MM-DD'),  // ISO 8601 
         ganttHours: [],
       }
       let startHour = datetimeMoment.hour()
       for (let i = 0; i <= endHour - startHour; i++) {
         let hour = {
           text: datetimeMoment.format('HH'),
-          fullDatetime: datetimeMoment.format('DD.MM.YYYY HH:mm'),
+          fullDatetime: datetimeMoment.format('YYYY-MM-DD HH:mm'),  // ISO 8601
         }
         axisDayObject.ganttHours.push(hour)
         datetimeMoment.add(1, 'hour')
@@ -202,7 +201,7 @@ export default {
     monthFormatted(month) {
       // do not display month text if the month is smaller than x%
       return month.widthPercentage >= (1 / 32) * 100
-        ? moment(month.value).locale(this.locale).format(this.monthFormat)
+        ? moment().locale(this.locale).localeData().months(month.value)
         : ''
     },
 
