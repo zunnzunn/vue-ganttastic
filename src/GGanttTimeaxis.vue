@@ -55,7 +55,7 @@ import moment from 'moment'
 export default {
   name: 'GGanttTimeaxis',
 
-  inject: ['getTimeaxisMode'],
+  inject: ['getTimeaxisMode', 'getTimeUnit', 'getTimeFormat'],
 
   props: {
     chartStart: String,
@@ -74,6 +74,8 @@ export default {
       hourFontSize: '11px',
       dayFormat: 'MM-DD', // ISO 8601
       mode: this.getTimeaxisMode(),
+      timeUnit: this.getTimeUnit(),
+      timeFormat: this.getTimeFormat()
     }
   },
 
@@ -100,10 +102,9 @@ export default {
       let end = moment(this.chartEnd)
       this.childPointCount = Math.floor(end.diff(start, 'day', true))
       while (start.isBefore(end)) {
-        let dayCountOfMonth =
-          start.isSame(end, 'day')
-            ? end.date()
-            : start.daysInMonth() - start.date() + 1
+        let dayCountOfMonth = start.isSame(end, 'month')
+          ? end.date()
+          : start.daysInMonth() - start.date() + 1
         let widthPercentage = (dayCountOfMonth / this.childPointCount) * 100
         let endDay =
           start.month() === end.month() ? end.date() : end.daysInMonth()
@@ -119,10 +120,9 @@ export default {
       let end = moment(this.chartEnd)
       this.childPointCount = Math.floor(end.diff(start, 'hour', true))
       while (start.isBefore(end)) {
-        let hourCountOfDay =
-          start.isSame(end, 'day')
-            ? end.hour()
-            : 24 - start.hour()
+        let hourCountOfDay = start.isSame(end, 'day')
+          ? end.hour()
+          : 24 - start.hour()
 
         let widthPercentage = (hourCountOfDay / this.childPointCount) * 100
         let endHour = start.day() === end.day() ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
@@ -137,14 +137,14 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisMonthObject = {
         widthPercentage: widthPercentage,
-        value: moment(datetime, 'YYYY-MM'), // ISO 8601 
+        value: moment(datetime, 'YYYY-MM'), // ISO 8601
         ganttDays: [],
       }
       let startDay = datetimeMoment.date()
       for (let i = 0; i <= endDay - startDay; i++) {
         let day = {
           text: datetimeMoment.format('D'),
-          fullDatetime: datetimeMoment.format('YYYY-MM-DD'),  // ISO 8601
+          fullDatetime: datetimeMoment.format(this.timeFormat),
         }
         axisMonthObject.ganttDays.push(day)
         datetimeMoment.add(1, 'day')
@@ -156,14 +156,14 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisDayObject = {
         widthPercentage: widthPercentage,
-        value: moment(datetime, 'YYYY-MM-DD'),  // ISO 8601 
+        value: moment(datetime, 'YYYY-MM-DD'), // ISO 8601
         ganttHours: [],
       }
       let startHour = datetimeMoment.hour()
       for (let i = 0; i <= endHour - startHour; i++) {
         let hour = {
           text: datetimeMoment.format('HH'),
-          fullDatetime: datetimeMoment.format('YYYY-MM-DD HH:mm'),  // ISO 8601
+          fullDatetime: datetimeMoment.format(this.timeFormat),
         }
         axisDayObject.ganttHours.push(hour)
         datetimeMoment.add(1, 'hour')
@@ -190,7 +190,7 @@ export default {
         ) + 'px'
     },
 
-    pointFormatted(point){
+    pointFormatted(point) {
       if (this.mode === 'month_days') {
         return this.monthFormatted(point)
       } else if (this.mode === 'day_hours') {
