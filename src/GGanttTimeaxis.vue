@@ -107,7 +107,7 @@ export default {
           : start.daysInMonth() - start.date() + 1
         let widthPercentage = (dayCountOfMonth / this.childPointCount) * 100
         let endDay =
-          start.month() === end.month() ? end.date() : end.daysInMonth()
+          start.month() === end.month() ? end.date() : start.daysInMonth()
         this.axisPoints.push(
           this.getAxisMonthObject(start, widthPercentage, endDay)
         )
