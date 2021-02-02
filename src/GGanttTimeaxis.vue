@@ -1,61 +1,51 @@
 <template>
   <div id="g-timeaxis">
-
     <div
       class="g-timeaxis-empty-space"
-      :style="{width: rowLabelWidth, background: themeColors.secondary}"
+      :style="{ width: rowLabelWidth, background: themeColors.secondary }"
     />
-    <div 
+    <div
       class="g-timeaxis-days"
-      :style="{width: `${100-rowLabelWidth.replace('%','')}%`}"
+      :style="{ width: `${100 - rowLabelWidth.replace('%', '')}%` }"
     >
-      <div 
-          v-for="(month, index) in axisMonths"
-          :key="month.text"
-          class="g-timeaxis-day"
-          :style="{
-            width: month.widthPercentage+'%', 
-            background: index%2===0 ? themeColors.primary : themeColors.secondary,
-            color: themeColors.text
-          }"
+      <div
+        v-for="(point, index) in axisPoints"
+        :key="point.text"
+        class="g-timeaxis-day"
+        :style="{
+          width: point.widthPercentage + '%',
+          background:
+            index % 2 === 0 ? themeColors.primary : themeColors.secondary,
+          color: themeColors.text,
+        }"
+      >
+        <div>{{ pointFormatted(point) }}</div>
+        <div
+          :style="{ background: themeColors.ternary, color: themeColors.text }"
         >
-        <div> {{monthFormatted(month)}} </div>
-        <div :style="{background: themeColors.ternary, color: themeColors.text}">
-          <div 
-            v-for="(day, index) in month.ganttDays"
-            :key="day.fullDatetime"
+          <div
+            v-for="(childPoint, index) in point.ganttDays"
+            :key="childPoint.fullDatetime"
             class="g-timeaxis-hour"
             :style="{
-              width: day.widthPercentage+'%', 
-              background: index%2===0 ? themeColors.primary : themeColors.secondary,
-              color: themeColors.text
+              width: childPoint.widthPercentage + '%',
+              background:
+                index % 2 === 0 ? themeColors.primary : themeColors.secondary,
+              color: themeColors.text,
             }"
           >
-            <span :style="{fontSize: hourFontSize}">{{day.text}}</span>
-            <div 
+            <span :style="{ fontSize: hourFontSize }">{{
+              childPoint.text
+            }}</span>
+            <div
               class="g-timeaxis-hour-pin"
-              :style="{background: themeColors.text}"
+              :style="{ background: themeColors.text }"
             />
-            <!-- <div> {{dayFormatted(day)}} </div>
-            <div :style="{background: themeColors.ternary, color: themeColors.text}">
-              <div 
-                v-for="hour in day.ganttHours"
-                :key="hour.fullDatetime"
-                class="g-timeaxis-hour" 
-              >
-                <span :style="{fontSize: hourFontSize}">{{hour.text}}</span>
-                <div 
-                  class="g-timeaxis-hour-pin"
-                  :style="{background: themeColors.text}"
-                />
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
     </div>
-    <div id="g-timeaxis-marker"/>
-    
+    <div id="g-timeaxis-marker" />
   </div>
 </template>
 
@@ -63,219 +53,259 @@
 import moment from 'moment'
 
 export default {
+  name: 'GGanttTimeaxis',
 
-  name:"GGanttTimeaxis",
+  inject: ['getTimeaxisMode'],
 
   props: {
     chartStart: String,
     chartEnd: String,
     rowLabelWidth: String,
-    timemarkerOffset: {type: Number, default: 0},
+    timemarkerOffset: { type: Number, default: 0 },
     locale: String,
-    themeColors: Object
+    themeColors: Object,
   },
 
-  data(){
+  data() {
     return {
-      axisMonths: [],
-      axisDays: [],
-      dayCount: null,
-      hourCount: null,
+      axisPoints: [],
+      childPointCount: null,
       timemarker: null,
-      hourFontSize: "11px",
-      monthFormat: "M月",
-      dayFormat: "MM-DD"
+      hourFontSize: '11px',
+      monthFormat: 'M月',
+      dayFormat: 'MM-DD',
+      mode: this.getTimeaxisMode(),
     }
   },
 
-  mounted(){
-    this.timemarker = document.querySelector("#g-timeaxis-marker")
-    this.initAxisMonthsAndDays()
-    // this.initAxisDaysAndHours()
+  mounted() {
+    this.timemarker = document.querySelector('#g-timeaxis-marker')
+    this.initAxis()
     this.onWindowResize()
     window.addEventListener('resize', this.onWindowResize)
-    window.addEventListener("mousemove", (event) => this.moveTimemarker(event))
-    window.addEventListener("dragover", (event) => this.moveTimemarker(event))
+    window.addEventListener('mousemove', (event) => this.moveTimemarker(event))
+    window.addEventListener('dragover', (event) => this.moveTimemarker(event))
   },
 
   methods: {
-    initAxisMonthsAndDays(){
-      this.axisMonths = []
-      let start = moment(this.chartStart)
-      let end = moment(this.chartEnd)
-      this.dayCount = Math.floor(end.diff(start, "day", true))
-      while(start.isBefore(end)){
-        let dayCountOfMonth = start.format("MM.YYYY")==end.format("MM.YYYY") ? end.date() : (start.daysInMonth() - start.date() + 1)
-        let widthPercentage = dayCountOfMonth/this.dayCount*100
-        console.log({start, startDay: start.date(), end, endDay: end.date(), dayCountOfMonth, dayCount: this.dayCount, widthPercentage})
-        let endDay = start.month()===end.month() ? end.date() : end.daysInMonth()
-        this.axisMonths.push(this.getAxisMonthObject(start, widthPercentage, endDay))
-        start.add(1,"month").date(1).hour(0)
-      }
-      console.log(this.axisMonths)
-    },
-
-    initAxisDaysAndHours(){
-      this.axisDays = []
-      let start = moment(this.chartStart)
-      let end = moment(this.chartEnd)
-      this.hourCount = Math.floor(end.diff(start, "hour", true))
-      while(start.isBefore(end)){
-        let hourCountOfDay = start.format("DD.MM.YYYY")==end.format("DD.MM.YYYY") ? end.hour() : 24-start.hour()
-        console.log({start, hourCountOfDay, hourCount: this.hourCount})
-        let widthPercentage = hourCountOfDay/this.hourCount*100
-        let endHour = start.day()===end.day() ? end.hour()-1 : 23   // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
-        this.axisDays.push(this.getAxisDayObject(start, widthPercentage, endHour))
-        start.add(1,"day").hour(0)
+    initAxis() {
+      if (this.mode === 'month_days') {
+        this.initAxisMonthsAndDays()
+      } else if (this.mode === 'day_hours') {
+        this.initAxisDaysAndHours()
       }
     },
 
-    getAxisMonthObject(datetime, widthPercentage, endDay){
+    initAxisMonthsAndDays() {
+      let start = moment(this.chartStart)
+      let end = moment(this.chartEnd)
+      this.childPointCount = Math.floor(end.diff(start, 'day', true))
+      while (start.isBefore(end)) {
+        let dayCountOfMonth =
+          start.isSame(end, 'day')
+            ? end.date()
+            : start.daysInMonth() - start.date() + 1
+        let widthPercentage = (dayCountOfMonth / this.childPointCount) * 100
+        let endDay =
+          start.month() === end.month() ? end.date() : end.daysInMonth()
+        this.axisPoints.push(
+          this.getAxisMonthObject(start, widthPercentage, endDay)
+        )
+        start.add(1, 'month').date(1).hour(0)
+      }
+    },
+
+    initAxisDaysAndHours() {
+      let start = moment(this.chartStart)
+      let end = moment(this.chartEnd)
+      this.childPointCount = Math.floor(end.diff(start, 'hour', true))
+      while (start.isBefore(end)) {
+        let hourCountOfDay =
+          start.isSame(end, 'day')
+            ? end.hour()
+            : 24 - start.hour()
+
+        let widthPercentage = (hourCountOfDay / this.childPointCount) * 100
+        let endHour = start.day() === end.day() ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
+        this.axisPoints.push(
+          this.getAxisDayObject(start, widthPercentage, endHour)
+        )
+        start.add(1, 'day').hour(0)
+      }
+    },
+
+    getAxisMonthObject(datetime, widthPercentage, endDay) {
       let datetimeMoment = moment(datetime)
       let axisMonthObject = {
-        widthPercentage : widthPercentage,
-        value : datetime.format("YYYY-MM"),
-        ganttDays : []
+        widthPercentage: widthPercentage,
+        value: datetime.format('YYYY-MM'),
+        ganttDays: [],
       }
       let startDay = datetimeMoment.date()
-      for(let i=0; i <=(endDay-startDay); i++) {
-        let day ={
-          text: datetimeMoment.format("D日"),
-          fullDatetime: datetimeMoment.format("YYYY-MM-DD")
+      for (let i = 0; i <= endDay - startDay; i++) {
+        let day = {
+          text: datetimeMoment.format('D日'),
+          fullDatetime: datetimeMoment.format('YYYY-MM-DD'),
         }
         axisMonthObject.ganttDays.push(day)
-        datetimeMoment.add(1,"day")
+        datetimeMoment.add(1, 'day')
       }
       return axisMonthObject
     },
 
-    getAxisDayObject(datetime, widthPercentage, endHour){
+    getAxisDayObject(datetime, widthPercentage, endHour) {
       let datetimeMoment = moment(datetime)
       let axisDayObject = {
-        widthPercentage : widthPercentage,
-        value : datetime.format("YYYY-MM-DD"),
-        ganttHours : []
+        widthPercentage: widthPercentage,
+        value: datetime.format('YYYY-MM-DD'),
+        ganttHours: [],
       }
       let startHour = datetimeMoment.hour()
-      for(let i=0; i <=(endHour-startHour); i++) {
-        let hour ={
-          text: datetimeMoment.format("HH"),
-          fullDatetime: datetimeMoment.format("DD.MM.YYYY HH:mm")
+      for (let i = 0; i <= endHour - startHour; i++) {
+        let hour = {
+          text: datetimeMoment.format('HH'),
+          fullDatetime: datetimeMoment.format('DD.MM.YYYY HH:mm'),
         }
         axisDayObject.ganttHours.push(hour)
-        datetimeMoment.add(1,"hour")
+        datetimeMoment.add(1, 'hour')
       }
       return axisDayObject
     },
 
-    moveTimemarker(event){
-      this.timemarker.style.left = (event.clientX - this.timemarkerOffset - this.horizontalAxisContainer.left)+"px"
+    moveTimemarker(event) {
+      this.timemarker.style.left =
+        event.clientX -
+        this.timemarkerOffset -
+        this.horizontalAxisContainer.left +
+        'px'
     },
 
-    onWindowResize(){
-      this.horizontalAxisContainer = document.querySelector("#g-timeaxis").getBoundingClientRect()
-      this.hourFontSize = Math.min(9.5, 0.75*(this.horizontalAxisContainer.width/this.hourCount))+"px"
+    onWindowResize() {
+      this.horizontalAxisContainer = document
+        .querySelector('#g-timeaxis')
+        .getBoundingClientRect()
+      this.hourFontSize =
+        Math.min(
+          9.5,
+          0.75 * (this.horizontalAxisContainer.width / this.childPointCount)
+        ) + 'px'
     },
 
-    monthFormatted(month){  // do not display month text if the month is smaller than x%
-      return month.widthPercentage>=1/32*100 ? moment(month.value).locale(this.locale).format(this.monthFormat) : ""
+    pointFormatted(point){
+      if (this.mode === 'month_days') {
+        return this.monthFormatted(point)
+      } else if (this.mode === 'day_hours') {
+        return this.dayFormatted(point)
+      }
     },
 
-    dayFormatted(day){  // do not display day text if the day is smaller than 12%
-      return day.widthPercentage>=12 ? moment(day.value).locale(this.locale).format(this.dayFormat) : ""
-    }
+    monthFormatted(month) {
+      // do not display month text if the month is smaller than x%
+      return month.widthPercentage >= (1 / 32) * 100
+        ? moment(month.value).locale(this.locale).format(this.monthFormat)
+        : ''
+    },
 
+    dayFormatted(day) {
+      // do not display day text if the day is smaller than 12%
+      return day.widthPercentage >= 12
+        ? moment(day.value).locale(this.locale).format(this.dayFormat)
+        : ''
+    },
   },
 
   watch: {
-    chartStart(){
-      this.initAxisMonthsAndDays()
-      // this.initAxisDaysAndHours()
+    chartStart() {
+      this.initAxis()
     },
-    chartEnd(){
-      this.initAxisMonthsAndDays()
-      // this.initAxisDaysAndHours()
-    }
-  }
+    chartEnd() {
+      this.initAxis()
+    },
+  },
 }
 </script>
 
 <style scoped>
-  #g-timeaxis, .g-timeaxis-days, .g-timeaxis-day, .g-timeaxis-day > div {
-    display: flex;
-    overflow: hidden;
-  }
+#g-timeaxis,
+.g-timeaxis-days,
+.g-timeaxis-day,
+.g-timeaxis-day > div {
+  display: flex;
+  overflow: hidden;
+}
 
-  #g-timeaxis {
-    position: sticky;
-    top:0;
-    width: 100%;
-    height: 8%;
-    min-height: 75px;
-    background: white;
-    z-index: 4;
-    box-shadow: 0px 1px 3px 2px rgba(50,50,50, 0.5);
-  }
+#g-timeaxis {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 8%;
+  min-height: 75px;
+  background: white;
+  z-index: 4;
+  box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
+}
 
-  #g-timeaxis > .g-timeaxis-empty-space {
-    width: 20%;    /* this has to be as wide as .ganttRowTitle in VGanttastic.css */
-    height: 100%;
-    background: #F5F5F5;
-  }
+#g-timeaxis > .g-timeaxis-empty-space {
+  width: 20%; /* this has to be as wide as .ganttRowTitle in VGanttastic.css */
+  height: 100%;
+  background: #f5f5f5;
+}
 
-  #g-timeaxis > .g-timeaxis-days {
-    position: relative;
-    width: 80%;
-    height: 100%,
-  }
+#g-timeaxis > .g-timeaxis-days {
+  position: relative;
+  width: 80%;
+  height: 100%;
+}
 
-  .g-timeaxis-day {
-    height: 100%;
-    flex-direction: column;
-    background: #E0E0E0;
-  }
+.g-timeaxis-day {
+  height: 100%;
+  flex-direction: column;
+  background: #e0e0e0;
+}
 
-  .g-timeaxis-day:nth-child(odd) {
-    background: #E8E8E8;
-  }
+.g-timeaxis-day:nth-child(odd) {
+  background: #e8e8e8;
+}
 
-  .g-timeaxis-day > div:nth-child(1) { /* day text */
-    height: 50%;
-    justify-content: space-around;
-    font-weight: bold;
-    align-items: center;
-  }
+.g-timeaxis-day > div:nth-child(1) {
+  /* day text */
+  height: 50%;
+  justify-content: space-around;
+  font-weight: bold;
+  align-items: center;
+}
 
-  .g-timeaxis-day > div:nth-child(2) { /* hours of a day */
-    align-items: flex-end;
-    height: 50%;
-    justify-content: space-between;
-    background:#F5F5F5;
-    padding-top:2px;
-    color: #212121;
-  }
-  
-  .g-timeaxis-hour {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-direction: column;
-    opacity: 0.5;
-    width: 100%;
-  }
+.g-timeaxis-day > div:nth-child(2) {
+  /* hours of a day */
+  align-items: flex-end;
+  height: 50%;
+  justify-content: space-between;
+  background: #f5f5f5;
+  padding-top: 2px;
+  color: #212121;
+}
 
-  .g-timeaxis-hour-pin {
-    width: 1px;
-    height: 8px;
-  }
+.g-timeaxis-hour {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  opacity: 0.5;
+  width: 100%;
+}
 
-  #g-timeaxis-marker {
-    position: absolute;
-    top:0;
-    left:0;
-    height: 100%;
-    width: 3px;
-    background: black;
-  }
+.g-timeaxis-hour-pin {
+  width: 1px;
+  height: 8px;
+}
+
+#g-timeaxis-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 3px;
+  background: black;
+}
 </style>
 

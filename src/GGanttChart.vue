@@ -62,7 +62,9 @@ export default {
       type: Number,
       default: 0
     },
-    defaultBarLength: { type: Number, default: 1 }
+    defaultBarLength: { type: Number, default: 1 },
+    // ["month_days", "day_hours"]
+    timeaxisMode: {type: String, default: "month_days"}
   },
 
   data(){
@@ -297,7 +299,8 @@ export default {
       shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
       snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
       getMinGapBetweenBars: () => this.minGapBetweenBars,
-      getDefaultBarLength: () => this.defaultBarLength
+      getDefaultBarLength: () => this.defaultBarLength,
+      getTimeaxisMode:() => this.timeaxisMode
     }
   }
 }

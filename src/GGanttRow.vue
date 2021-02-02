@@ -109,7 +109,9 @@ export default {
     onDragover(e) {
       e.preventDefault()   // enables dropping content on row
       if(this.highlightOnHover){
+        console.log({backgroundColor: this.$refs["g-gantt-row"].style.backgroundColor })
         this.$refs["g-gantt-row"].style.backgroundColor = this.getThemeColors().hoverHighlight
+        console.log({backgroundColor: this.$refs["g-gantt-row"].style.backgroundColor })
       }
     },
 
