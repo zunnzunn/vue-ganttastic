@@ -24,7 +24,7 @@
           :style="{ background: themeColors.ternary, color: themeColors.text }"
         >
           <div
-            v-for="(childPoint, index) in point.ganttDays"
+            v-for="(childPoint, index) in point.childPoints"
             :key="childPoint.fullDatetime"
             class="g-timeaxis-hour"
             :style="{
@@ -137,8 +137,7 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisMonthObject = {
         widthPercentage: widthPercentage,
-        value: moment(datetime, 'YYYY-MM'), // ISO 8601
-        ganttDays: [],
+        childPoints: [],
       }
       let startDay = datetimeMoment.date()
       for (let i = 0; i <= endDay - startDay; i++) {
@@ -146,7 +145,7 @@ export default {
           text: datetimeMoment.format('D'),
           fullDatetime: datetimeMoment.format(this.timeFormat),
         }
-        axisMonthObject.ganttDays.push(day)
+        axisMonthObject.childPoints.push(day)
         datetimeMoment.add(1, 'day')
       }
       return axisMonthObject
@@ -157,7 +156,7 @@ export default {
       let axisDayObject = {
         widthPercentage: widthPercentage,
         value: moment(datetime, 'YYYY-MM-DD'), // ISO 8601
-        ganttHours: [],
+        childPoints: [],
       }
       let startHour = datetimeMoment.hour()
       for (let i = 0; i <= endHour - startHour; i++) {
@@ -165,7 +164,7 @@ export default {
           text: datetimeMoment.format('HH'),
           fullDatetime: datetimeMoment.format(this.timeFormat),
         }
-        axisDayObject.ganttHours.push(hour)
+        axisDayObject.childPoints.push(hour)
         datetimeMoment.add(1, 'hour')
       }
       return axisDayObject
