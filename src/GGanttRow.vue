@@ -26,8 +26,8 @@
         :key="`ganttastic_bar_${index}`"
         :bar="bar"
         ref="ganttBar"
-        :bar-start="barStart"
-        :bar-end="barEnd"
+        :bar-start-key="barStartKey"
+        :bar-end-key="barEndKey"
         :bar-container="barContainer"
         :all-bars-in-row="bars"
       >
@@ -53,8 +53,8 @@ export default {
   props: {
     label: { type: String, default: 'Row' },
     bars: { type: Array, default: () => [] },
-    barStart: { type: String, required: true }, // property name of the bar objects that represents the start datetime
-    barEnd: { type: String, required: true }, // property name of the bar objects that represents the end datetime,
+    barStartKey: { type: String, required: true }, // property name of the bar objects that represents the start datetime
+    barEndKey: { type: String, required: true }, // property name of the bar objects that represents the end datetime,
     highlightOnHover: Boolean,
   },
 
@@ -103,15 +103,9 @@ export default {
     onDragover(e) {
       e.preventDefault() // enables dropping content on row
       if (this.highlightOnHover) {
-        console.log({
-          backgroundColor: this.$refs['g-gantt-row'].style.backgroundColor,
-        })
         this.$refs[
           'g-gantt-row'
         ].style.backgroundColor = this.getThemeColors().hoverHighlight
-        console.log({
-          backgroundColor: this.$refs['g-gantt-row'].style.backgroundColor,
-        })
       }
     },
 

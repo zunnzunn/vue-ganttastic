@@ -55,7 +55,7 @@ import moment from 'moment'
 export default {
   name: 'GGanttTimeaxis',
 
-  inject: ['getTimeaxisMode', 'getTimeUnit', 'getTimeFormat'],
+  inject: ['ganttChartProps', 'getTimeUnit', 'getTimeFormat'],
 
   props: {
     chartStart: String,
@@ -73,9 +73,9 @@ export default {
       timemarker: null,
       hourFontSize: '11px',
       dayFormat: 'MM-DD', // ISO 8601
-      mode: this.getTimeaxisMode(),
+      mode: this.ganttChartProps.timeaxisMode,
       timeUnit: this.getTimeUnit(),
-      timeFormat: this.getTimeFormat()
+      timeFormat: this.getTimeFormat(),
     }
   },
 
@@ -198,17 +198,17 @@ export default {
       }
     },
 
-    monthFormatted(month) {
+    monthFormatted(point) {
       // do not display month text if the month is smaller than x%
-      return month.widthPercentage >= (1 / 32) * 100
-        ? moment().locale(this.locale).localeData().months(month.value)
+      return point.widthPercentage >= (1 / 32) * 100
+        ? moment().locale(this.locale).localeData().months(point.value)
         : ''
     },
 
-    dayFormatted(day) {
+    dayFormatted(point) {
       // do not display day text if the day is smaller than 12%
-      return day.widthPercentage >= 12
-        ? moment(day.value).locale(this.locale).format(this.dayFormat)
+      return point.widthPercentage >= 12
+        ? moment(point.value).locale(this.locale).format(this.dayFormat)
         : ''
     },
   },

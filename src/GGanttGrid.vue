@@ -7,11 +7,11 @@
     }"
   >
     <div
-      v-for="(hour, index) in allHours"
+      v-for="(childPoint, index) in allChildPoints"
       :key="index"
       :class="{
         'g-grid-line': true,
-        'g-grid-line-highlighted': highlightedHours.includes(hour),
+        'g-grid-line-highlighted': highlightedHours.includes(childPoint),
       }"
     />
   </div>
@@ -23,7 +23,7 @@ import moment from 'moment'
 export default {
   name: 'GGanttGrid',
 
-  inject: ['getTimeaxisMode'],
+  inject: ['ganttChartProps'],
 
   props: {
     chartStart: { type: String },
@@ -33,11 +33,11 @@ export default {
   },
 
   computed: {
-    allHours() {
+    allChildPoints() {
       let momentChartStart = moment(this.chartStart)
       let momentChartEnd = moment(this.chartEnd)
       let res = []
-      const timeaxisMode = this.getTimeaxisMode()
+      const timeaxisMode = this.ganttChartProps.timeaxisMode
       while (momentChartStart.isSameOrBefore(momentChartEnd)) {
         if (timeaxisMode === 'month_days') {
           res.push(momentChartStart.date())

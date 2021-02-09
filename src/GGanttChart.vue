@@ -56,6 +56,7 @@ export default {
     highlightedHours: { type: Array, default: () => [] },
     width: { type: String, default: '100%' }, // the total width of the entire ganttastic component in %
     pushOnOverlap: { type: Boolean },
+    isMagnetic: { type: Boolean },
     snapBackOnOverlap: { type: Boolean },
     minGapBetweenBars: {
       type: Number,
@@ -72,7 +73,7 @@ export default {
       movedBarsInDrag: new Set(),
       timeUnit: this.timeaxisMode === 'month_days' ? 'days' : 'hours',
       timeFormat:
-        this.timeaxisMode === 'month_days' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm',
+        this.timeaxisMode === 'month_days' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm',
     }
   },
 
@@ -142,7 +143,7 @@ export default {
           ganttBarChild.barConfig.bundle === bundleId &&
           ganttBarChild.bar !== pushedBar
         ) {
-          ganttBarChild.moveBarByMinutesAndPush(minuteDiff, overlapType)
+          ganttBarChild.moveBarByChildPointsAndPush(minuteDiff, overlapType)
           this.movedBarsInDrag.add(ganttBarChild.bar)
         }
       })
@@ -377,9 +378,8 @@ export default {
       snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
       getMinGapBetweenBars: () => this.minGapBetweenBars,
       getDefaultBarLength: () => this.defaultBarLength,
-      getTimeaxisMode: () => this.timeaxisMode,
       getTimeUnit: () => this.timeUnit,
-      getTimeFormat: () => this.timeFormat
+      getTimeFormat: () => this.timeFormat,
     }
   },
 }

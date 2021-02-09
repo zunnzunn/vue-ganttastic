@@ -35,9 +35,9 @@
               this.barStyle.background || this.barStyle.backgroundColor,
           }"
         />
-        {{ bar[barStart] }}
+        {{ barStartText }}
         -
-        {{ bar[barEnd] }}
+        {{ barEndText }}
       </div>
     </transition>
   </div>
@@ -51,8 +51,8 @@ export default {
 
   props: {
     bar: { type: Object },
-    barStart: { type: String }, // property name of the bar objects that represents the start datetime
-    barEnd: { type: String }, // property name of the bar objects that represents the end datetime,
+    barStartKey: { type: String }, // property name of the bar objects that represents the start datetime,
+    barEndKey: { type: String }, // property name of the bar objects that represents the end datetime,
     barContainer: [Object, DOMRect],
     allBarsInRow: { type: Array },
   },
@@ -85,29 +85,43 @@ export default {
       barStartBeforeDrag: null,
       barEndBeforeDrag: null,
       timeUnit: this.getTimeUnit(),
-      timeChildKey: this.getTimeUnit() === 'days' ? 'hours' : 'minutes',
+      timeChildKey:
+        this.ganttChartProps.timeaxisMode === 'month_days'
+          ? 'hours'
+          : 'minutes',
+      timeChildFormat:
+        this.ganttChartProps.timeaxisMode === 'month_days' ? 'MM-DD' : 'HH:mm',
       timeFormat: this.getTimeFormat(),
     }
   },
 
   computed: {
-    // use these computed moment objects to work with the bar's start/end dates:
-    // instead of directly mutating them:
     barStartMoment: {
-      get() {
-        return moment(this.bar[this.barStart])
+      get: function () {
+        return moment(this.bar[this.barStartKey], this.timeFormat)
       },
-      set(value) {
-        this.bar[this.barStart] = moment(value).format(this.timeFormat)
+      set: function (value) {
+        this.bar[this.barStartKey] = value.format(this.timeFormat)
+      },
+    },
+    barEndMoment: {
+      get: function () {
+        return moment(this.bar[this.barEndKey])
+      },
+      set: function (value) {
+        this.bar[this.barEndKey] = value.format(this.timeFormat)
+      },
+    },
+    barStartText: {
+      get() {
+        return moment(this.barStartMoment).format(this.timeChildFormat)
       },
     },
 
-    barEndMoment: {
+    barEndText: {
       get() {
-        return moment(this.bar[this.barEnd])
-      },
-      set(value) {
-        this.bar[this.barEnd] = moment(value).format(this.timeFormat)
+        let endMoment = moment(this.barEndMoment)
+        return endMoment.format(this.timeChildFormat)
       },
     },
 
@@ -128,6 +142,8 @@ export default {
     },
 
     barStyle() {
+      if (!this.barContainer.width) return
+
       let xStart = this.mapTimeToPosition(this.barStartMoment)
       let xEnd = this.mapTimeToPosition(this.barEndMoment)
       return {
@@ -228,8 +244,9 @@ export default {
     initDrag(e) {
       // "e" must be the mousedown event
       this.isDragging = true
-      this.barStartBeforeDrag = this.bar[this.barStart]
-      this.barEndBeforeDrag = this.bar[this.barEnd]
+      this.barStartBeforeDrag = this.bar[this.barStartKey]
+      this.barEndBeforeDrag = this.bar[this.barEndKey]
+
       let barX = this.$refs['g-gantt-bar'].getBoundingClientRect().left
       this.cursorOffsetX = e.clientX - barX
       let mousedownType = e.target.className
@@ -239,7 +256,7 @@ export default {
           this.mousemoveCallback = this.dragByHandleLeft
           break
         case 'g-gantt-bar-handle-right':
-          document.body.style.cursor = 'w-resize'
+          document.body.style.cursor = 'e-resize'
           this.mousemoveCallback = this.dragByHandleRight
           break
         default:
@@ -279,7 +296,7 @@ export default {
       let newXEnd = e.clientX - this.barContainer.left
       let newEndMoment = this.mapPositionToTime(newXEnd)
       if (
-        newEndMoment.isSameOrBefore(this.barStartMoment) ||
+        newEndMoment.isSameOrBefore(this.barStartMoment, this.timeUnit) ||
         this.isPosOutOfDragRange(null, newXEnd)
       ) {
         return
@@ -289,12 +306,12 @@ export default {
     },
 
     isPosOutOfDragRange(xStart, xEnd) {
-      // 不能推动旁边的bar时，拖拽就不停止
-      if (!this.ganttChartProps.pushOnOverlap) {
-        return false
-      }
       if (xStart && xStart < 0) {
         return true
+      }
+      // 设置允许推动旁边的bar时，拖拽到到位置就算进入了重叠，也不算超出范围
+      if (this.ganttChartProps.pushOnOverlap) {
+        return false
       }
       if (
         xStart &&
@@ -314,6 +331,78 @@ export default {
     },
 
     endDrag(e) {
+      // Magnetic suction
+
+      if (this.ganttChartProps.isMagnetic) {
+        let left = false,
+          right = false,
+          move = false
+        switch (document.body.style.cursor) {
+          case 'e-resize':
+            right = true
+            break
+          case 'w-resize':
+            left = true
+            break
+          default:
+            move = true
+            break
+        }
+        console.log({ left, right, move })
+
+        this.allBarsInRow.forEach((bar) => {
+          if (this.ganttChartProps.timeaxisMode === 'month_days') {
+            if (left && bar == this.bar) {
+              if (moment(bar[this.barStartKey]).hours() < 12) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(0)
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(24)
+              }
+            } else if (right && bar == this.bar) {
+              if (moment(bar[this.barEndKey]).hours() < 12) {
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(0)
+              } else {
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(24)
+              }
+            } else {
+              if (moment(bar[this.barStartKey]).hours() < 12) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(0)
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(0)
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(24)
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(24)
+              }
+            }
+          } else {
+            if (left && bar == this.bar) {
+              if (moment(bar[this.barStartKey]).minutes() < 30) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(0)
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(
+                  60
+                )
+              }
+            } else if (right && bar == this.bar) {
+              if (moment(bar[this.barEndKey]).minutes() < 30) {
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(0)
+              } else {
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(60)
+              }
+            } else {
+              if (moment(bar[this.barStartKey]).minutes() < 30) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(0)
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(0)
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(
+                  60
+                )
+                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(60)
+              }
+            }
+          }
+        })
+      }
+
       this.isDragging = false
       this.dragLimitLeft = null
       this.dragLimitRight = null
@@ -327,8 +416,8 @@ export default {
     },
 
     snapBack() {
-      this.barStartMoment = this.barStartBeforeDrag
-      this.barEndMoment = this.barEndBeforeDrag
+      this.barStartMoment = moment(this.barStartBeforeDrag)
+      this.barEndMoment = moment(this.barEndBeforeDrag)
     },
 
     manageOverlapping() {
@@ -342,10 +431,10 @@ export default {
       let { overlapBar, overlapType } = this.getOverlapBarAndType(currentBar)
       while (overlapBar) {
         let minuteDiff
-        let currentStartMoment = moment(currentBar[this.barStart])
-        let currentEndMoment = moment(currentBar[this.barEnd])
-        let overlapStartMoment = moment(overlapBar[this.barStart])
-        let overlapEndMoment = moment(overlapBar[this.barEnd])
+        let currentStartMoment = moment(currentBar[this.barStartKey])
+        let currentEndMoment = moment(currentBar[this.barEndKey])
+        let overlapStartMoment = moment(overlapBar[this.barStartKey])
+        let overlapEndMoment = moment(overlapBar[this.barEndKey])
         switch (overlapType) {
           case 'left':
             minuteDiff =
@@ -354,10 +443,10 @@ export default {
                 this.timeChildKey,
                 true
               ) + this.getMinGapBetweenBars()
-            overlapBar[this.barEnd] = currentStartMoment
+            overlapBar[this.barEndKey] = currentStartMoment
               .subtract(this.getMinGapBetweenBars(), this.timeChildKey, true)
               .format(this.timeFormat)
-            overlapBar[this.barStart] = overlapStartMoment
+            overlapBar[this.barStartKey] = overlapStartMoment
               .subtract(minuteDiff, this.timeChildKey, true)
               .format(this.timeFormat)
             break
@@ -368,10 +457,10 @@ export default {
                 this.timeChildKey,
                 true
               ) + this.getMinGapBetweenBars()
-            overlapBar[this.barStart] = currentEndMoment
+            overlapBar[this.barStartKey] = currentEndMoment
               .add(this.getMinGapBetweenBars(), this.timeChildKey, true)
               .format(this.timeFormat)
-            overlapBar[this.barEnd] = overlapEndMoment
+            overlapBar[this.barEndKey] = overlapEndMoment
               .add(minuteDiff, this.timeChildKey, true)
               .format(this.timeFormat)
             break
@@ -389,8 +478,8 @@ export default {
     },
 
     getOverlapBarAndType(bar) {
-      let barStartMoment = moment(bar[this.barStart])
-      let barEndMoment = moment(bar[this.barEnd])
+      let barStartMoment = moment(bar[this.barStartKey])
+      let barEndMoment = moment(bar[this.barEndKey])
       let overlapLeft, overlapRight, overlapInBetween
       let overlapBar = this.allBarsInRow.find((otherBar) => {
         if (
@@ -399,13 +488,20 @@ export default {
         ) {
           return false
         }
-        let otherBarStart = moment(otherBar[this.barStart])
-        let otherBarEnd = moment(otherBar[this.barEnd])
-        overlapLeft = barStartMoment.isBetween(otherBarStart, otherBarEnd)
-        overlapRight = barEndMoment.isBetween(otherBarStart, otherBarEnd)
+        let otherBarStartMoment = moment(otherBar[this.barStartKey])
+        let otherBarEndMoment = moment(otherBar[this.barEndKey])
+
+        overlapLeft = barStartMoment.isBetween(
+          otherBarStartMoment,
+          otherBarEndMoment
+        )
+        overlapRight = barEndMoment.isBetween(
+          otherBarStartMoment,
+          otherBarEndMoment
+        )
         overlapInBetween =
-          otherBarStart.isBetween(barStartMoment, barEndMoment) ||
-          otherBarEnd.isBetween(barStartMoment, barEndMoment)
+          otherBarStartMoment.isBetween(barStartMoment, barEndMoment) ||
+          otherBarEndMoment.isBetween(barStartMoment, barEndMoment)
         return overlapLeft || overlapRight || overlapInBetween
       })
       let overlapType = overlapLeft
@@ -420,35 +516,35 @@ export default {
 
     // this is used in GGanttChart, when a bar from a bundle is pushed
     // so that bars from its bundle also get pushed
-    moveBarByMinutesAndPush(minuteCount, direction) {
+    moveBarByChildPointsAndPush(childPointCount, direction) {
       switch (direction) {
         case 'left':
           this.barStartMoment = moment(this.barStartMoment).subtract(
-            minuteCount,
+            childPointCount,
             this.timeChildKey,
             true
           )
           this.barEndMoment = moment(this.barEndMoment).subtract(
-            minuteCount,
+            childPointCount,
             this.timeChildKey,
             true
           )
           break
         case 'right':
           this.barStartMoment = moment(this.barStartMoment).add(
-            minuteCount,
+            childPointCount,
             this.timeChildKey,
             true
           )
           this.barEndMoment = moment(this.barEndMoment).add(
-            minuteCount,
+            childPointCount,
             this.timeChildKey,
             true
           )
           break
         default:
           // eslint-disable-next-line
-          console.warn('wrong direction in moveBarByMinutesAndPush')
+          console.warn('wrong direction in moveBarByChildPointsAndPush')
           return
       }
       this.manageOverlapping()
@@ -463,7 +559,9 @@ export default {
         this.timeUnit,
         true
       )
-      return (timeDiffFromStart / this.getTimeCount()) * this.barContainer.width
+      let pos =
+        (timeDiffFromStart / this.getTimeCount()) * this.barContainer.width
+      return pos
     },
 
     mapPositionToTime(xPos) {
@@ -519,15 +617,16 @@ export default {
   background: white;
   opacity: 0.7;
   border-radius: 40px;
-  cursor: w-resize;
 }
 
 .g-gantt-bar-handle-left {
   left: 0;
+  cursor: w-resize;
 }
 
 .g-gantt-bar-handle-right {
   right: 0;
+  cursor: e-resize;
 }
 
 .g-gantt-bar-label img {
