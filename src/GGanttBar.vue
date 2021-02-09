@@ -469,7 +469,11 @@ export default {
     mapPositionToTime(xPos) {
       let timeDiffFromStart =
         (xPos / this.barContainer.width) * this.getTimeCount()
-      return this.chartStartMoment.clone().add(timeDiffFromStart, this.timeUnit)
+      if (this.timeUnit === 'days') {
+        let duration = moment.duration(timeDiffFromStart, 'days')
+        timeDiffFromStart = duration.asHours()
+      }
+      return moment(this.chartStartMoment).add(timeDiffFromStart, 'hours')
     },
   },
 }
