@@ -19,7 +19,7 @@
           color: themeColors.text,
         }"
       >
-        <div>{{ pointFormatted(point) }}</div>
+        <div v-html="pointFormatted(point)||'&nbsp;'"></div>
         <div
           :style="{ background: themeColors.ternary, color: themeColors.text }"
         >
@@ -103,11 +103,11 @@ export default {
       this.childPointCount = Math.floor(end.diff(start, 'day', true))
       while (start.isBefore(end)) {
         let dayCountOfMonth = start.isSame(end, 'month')
-          ? end.date()
+          ? end.date() - 1
           : start.daysInMonth() - start.date() + 1
         let widthPercentage = (dayCountOfMonth / this.childPointCount) * 100
         let endDay =
-          start.month() === end.month() ? end.date() : start.daysInMonth()
+          start.month() === end.month() ? end.date() - 1 : start.daysInMonth()
         this.axisPoints.push(
           this.getAxisMonthObject(start, widthPercentage, endDay)
         )
@@ -137,6 +137,7 @@ export default {
       let datetimeMoment = moment(datetime)
       let axisMonthObject = {
         widthPercentage: widthPercentage,
+        value: moment(datetime, 'YYYY-MM'),
         childPoints: [],
       }
       let startDay = datetimeMoment.date()
