@@ -118,7 +118,10 @@ export default {
         this.timeUnit
       )
       let bar = this.bars.find((bar) =>
-        time.isBetween(bar[this.barStart], bar[this.barEnd])
+        time.isBetween(
+          bar[this.ganttChartProps.barStartKey],
+          bar[this.ganttChartProps.barEndKey]
+        )
       )
       this.$emit('drop', { event: e, bar, time: time.format(this.timeFormat) })
     },
