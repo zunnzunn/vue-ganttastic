@@ -363,7 +363,7 @@ export default {
           }
         }
       } else if (isSqueezeToLeft) {
-        otherBars = this.allBarsInRow.slice(0, -currentIndex)
+        otherBars = this.allBarsInRow.slice(0, currentIndex)
         if (otherBars.length) {
           let otherBarTotalWidth = otherBars
             .map((bar) => this.getBarWidth(bar))
