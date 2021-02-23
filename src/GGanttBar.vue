@@ -266,11 +266,17 @@ export default {
       window.addEventListener('mouseup', this.endDrag)
     },
 
+    getBarWidth(bar) {
+      let xStart = this.mapTimeToPosition(moment(bar[this.barStartKey]))
+      let xEnd = this.mapTimeToPosition(moment(bar[this.barEndKey]))
+      return xEnd - xStart
+    },
+
     drag(e) {
       let barWidth = this.$refs['g-gantt-bar'].getBoundingClientRect().width
       let newXStart = e.clientX - this.barContainer.left - this.cursorOffsetX
       let newXEnd = newXStart + barWidth
-      if (this.isPosOutOfDragRange(newXStart, newXEnd)) {
+      if (this.isPosOutOfDragRange(e, newXStart, newXEnd)) {
         return
       }
       this.barStartMoment = this.mapPositionToTime(newXStart)
@@ -283,8 +289,8 @@ export default {
       let newXStart = e.clientX - this.barContainer.left
       let newStartMoment = this.mapPositionToTime(newXStart)
       if (
-        newStartMoment.isSameOrAfter(this.barEndMoment) ||
-        this.isPosOutOfDragRange(newXStart, null)
+        this.barEndMoment.diff(newStartMoment, this.timeUnit) < 1 ||
+        this.isPosOutOfDragRange(e, newXStart, null)
       ) {
         return
       }
@@ -297,7 +303,7 @@ export default {
       let newEndMoment = this.mapPositionToTime(newXEnd)
       if (
         newEndMoment.isSameOrBefore(this.barStartMoment, this.timeUnit) ||
-        this.isPosOutOfDragRange(null, newXEnd)
+        this.isPosOutOfDragRange(e, null, newXEnd)
       ) {
         return
       }
@@ -305,46 +311,99 @@ export default {
       this.manageOverlapping()
     },
 
-    isPosOutOfDragRange(xStart, xEnd) {
-      if (xStart && xStart < 0) {
+    isPosOutOfDragRange(e, newXStart, newXEnd) {
+      // console.log('isPosOutOfDragRange target', e.target.className)
+      if (newXStart && newXStart < 0) {
         return true
       }
-      // 设置允许推动旁边的bar时，拖拽到到位置就算进入了重叠，也不算超出范围
-      if (this.ganttChartProps.pushOnOverlap) {
-        return false
+      if (newXEnd > this.barContainer.width) {
+        return true
       }
       if (
-        xStart &&
+        newXStart &&
         this.dragLimitLeft !== null &&
-        xStart < this.dragLimitLeft + this.getMinGapBetweenBars()
+        newXStart < this.dragLimitLeft + this.getMinGapBetweenBars()
       ) {
         return true
       }
       if (
-        xEnd &&
+        newXEnd &&
         this.dragLimitRight !== null &&
-        xEnd > this.dragLimitRight - this.getMinGapBetweenBars()
+        newXEnd > this.dragLimitRight - this.getMinGapBetweenBars()
       ) {
         return true
       }
+
+      if (
+        moment(this.bar[this.barStartKey]).isAfter(this.barStartBeforeDrag) &&
+        moment(this.bar[this.barStartKey])
+          .add(1, this.timeUnit)
+          .isAfter(this.bar[this.barEndBeforeDrag])
+      ) {
+        return true
+      }
+
+      let pullToTheLeft = false,
+        pullToTheRight = false
+      let xStart = this.mapTimeToPosition(this.barStartMoment)
+      let xEnd = this.mapTimeToPosition(this.barEndMoment)
+
+      if (
+        moment(this.bar[this.barStartKey]).isBefore(this.barStartBeforeDrag)
+      ) {
+        pullToTheLeft = true
+      } else if (
+        moment(this.bar[this.barEndKey]).isAfter(this.barEndBeforeDrag)
+      ) {
+        pullToTheRight = true
+      }
+
+      let currentIndex = this.allBarsInRow.findIndex((bar) => bar == this.bar)
+
+      let otherBars = []
+      if (newXEnd && pullToTheRight) {
+        otherBars = this.allBarsInRow.slice(currentIndex + 1)
+        if (otherBars.length) {
+          let otherBarTotalWidth = otherBars
+            .map((bar) => this.getBarWidth(bar))
+            .reduce((accumulator, currentValue) => accumulator + currentValue)
+          if (newXEnd > this.barContainer.width - otherBarTotalWidth) {
+            return true
+          }
+        }
+      } else if (newXStart && pullToTheLeft) {
+        otherBars = this.allBarsInRow.slice(
+          0,
+          this.allBarsInRow.length - currentIndex
+        )
+        if (otherBars.length) {
+          let otherBarTotalWidth = otherBars
+            .map((bar) => this.getBarWidth(bar))
+            .reduce((accumulator, currentValue) => accumulator + currentValue)
+          if (newXStart < otherBarTotalWidth) {
+            return true
+          }
+        }
+      }
+
       return false
     },
 
     endDrag(e) {
-        let left = false,
-          right = false,
-          move = false
-        switch (document.body.style.cursor) {
-          case 'e-resize':
-            right = true
-            break
-          case 'w-resize':
-            left = true
-            break
-          default:
-            move = true
-            break
-        }
+      let left = false,
+        right = false,
+        move = false
+      switch (document.body.style.cursor) {
+        case 'e-resize':
+          right = true
+          break
+        case 'w-resize':
+          left = true
+          break
+        default:
+          move = true
+          break
+      }
       // console.log('endDrag', { left, right, move })
       this.isDragging = false
       this.dragLimitLeft = null
