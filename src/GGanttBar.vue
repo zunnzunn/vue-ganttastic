@@ -276,7 +276,7 @@ export default {
       let barWidth = this.$refs['g-gantt-bar'].getBoundingClientRect().width
       let newXStart = e.clientX - this.barContainer.left - this.cursorOffsetX
       let newXEnd = newXStart + barWidth
-      if (this.isPosOutOfDragRange(e, newXStart, newXEnd)) {
+      if (this.isPosOutOfDragRange(newXStart, newXEnd)) {
         return
       }
       this.barStartMoment = this.mapPositionToTime(newXStart)
@@ -290,7 +290,7 @@ export default {
       let newStartMoment = this.mapPositionToTime(newXStart)
       if (
         this.barEndMoment.diff(newStartMoment, this.timeUnit) < 1 ||
-        this.isPosOutOfDragRange(e, newXStart, null)
+        this.isPosOutOfDragRange(newXStart, null)
       ) {
         return
       }
@@ -303,7 +303,7 @@ export default {
       let newEndMoment = this.mapPositionToTime(newXEnd)
       if (
         newEndMoment.isSameOrBefore(this.barStartMoment, this.timeUnit) ||
-        this.isPosOutOfDragRange(e, null, newXEnd)
+        this.isPosOutOfDragRange(null, newXEnd)
       ) {
         return
       }
@@ -311,8 +311,7 @@ export default {
       this.manageOverlapping()
     },
 
-    isPosOutOfDragRange(e, newXStart, newXEnd) {
-      // console.log('isPosOutOfDragRange target', e.target.className)
+    isPosOutOfDragRange(newXStart, newXEnd) {
       if (newXStart && newXStart < 0) {
         return true
       }
@@ -343,25 +342,17 @@ export default {
         return true
       }
 
-      let pullToTheLeft = false,
-        pullToTheRight = false
-      let xStart = this.mapTimeToPosition(this.barStartMoment)
-      let xEnd = this.mapTimeToPosition(this.barEndMoment)
-
-      if (
+      const isSqueezeToLeft =
+        newXStart &&
         moment(this.bar[this.barStartKey]).isBefore(this.barStartBeforeDrag)
-      ) {
-        pullToTheLeft = true
-      } else if (
+      const isSqueezeToRight =
+        newXEnd &&
         moment(this.bar[this.barEndKey]).isAfter(this.barEndBeforeDrag)
-      ) {
-        pullToTheRight = true
-      }
 
-      let currentIndex = this.allBarsInRow.findIndex((bar) => bar == this.bar)
+      const currentIndex = this.allBarsInRow.findIndex((bar) => bar == this.bar)
 
       let otherBars = []
-      if (newXEnd && pullToTheRight) {
+      if (isSqueezeToRight) {
         otherBars = this.allBarsInRow.slice(currentIndex + 1)
         if (otherBars.length) {
           let otherBarTotalWidth = otherBars
@@ -371,11 +362,8 @@ export default {
             return true
           }
         }
-      } else if (newXStart && pullToTheLeft) {
-        otherBars = this.allBarsInRow.slice(
-          0,
-          this.allBarsInRow.length - currentIndex
-        )
+      } else if (isSqueezeToLeft) {
+        otherBars = this.allBarsInRow.slice(0, -currentIndex)
         if (otherBars.length) {
           let otherBarTotalWidth = otherBars
             .map((bar) => this.getBarWidth(bar))
