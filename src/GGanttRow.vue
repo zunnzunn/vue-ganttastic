@@ -134,10 +134,17 @@ export default {
       )
       let bar = {}
       bar[this.ganttChartProps.barStartKey] = time.format()
-      bar[this.ganttChartProps.barEndKey] = time.add(this.getDefaultBarLength(), this.timeUnit).format()
+      bar[this.ganttChartProps.barEndKey] = time
+        .add(this.getDefaultBarLength(), this.timeUnit)
+        .format()
 
       bar.ganttBarConfig = { handles: true }
       this.bars.push(bar)
+      this.bars.sort((first, second) =>
+        moment(first[this.ganttChartProps.barStartKey]).diff(
+          second[this.ganttChartProps.barStartKey]
+        )
+      )
     },
 
     onMouseover() {
