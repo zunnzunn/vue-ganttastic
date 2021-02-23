@@ -126,8 +126,9 @@ export default {
     onDoubleClick(e) {
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
-      let timeDiffFromStart =
-        Math.round(xPos / barContainer.width * this.getTimeCount())
+      let timeDiffFromStart = Math.floor(
+        (xPos / barContainer.width) * this.getTimeCount()
+      )
       let time = moment(this.getChartStart()).add(
         timeDiffFromStart,
         this.timeUnit
