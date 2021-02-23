@@ -65,8 +65,8 @@ export default {
     defaultBarLength: { type: Number, default: 1 },
     // ["month_days", "day_hours"]
     timeaxisMode: { type: String, default: 'month_days' },
-    barStartKey: { type: String, required: true }, // property name of the bar objects that represents the start datetime
-    barEndKey: { type: String, required: true }, // property name of the bar objects that represents the end datetime,
+    barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
+    barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime,
   },
 
   data() {
