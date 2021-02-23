@@ -17,7 +17,7 @@
       @dragover="onDragover($event)"
       @dragleave="onDragleave($event)"
       @drop="onDrop($event)"
-      @dblclick="onDoubleClick($event)"
+      @dblclick.self="onDoubleClick($event)"
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
     >
