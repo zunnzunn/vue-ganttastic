@@ -130,14 +130,15 @@ export default {
     onDoubleClick(e) {
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
-      let timeDiffFromStart = (xPos / barContainer.width) * this.getTimeCount()
+      let timeDiffFromStart =
+        Math.round(xPos / barContainer.width * this.getTimeCount())
       let time = moment(this.getChartStart()).add(
         timeDiffFromStart,
         this.timeUnit
       )
       let bar = {}
-      bar[this.barStart] = time
-      bar[this.barEnd] = time.add(this.getDefaultBarLength(), this.timeUnit)
+      bar[this.ganttChartProps.barStartKey] = time.format()
+      bar[this.ganttChartProps.barEndKey] = time.add(this.getDefaultBarLength(), this.timeUnit).format()
 
       bar.ganttBarConfig = { handles: true }
       this.bars.push(bar)
