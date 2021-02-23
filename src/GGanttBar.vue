@@ -51,8 +51,6 @@ export default {
 
   props: {
     bar: { type: Object },
-    barStartKey: { type: String }, // property name of the bar objects that represents the start datetime,
-    barEndKey: { type: String }, // property name of the bar objects that represents the end datetime,
     barContainer: [Object, DOMRect],
     allBarsInRow: { type: Array },
   },
@@ -92,6 +90,8 @@ export default {
       timeChildFormat:
         this.ganttChartProps.timeaxisMode === 'month_days' ? 'MM-DD' : 'HH:mm',
       timeFormat: this.getTimeFormat(),
+      barStartKey: this.ganttChartProps.barStartKey,
+      barEndKey: this.ganttChartProps.barEndKey,
     }
   },
 
@@ -331,9 +331,6 @@ export default {
     },
 
     endDrag(e) {
-      // Magnetic suction
-
-      if (this.ganttChartProps.isMagnetic) {
         let left = false,
           right = false,
           move = false
@@ -348,61 +345,7 @@ export default {
             move = true
             break
         }
-        console.log({ left, right, move })
-
-        this.allBarsInRow.forEach((bar) => {
-          if (this.ganttChartProps.timeaxisMode === 'month_days') {
-            if (left && bar == this.bar) {
-              if (moment(bar[this.barStartKey]).hours() < 12) {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(0)
-              } else {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(24)
-              }
-            } else if (right && bar == this.bar) {
-              if (moment(bar[this.barEndKey]).hours() < 12) {
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(0)
-              } else {
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(24)
-              }
-            } else {
-              if (moment(bar[this.barStartKey]).hours() < 12) {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(0)
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(0)
-              } else {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).hours(24)
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).hours(24)
-              }
-            }
-          } else {
-            if (left && bar == this.bar) {
-              if (moment(bar[this.barStartKey]).minutes() < 30) {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(0)
-              } else {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(
-                  60
-                )
-              }
-            } else if (right && bar == this.bar) {
-              if (moment(bar[this.barEndKey]).minutes() < 30) {
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(0)
-              } else {
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(60)
-              }
-            } else {
-              if (moment(bar[this.barStartKey]).minutes() < 30) {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(0)
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(0)
-              } else {
-                bar[this.barStartKey] = moment(bar[this.barStartKey]).minutes(
-                  60
-                )
-                bar[this.barEndKey] = moment(bar[this.barEndKey]).minutes(60)
-              }
-            }
-          }
-        })
-      }
-
+      // console.log('endDrag', { left, right, move })
       this.isDragging = false
       this.dragLimitLeft = null
       this.dragLimitRight = null
@@ -410,7 +353,7 @@ export default {
       window.removeEventListener('mousemove', this.mousemoveCallback)
       window.removeEventListener('mouseup', this.endDrag)
       if (this.isMainBarOfDrag) {
-        this.onDragendBar(e, this)
+        this.onDragendBar(e, this, { left, right, move })
         this.isMainBarOfDrag = false
       }
     },

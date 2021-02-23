@@ -65,6 +65,8 @@ export default {
     defaultBarLength: { type: Number, default: 1 },
     // ["month_days", "day_hours"]
     timeaxisMode: { type: String, default: 'month_days' },
+    barStartKey: { type: String, required: true }, // property name of the bar objects that represents the start datetime
+    barEndKey: { type: String, required: true }, // property name of the bar objects that represents the end datetime,
   },
 
   data() {
@@ -73,7 +75,9 @@ export default {
       movedBarsInDrag: new Set(),
       timeUnit: this.timeaxisMode === 'month_days' ? 'days' : 'hours',
       timeFormat:
-        this.timeaxisMode === 'month_days' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm',
+        this.timeaxisMode === 'month_days'
+          ? 'YYYY-MM-DD HH'
+          : 'YYYY-MM-DD HH:mm',
     }
   },
 
@@ -81,7 +85,9 @@ export default {
     timeCount() {
       let momentChartStart = moment(this.chartStart)
       let momentChartEnd = moment(this.chartEnd)
-      return Math.floor(momentChartEnd.diff(momentChartStart, this.timeUnit, true))
+      return Math.floor(
+        momentChartEnd.diff(momentChartStart, this.timeUnit, true)
+      )
     },
 
     themeColors() {
@@ -177,9 +183,93 @@ export default {
       this.$emit(`${type}-bar`, { event, bar: ganttBar.bar, time })
     },
 
-    onDragendBar(e, ganttBar) {
+    onDragendBar(e, ganttBar, action) {
       let didSnapBack = this.snapBackBundleIfNeeded(ganttBar)
       let movedBars = didSnapBack ? new Set() : this.movedBarsInDrag
+      // Magnetic suction
+      if (movedBars.size && this.isMagnetic) {
+        let { left, right, move } = action
+
+        movedBars.forEach((bar) => {
+          if (this.timeaxisMode === 'month_days') {
+            if (left && bar == ganttBar.bar) {
+              if (moment(bar[this.barStartKey]).hours() < 12) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .hours(0)
+                  .format()
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .hours(24)
+                  .format()
+              }
+            } else if (right && bar == ganttBar.bar) {
+              if (moment(bar[this.barEndKey]).hours() < 12) {
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .hours(0)
+                  .format()
+              } else {
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .hours(24)
+                  .format()
+              }
+            } else {
+              if (moment(bar[this.barStartKey]).hours() < 12) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .hours(0)
+                  .format()
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .hours(0)
+                  .format()
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .hours(24)
+                  .format()
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .hours(24)
+                  .format()
+              }
+            }
+          } else {
+            if (left && bar == ganttBar.bar) {
+              if (moment(bar[this.barStartKey]).minutes() < 30) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .minutes(0)
+                  .format()
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .minutes(60)
+                  .format()
+              }
+            } else if (right && bar == ganttBar.bar) {
+              if (moment(bar[this.barEndKey]).minutes() < 30) {
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .minutes(0)
+                  .format()
+              } else {
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .minutes(60)
+                  .format()
+              }
+            } else {
+              if (moment(bar[this.barStartKey]).minutes() < 30) {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .minutes(0)
+                  .format()
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .minutes(0)
+                  .format()
+              } else {
+                bar[this.barStartKey] = moment(bar[this.barStartKey])
+                  .minutes(60)
+                  .format()
+                bar[this.barEndKey] = moment(bar[this.barEndKey])
+                  .minutes(60)
+                  .format()
+              }
+            }
+          }
+        })
+      }
       this.movedBarsInDrag = new Set()
       this.$emit('dragend-bar', { event: e, bar: ganttBar.bar, movedBars })
     },
@@ -373,7 +463,8 @@ export default {
       setDragLimitsOfGanttBar: (ganttBar) =>
         this.setDragLimitsOfGanttBar(ganttBar),
       onBarEvent: (e, ganttBar) => this.onBarEvent(e, ganttBar),
-      onDragendBar: (e, ganttBar) => this.onDragendBar(e, ganttBar),
+      onDragendBar: (e, ganttBar, action) =>
+        this.onDragendBar(e, ganttBar, action),
       shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
       snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
       getMinGapBetweenBars: () => this.minGapBetweenBars,
