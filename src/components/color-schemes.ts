@@ -1,4 +1,4 @@
-type ThemeColors = {
+export type ColorScheme = {
   primary: string,
   secondary: string,
   ternary: string,
@@ -8,7 +8,7 @@ type ThemeColors = {
   toast?: string
 }
 
-export const themeColors: Record<string, ThemeColors> = {
+export const colorSchemes: Record<string, ColorScheme> = {
   default: {
     primary: "#eeeeee",
     secondary: "#E0E0E0",
@@ -111,4 +111,4 @@ export const themeColors: Record<string, ThemeColors> = {
   }
 }
 
-export default themeColors
+export default colorSchemes

@@ -23,6 +23,7 @@
   "author": "Marko Zunic",
   "license": "MIT",
   "dependencies": {
+    "dayjs": "^1.10.5",
     "vue": "^3.0.0"
   },
   "devDependencies": {
