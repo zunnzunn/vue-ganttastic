@@ -2,11 +2,11 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, width }, index) in getUnits(true)"
+        v-for="({ label, width }, index) in upperUnits"
         :key="label"
         class="g-high-timeunit"
         :style="{
-          background: index%2===0 ? colors.primary : colors.secondary,
+          background: index % 2 === 0 ? colors.primary : colors.secondary,
           color: colors.text,
           width
         }"
@@ -17,7 +17,7 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="{ label } in getUnits()"
+        v-for="{ label } in lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
@@ -69,9 +69,6 @@ export default defineComponent({
 
   setup (props) {
     const { precision } = toRefs(props)
-    const dayjsStart = computed(() => dayjs(props.chartStart))
-    const dayjsEnd = computed(() => dayjs(props.chartEnd))
-
     const upperPrecision = computed(() => {
       switch (precision.value) {
         case "hour":
@@ -86,28 +83,52 @@ export default defineComponent({
     })
     const displayFormats = {
       hour: "HH",
-      day: "dd, DD.MM ",
+      date: "DD.MM ",
+      day: "DD.MM ",
       month: "MMMM YYYY",
       year: "YYYY"
     }
 
-    const getUnits = (upper: boolean) => {
-      const units :{label: string, width?: string}[] = []
-      const unit = upper ? upperPrecision.value : precision.value
-      const format = displayFormats[unit]
-      let start = dayjsStart.value
-      const diff = dayjsEnd.value.diff(dayjsStart.value, unit, true)
-      for (let i = 0; i <= diff; i++) {
-        units.push({
-          label: start.format(format)
+    const getUnits = () => {
+      const upperUnits :{label: string, value?: string, width?: string}[] = []
+      const lowerUnits :{label: string, width?: string}[] = []
+      const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
+      const lowerUnit = precision.value
+      let unitDayjs = dayjs(props.chartStart).startOf(lowerUnit)
+      const diff = -unitDayjs.diff(props.chartEnd, lowerUnit, true)
+      let lowerUnitCount = 0
+      let currentUpperUnitVal = unitDayjs[upperUnit]()
+      while (unitDayjs.isBefore(props.chartEnd) || unitDayjs.isSame(props.chartEnd)) {
+        if (unitDayjs[upperUnit]() !== currentUpperUnitVal) {
+          upperUnits.push({
+            label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
+            value: String(currentUpperUnitVal),
+            width: `${(lowerUnitCount / diff) * 100}%`
+          })
+          lowerUnitCount = 0
+          currentUpperUnitVal = unitDayjs[upperUnit]()
+        }
+        lowerUnits.push({
+          label: unitDayjs.format(displayFormats[lowerUnit])
         })
-        // TODO: compute width for upper units
-        start = start.add(1, unit)
+        unitDayjs = unitDayjs.add(1, lowerUnit)
+        ++lowerUnitCount
       }
-      return units
+      if (!upperUnits.some(un => un.value === String(currentUpperUnitVal))) {
+        upperUnits.push({
+          label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
+          value: String(currentUpperUnitVal),
+          width: `${(lowerUnitCount / diff) * 100}%`
+        })
+      }
+      return { upperUnits, lowerUnits }
     }
 
+    const { upperUnits, lowerUnits } = getUnits()
+
     return {
+      upperUnits,
+      lowerUnits,
       getUnits,
       dayjs
     }
@@ -137,13 +158,15 @@ export default defineComponent({
     height: 50%;
   }
 
-  .g-high-timeunit, .g-timeunit{
+  .g-timeunit{
     flex: 1;
     height: 100%;
+    font-size: 0.4em;
   }
 
   .g-high-timeunit {
     display: flex;
+    height: 100%;
     justify-content: center;
     align-items: center;
   }
