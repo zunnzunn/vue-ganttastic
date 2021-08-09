@@ -11,6 +11,15 @@
       row-label-width="10%"
       :colors="colors"
     />
+    <g-gantt-grid
+      v-if="grid"
+      :chart-start="chartStart"
+      :chart-end="chartEnd"
+      :precision="precision"
+    />
+    <div id="g-gantt-rows-container">
+      <slot />   <!-- the g-gantt-row components go here -->
+    </div>
   </div>
 </template>
 
@@ -18,13 +27,15 @@
 import dayjs from "dayjs"
 import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
+import GGanttGrid from "./GGanttGrid.vue"
 import { defineComponent, computed, PropType } from "vue"
 
 export default defineComponent({
   name: "GGanttChart",
 
   components: {
-    GGanttTimeaxis
+    GGanttTimeaxis,
+    GGanttGrid
   },
 
   props: {
@@ -50,6 +61,10 @@ export default defineComponent({
     colorScheme: {
       type: String,
       default: "default"
+    },
+    grid: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -79,5 +94,8 @@ export default defineComponent({
     user-select: none;
     padding-bottom: 23px;
     font-family: Helvetica;
+  }
+   #g-gantt-rows-container{
+    position: relative;
   }
 </style>

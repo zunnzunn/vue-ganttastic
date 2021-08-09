@@ -2,7 +2,7 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, width }, index) in upperUnits"
+        v-for="({ label, width }, index) in timeaxisUnits.upperUnits"
         :key="label"
         class="g-high-timeunit"
         :style="{
@@ -17,7 +17,7 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="{ label } in lowerUnits"
+        v-for="{ label } in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
@@ -37,9 +37,9 @@
 </template>
 
 <script lang="ts">
-import dayjs from "dayjs"
 import { ColorScheme } from "./color-schemes"
-import { defineComponent, computed, PropType, toRefs } from "vue"
+import useTimeaxisUnits from "../composables/useTimeaxisUnits"
+import { defineComponent, PropType, toRefs } from "vue"
 
 export default defineComponent({
   name: "GGanttTimeaxis",
@@ -57,10 +57,6 @@ export default defineComponent({
       type: String as PropType<"hour" | "day" | "month">,
       required: true
     },
-    rowLabelWidth: {
-      type: String,
-      required: true
-    },
     colors: {
       type: Object as PropType<ColorScheme>,
       required: true
@@ -68,69 +64,12 @@ export default defineComponent({
   },
 
   setup (props) {
-    const { precision } = toRefs(props)
-    const upperPrecision = computed(() => {
-      switch (precision.value) {
-        case "hour":
-          return "day"
-        case "day":
-          return "month"
-        case "month":
-          return "year"
-        default:
-          throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'month'")
-      }
-    })
-    const displayFormats = {
-      hour: "HH",
-      date: "DD.MM ",
-      day: "DD.MM ",
-      month: "MMMM YYYY",
-      year: "YYYY"
-    }
+    const { chartStart, chartEnd, precision } = toRefs(props)
 
-    const getUnits = () => {
-      const upperUnits :{label: string, value?: string, width?: string}[] = []
-      const lowerUnits :{label: string, width?: string}[] = []
-      const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
-      const lowerUnit = precision.value
-      let unitDayjs = dayjs(props.chartStart).startOf(lowerUnit)
-      const diff = -unitDayjs.diff(props.chartEnd, lowerUnit, true)
-      let lowerUnitCount = 0
-      let currentUpperUnitVal = unitDayjs[upperUnit]()
-      while (unitDayjs.isBefore(props.chartEnd) || unitDayjs.isSame(props.chartEnd)) {
-        if (unitDayjs[upperUnit]() !== currentUpperUnitVal) {
-          upperUnits.push({
-            label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
-            value: String(currentUpperUnitVal),
-            width: `${(lowerUnitCount / diff) * 100}%`
-          })
-          lowerUnitCount = 0
-          currentUpperUnitVal = unitDayjs[upperUnit]()
-        }
-        lowerUnits.push({
-          label: unitDayjs.format(displayFormats[lowerUnit])
-        })
-        unitDayjs = unitDayjs.add(1, lowerUnit)
-        ++lowerUnitCount
-      }
-      if (!upperUnits.some(un => un.value === String(currentUpperUnitVal))) {
-        upperUnits.push({
-          label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
-          value: String(currentUpperUnitVal),
-          width: `${(lowerUnitCount / diff) * 100}%`
-        })
-      }
-      return { upperUnits, lowerUnits }
-    }
-
-    const { upperUnits, lowerUnits } = getUnits()
+    const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
 
     return {
-      upperUnits,
-      lowerUnits,
-      getUnits,
-      dayjs
+      timeaxisUnits
     }
   }
 })

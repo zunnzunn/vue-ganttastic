@@ -3,7 +3,10 @@
     chart-start="2021-07-30 02:00"
     chart-end="2021-08-01 23:59"
     precision="hour"
-  />
+    grid
+  >
+    <div style="width: 100%; height: 25vh;" />
+  </g-gantt-chart>
 </template>
 
 <script lang="ts">
