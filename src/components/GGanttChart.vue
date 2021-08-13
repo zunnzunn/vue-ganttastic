@@ -8,9 +8,9 @@
       :chart-start="chartStart"
       :chart-end="chartEnd"
       :precision="precision"
-      row-label-width="10%"
       :colors="colors"
     />
+
     <g-gantt-grid
       v-if="grid"
       :chart-start="chartStart"
@@ -28,7 +28,8 @@ import dayjs from "dayjs"
 import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
-import { defineComponent, computed, PropType } from "vue"
+import INJECTION_KEYS from "../models/symbols"
+import { defineComponent, computed, PropType, provide, toRefs, ref } from "vue"
 
 export default defineComponent({
   name: "GGanttChart",
@@ -69,9 +70,14 @@ export default defineComponent({
   },
 
   setup (props) {
+    const { chartStart, chartEnd, precision, width } = toRefs(props)
     const colors = computed(() => {
       return colorSchemes[props.colorScheme] || colorSchemes.default
     })
+    provide(INJECTION_KEYS.chartStartKey, chartStart)
+    provide(INJECTION_KEYS.chartEndKey, chartEnd)
+    provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
+    provide(INJECTION_KEYS.precisionKey, precision)
     return {
       colors
     }
