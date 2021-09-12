@@ -23,67 +23,32 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs from "dayjs"
 import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { defineComponent, computed, PropType, provide, toRefs, ref } from "vue"
+import { defineComponent, computed, provide, toRefs, ref, defineProps } from "vue"
 
-export default defineComponent({
-  name: "GGanttChart",
+const props = defineProps<{
+    chartStart: string
+    chartEnd: string
+    precision: "hour" | "day" | "month"
+    width: string
+    hideTimeaxis: boolean
+    colorScheme: string,
+    grid: boolean
+  }>()
 
-  components: {
-    GGanttTimeaxis,
-    GGanttGrid
-  },
-
-  props: {
-    chartStart: {
-      type: String,
-      default: dayjs().format("YYYY-MM-DD HH:mm")
-    },
-    chartEnd: {
-      type: String,
-      default: dayjs().add(1, "day").format("YYYY-MM-DD HH:mm")
-    },
-    precision: {
-      type: String as PropType<"hour" | "day" | "month">,
-      default: "hour"
-    },
-    width: {
-      type: String,
-      default: "800px"
-    },
-    hideTimeaxis: {
-      type: Boolean
-    },
-    colorScheme: {
-      type: String,
-      default: "default"
-    },
-    grid: {
-      type: Boolean,
-      default: false
-    }
-  },
-
-  setup (props) {
-    const { chartStart, chartEnd, precision, width } = toRefs(props)
-    const colors = computed(() => {
-      return colorSchemes[props.colorScheme] || colorSchemes.default
-    })
-    provide(INJECTION_KEYS.chartStartKey, chartStart)
-    provide(INJECTION_KEYS.chartEndKey, chartEnd)
-    provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
-    provide(INJECTION_KEYS.precisionKey, precision)
-    return {
-      colors
-    }
-  }
-
+const { chartStart, chartEnd, precision, width } = toRefs(props)
+const colors = computed(() => {
+  return colorSchemes[props.colorScheme] || colorSchemes.default
 })
+provide(INJECTION_KEYS.chartStartKey, chartStart)
+provide(INJECTION_KEYS.chartEndKey, chartEnd)
+provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
+provide(INJECTION_KEYS.precisionKey, precision)
 </script>
 
 <style scoped>
@@ -101,7 +66,8 @@ export default defineComponent({
     padding-bottom: 23px;
     font-family: Helvetica;
   }
-   #g-gantt-rows-container{
+
+  #g-gantt-rows-container{
     position: relative;
   }
 </style>

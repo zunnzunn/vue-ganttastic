@@ -36,44 +36,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ColorScheme } from "./color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineComponent, PropType, toRefs } from "vue"
+import { defineProps, toRefs } from "vue"
 
-export default defineComponent({
-  name: "GGanttTimeaxis",
-
-  props: {
-    chartStart: {
-      type: String,
-      required: true
-    },
-    chartEnd: {
-      type: String,
-      required: true
-    },
-    precision: {
-      type: String as PropType<"hour" | "day" | "month">,
-      required: true
-    },
-    colors: {
-      type: Object as PropType<ColorScheme>,
-      required: true
-    }
-  },
-
-  setup (props) {
-    const { chartStart, chartEnd, precision } = toRefs(props)
-
-    const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
-
-    return {
-      timeaxisUnits
-    }
-  }
-})
-
+const props = defineProps<{
+  chartStart: string
+  chartEnd: string
+  precision: "hour" | "day" | "month"
+  colors: ColorScheme
+}>()
+const { chartStart, chartEnd, precision } = toRefs(props)
+const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
 </script>
 
 <style scoped>

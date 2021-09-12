@@ -25,52 +25,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue"
+<script setup lang="ts">
+import { defineProps } from "vue"
 import GanttBarObject from "../models/GanttBarObject"
 import GGanttBar from "./GGanttBar.vue"
 
-export default defineComponent({
-  name: "GGanttRow",
-  components: {
-    GGanttBar
-  },
+const props = defineProps<{
+  label: string
+  bars: GanttBarObject[]
+  barStart: string,
+  barEnd: string,
+  highlightOnHover: boolean
+}>()
 
-  props: {
-    label: {
-      type: String,
-      default: "Row"
-    },
-    bars: {
-      type: Array as PropType<Array<GanttBarObject>>,
-      default: () => []
-    },
-    barStart: { // property name of the bar objects that represents the start datetime
-      type: String,
-      required: true
-    },
-    barEnd: { // property name of the bar objects that represents the end datetime
-      type: String,
-      required: true
-    },
-    highlightOnHover: Boolean
-  },
-
-  setup () {
-    const onDragover = () => console.log("foo")
-    const onDragleave = () => console.log("foo")
-    const onDrop = () => console.log("foo")
-    const onMouseover = () => console.log("foo")
-    const onMouseleave = () => console.log("foo")
-    return {
-      onDragover,
-      onDragleave,
-      onDrop,
-      onMouseover,
-      onMouseleave
-    }
-  }
-})
+const onDragover = () => console.log("foo")
+const onDragleave = () => console.log("foo")
+const onDrop = () => console.log("foo")
+const onMouseover = () => console.log("foo")
+const onMouseleave = () => console.log("foo")
 </script>
 
 <style scoped>

@@ -5,45 +5,24 @@
       :key="index"
       :class="{
         'g-grid-line': true,
-        'g-grid-line-highlighted': highlightedUnits.includes(unit.value)
+        'g-grid-line-highlighted': highlightedUnits.includes(Number(unit.value))
       }"
     />
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineComponent, toRefs, PropType } from "vue"
+import { defineProps, toRefs } from "vue"
 
-export default defineComponent({
-  name: "GGanttGrid",
-  props: {
-    chartStart: {
-      type: String,
-      required: true
-    },
-    chartEnd: {
-      type: String,
-      required: true
-    },
-    precision: {
-      type: String as PropType<"hour" | "day" | "month">,
-      required: true
-    },
-    highlightedUnits: {
-      type: Array as PropType<number[]>,
-      default: () => []
-    }
-  },
-
-  setup (props) {
-    const { chartStart, chartEnd, precision } = toRefs(props)
-    const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
-    return {
-      timeaxisUnits
-    }
-  }
-})
+const props = defineProps<{
+    chartStart: string
+    chartEnd: string
+    precision: "hour" | "day" | "month"
+    highlightedUnits: number[]
+  }>()
+const { chartStart, chartEnd, precision } = toRefs(props)
+const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
 </script>
 
 <style scoped>
