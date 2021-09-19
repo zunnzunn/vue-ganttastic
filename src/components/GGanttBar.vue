@@ -1,19 +1,21 @@
 <template>
-  <div>
-    <div
-      ref="barElement"
-      class="g-gantt-bar"
-      :style="barStyle"
-      @mousedown="onMousedown($event)"
-    >
-      {{ bar[barStart] }}
-    </div>
+  <div
+    ref="barElement"
+    class="g-gantt-bar"
+    :style="barStyle"
+    @mousedown="onMousedown($event)"
+  >
+    {{ bar[barStart] }}
+    <template v-if="bar.ganttBarConfig.hasHandles">
+      <div class="g-gantt-bar-handle-left" />
+      <div class="g-gantt-bar-handle-right" />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs"
-import { defineProps, defineExpose, ref, computed, toRefs, inject } from "vue"
+import { defineProps, defineExpose, ref, computed, toRefs, inject, onMOunted, onMounted } from "vue"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 import GanttBarObject from "../models/GanttBarObject"
 import INJECTION_KEYS from "../models/symbols"
@@ -33,8 +35,6 @@ if (!chartStart || !chartEnd || !precision || !chartWidth) {
 }
 
 const { bar, barStart, barEnd } = toRefs(props)
-const barElement = ref<HTMLElement>()
-const barContainer = barElement.value?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
 const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
 
 const barStyle = computed(() => {
@@ -63,7 +63,11 @@ const mapPositionToTime = (xPos: number) => {
 }
 
 let cursorOffsetX = 0
-
+const barElement = ref<HTMLElement>()
+let barContainer: DOMRect | undefined
+onMounted(() => {
+  barContainer = barElement.value?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+})
 const onMousedown = (e: MouseEvent) => {
   e.preventDefault()
   window.addEventListener("mousemove", onFirstMousemove, { once: true })
@@ -77,26 +81,62 @@ const onFirstMousemove = (e: MouseEvent) => {
   initDrag(e)
 }
 
+let dragCallBack : (e: MouseEvent) => void
+
 const initDrag = (e: MouseEvent) => {
   cursorOffsetX = e.clientX - (barElement.value?.getBoundingClientRect().left || 0)
-  window.addEventListener("mousemove", drag)
+  const mousedownType = (e.target as Element).className
+  console.log("🚀 ~ file: GGanttBar.vue ~ line 87 ~ initDrag ~ mousedownType", mousedownType)
+  switch (mousedownType) {
+    case "g-gantt-bar-handle-left":
+      document.body.style.cursor = "w-resize"
+      dragCallBack = dragByLeftHandle
+      break
+    case "g-gantt-bar-handle-right":
+      document.body.style.cursor = "w-resize"
+      dragCallBack = dragByRightHandle
+      break
+    default: dragCallBack = drag
+  }
+  window.addEventListener("mousemove", dragCallBack)
   window.addEventListener("mouseup", endDrag)
 }
 
 const drag = (e: MouseEvent) => {
-  if (barElement.value) {
-    const barContainerOffsetLeft = 0
+  if (barElement.value && barContainer) {
     const barWidth = barElement.value?.getBoundingClientRect().width
-    const xStart = (e.clientX - barContainerOffsetLeft - cursorOffsetX)
+    const xStart = (e.clientX - barContainer.left - cursorOffsetX)
     const xEnd = xStart + barWidth
     bar.value[barStart.value] = mapPositionToTime(xStart)
     bar.value[barEnd.value] = mapPositionToTime(xEnd)
   }
 }
 
+const dragByLeftHandle = (e: MouseEvent) => {
+  if (barElement.value && barContainer) {
+    const xStart = e.clientX - barContainer.left
+    const newBarStart = mapPositionToTime(xStart)
+    if (dayjs(newBarStart).isSameOrAfter(bar.value[barEnd.value])) {
+      return
+    }
+    bar.value[barStart.value] = newBarStart
+  }
+}
+
+const dragByRightHandle = (e: MouseEvent) => {
+  if (barElement.value && barContainer) {
+    const xEnd = e.clientX - barContainer.left
+    const newBarEnd = mapPositionToTime(xEnd)
+    if (dayjs(newBarEnd).isSameOrBefore(bar.value[barStart.value])) {
+      return
+    }
+    bar.value[barEnd.value] = newBarEnd
+  }
+}
+
 const endDrag = (e: MouseEvent) => {
   document.body.style.cursor = "auto"
-  window.removeEventListener("mousemove", drag)
+  window.removeEventListener("mousemove", dragCallBack)
   window.removeEventListener("mouseup", endDrag)
 }
 
@@ -105,3 +145,22 @@ defineExpose({
 })
 
 </script>
+
+<style scoped>
+.g-gantt-bar-handle-left, .g-gantt-bar-handle-right {
+  position: absolute;
+  width: 10px;
+  height: 100%;
+  background: white;
+  opacity: 0.7;
+  border-radius: 40px;
+  cursor: w-resize;
+  top: 0;
+}
+.g-gantt-bar-handle-left {
+  left: 0;
+}
+.g-gantt-bar-handle-right {
+  right: 0;
+}
+</style>

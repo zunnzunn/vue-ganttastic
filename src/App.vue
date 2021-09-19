@@ -24,6 +24,7 @@ const bars = ref([
     beginDate: "2021-07-26 00:00",
     endDate: "2021-07-27 12:00",
     ganttBarConfig: {
+      hasHandles: true,
       style: {
         background: "yellow"
       }
