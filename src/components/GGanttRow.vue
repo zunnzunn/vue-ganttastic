@@ -7,9 +7,9 @@
     <div
       ref="barContainer"
       class="g-gantt-row-bars-container"
-      @dragover="onDragover($event)"
-      @dragleave="onDragleave($event)"
-      @drop="onDrop($event)"
+      @dragover="onDragover()"
+      @dragleave="onDragleave()"
+      @drop="onDrop()"
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
     >
@@ -38,11 +38,11 @@ const props = defineProps<{
   highlightOnHover: boolean
 }>()
 
-const onDragover = () => console.log("foo")
-const onDragleave = () => console.log("foo")
-const onDrop = () => console.log("foo")
-const onMouseover = () => console.log("foo")
-const onMouseleave = () => console.log("foo")
+const onDragover = () => 0
+const onDragleave = () => 0
+const onDrop = () => 0
+const onMouseover = () => 0
+const onMouseleave = () => 0
 </script>
 
 <style scoped>
