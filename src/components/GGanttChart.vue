@@ -38,10 +38,11 @@ const props = defineProps<{
     width: string
     hideTimeaxis: boolean
     colorScheme: string,
-    grid: boolean
+    grid: boolean,
+    pushOnOverlap: boolean
   }>()
 
-const { chartStart, chartEnd, precision, width } = toRefs(props)
+const { chartStart, chartEnd, precision, width, pushOnOverlap } = toRefs(props)
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
 })
@@ -49,6 +50,7 @@ provide(INJECTION_KEYS.chartStartKey, chartStart)
 provide(INJECTION_KEYS.chartEndKey, chartEnd)
 provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
 provide(INJECTION_KEYS.precisionKey, precision)
+provide(INJECTION_KEYS.pushOnOverlapKey, pushOnOverlap)
 </script>
 
 <style scoped>

@@ -26,8 +26,16 @@ const bars = ref([
     ganttBarConfig: {
       hasHandles: true,
       style: {
-        background: "yellow"
+        background: "red",
+        borderRadius: "20px"
       }
+    }
+  },
+  {
+    id: "Test",
+    beginDate: "2021-07-27 16:00",
+    endDate: "2021-07-27 22:00",
+    ganttBarConfig: {
     }
   }
 ])

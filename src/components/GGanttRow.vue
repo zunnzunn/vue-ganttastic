@@ -20,6 +20,7 @@
         :bar="bar"
         :bar-start="barStart"
         :bar-end="barEnd"
+        :all-bars-in-row="bars"
       />
     </div>
   </div>

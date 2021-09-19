@@ -6,6 +6,7 @@ type GanttBarObject = {
     hasHandles?: true,
     style?: {
       background?: string,
+      borderRadius?: string,
     }
   }
 }
