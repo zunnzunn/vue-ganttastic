@@ -1,13 +1,13 @@
+import INJECTION_KEYS from "@/models/symbols"
 import dayjs from "dayjs"
-import { computed } from "vue"
+import { computed, inject, Ref } from "vue"
 
-export default function useTimeaxisUnits (
-  chartStart: string,
-  chartEnd: string,
-  precision: "hour" | "day" | "month"
-) {
+export default function useTimeaxisUnits () {
+  const chartStart = inject(INJECTION_KEYS.chartStartKey) as Ref<string>
+  const chartEnd = inject(INJECTION_KEYS.chartEndKey) as Ref<string>
+  const precision = inject(INJECTION_KEYS.precisionKey) as Ref<"day" | "hour" | "month">
   const upperPrecision = computed(() => {
-    switch (precision) {
+    switch (precision?.value) {
       case "hour":
         return "day"
       case "day":
@@ -31,12 +31,12 @@ export default function useTimeaxisUnits (
     const upperUnits :{label: string, value?: string, width?: string}[] = []
     const lowerUnits :{label: string, value?: string}[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
-    const lowerUnit = precision
-    let unitDayjs = dayjs(chartStart).startOf(lowerUnit)
-    const diff = -unitDayjs.diff(chartEnd, lowerUnit, true)
+    const lowerUnit = precision.value
+    let unitDayjs = dayjs(chartStart.value).startOf(lowerUnit)
+    const diff = -unitDayjs.diff(chartEnd.value, lowerUnit, true)
     let lowerUnitCount = 0
     let currentUpperUnitVal = unitDayjs[upperUnit]()
-    while (unitDayjs.isBefore(chartEnd) || unitDayjs.isSame(chartEnd)) {
+    while (unitDayjs.isBefore(chartEnd.value) || unitDayjs.isSame(chartEnd.value)) {
       if (unitDayjs[upperUnit]() !== currentUpperUnitVal) {
         upperUnits.push({
           label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),

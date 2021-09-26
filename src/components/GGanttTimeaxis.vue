@@ -39,16 +39,16 @@
 <script setup lang="ts">
 import { ColorScheme } from "./color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineProps, toRefs } from "vue"
+import { defineProps } from "vue"
 
-const props = defineProps<{
+defineProps<{
   chartStart: string
   chartEnd: string
   precision: "hour" | "day" | "month"
   colors: ColorScheme
 }>()
-const { chartStart, chartEnd, precision } = toRefs(props)
-const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
+
+const { timeaxisUnits } = useTimeaxisUnits()
 </script>
 
 <style scoped>

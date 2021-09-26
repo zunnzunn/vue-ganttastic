@@ -25,6 +25,7 @@ const bars = ref([
     endDate: "2021-07-27 12:00",
     ganttBarConfig: {
       hasHandles: true,
+      label: "Lorem ipsum dolor",
       style: {
         background: "red",
         borderRadius: "20px"
@@ -36,6 +37,7 @@ const bars = ref([
     beginDate: "2021-07-27 16:00",
     endDate: "2021-07-27 22:00",
     ganttBarConfig: {
+      label: "Lorem ipsum dolor"
     }
   }
 ])
