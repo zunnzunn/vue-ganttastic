@@ -14,6 +14,8 @@
       :row-label-width="`${rowLabelWidth}%`"
       :row-height="rowHeight"
       :theme="selectedTheme"
+      barStartKey="myStart"
+      barEndKey="myEnd"
       @dragend-bar="onDragend($event)"
     >
       <template v-for="row in rowList">
@@ -22,8 +24,6 @@
           :label="row.label"
           :bars="row.barList"
           :highlight-on-hover="highlightOnHover"
-          bar-start-key="myStart"
-          bar-end-key="myEnd"
         >
           <template #bar-label="{ bar }">
             <span>{{ bar.label }}</span>

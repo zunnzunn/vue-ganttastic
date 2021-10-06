@@ -188,7 +188,7 @@ export default {
       let movedBars = didSnapBack ? new Set() : this.movedBarsInDrag
       // Magnetic suction
       if (movedBars.size && this.isMagnetic) {
-        let { left, right, move } = action
+        let { left, right/*, move*/ } = action
 
         movedBars.forEach((bar) => {
           if (this.timeaxisMode === 'month_days') {
