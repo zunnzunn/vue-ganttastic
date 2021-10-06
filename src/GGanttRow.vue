@@ -95,13 +95,16 @@ export default {
     window.addEventListener('resize', this.onWindowResize)
   },
 
+  destroyed() {
+    window.removeEventListener('resize', this.onWindowResize)
+  },
+
   methods: {
     onDragover(e) {
       e.preventDefault() // enables dropping content on row
       if (this.highlightOnHover) {
-        this.$refs[
-          'g-gantt-row'
-        ].style.backgroundColor = this.getThemeColors().hoverHighlight
+        this.$refs['g-gantt-row'].style.backgroundColor =
+          this.getThemeColors().hoverHighlight
       }
     },
 
@@ -153,9 +156,8 @@ export default {
 
     onMouseover() {
       if (this.highlightOnHover) {
-        this.$refs[
-          'g-gantt-row'
-        ].style.backgroundColor = this.getThemeColors().hoverHighlight
+        this.$refs['g-gantt-row'].style.backgroundColor =
+          this.getThemeColors().hoverHighlight
       }
     },
 
@@ -165,7 +167,9 @@ export default {
 
     onWindowResize() {
       // re-initialize the barContainer DOMRect variable, which will trigger re-rendering in the gantt bars
-      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+      if (this.$refs.barContainer) {
+        this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+      }
     },
   },
 
