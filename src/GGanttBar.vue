@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="g-gantt-bar"
+      :class="['g-gantt-bar', { 'g-gantt-bar-immobile': barConfig.immobile }]"
       ref="g-gantt-bar"
       :style="barStyle"
       @mouseenter.stop="onMouseenter($event)"
@@ -97,18 +97,18 @@ export default {
 
   computed: {
     barStartMoment: {
-      get: function () {
+      get() {
         return moment(this.bar[this.barStartKey], this.timeFormat)
       },
-      set: function (value) {
+      set(value) {
         this.bar[this.barStartKey] = value.format(this.timeFormat)
       },
     },
     barEndMoment: {
-      get: function () {
+      get() {
         return moment(this.bar[this.barEndKey])
       },
-      set: function (value) {
+      set(value) {
         this.bar[this.barEndKey] = value.format(this.timeFormat)
       },
     },
@@ -581,6 +581,11 @@ export default {
   border-radius: 15px;
   background: #79869c;
   overflow: hidden;
+  cursor: move;
+}
+
+.g-gantt-bar-immobile {
+  cursor: unset;
 }
 
 .g-gantt-bar-label {
