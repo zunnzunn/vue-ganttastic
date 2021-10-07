@@ -11,7 +11,7 @@
       timeaxisMode="day_hours"
       :is-magnetic="isMagnetic"
       :highlighted-hours="highlightedHours"
-      :row-label-width="`${rowLabelWidth}%`"
+      :row-label-width="rowLabelWidth"
       :row-height="rowHeight"
       :theme="selectedTheme"
       barStartKey="myStart"
@@ -46,12 +46,12 @@ export default {
   data() {
     return {
       chartStart: '2020-03-02 00:00',
-      chartEnd: '2020-03-04 00:00',
+      chartEnd: '2020-03-05 10:00',
       pushOnOverlap: true,
       isMagnetic: true,
       grid: true,
       rowHeight: 40,
-      rowLabelWidth: 15,
+      rowLabelWidth: '200px',
       hideTimeaxis: false,
       highlightOnHover: false,
       hours: [...Array(24).keys()],
@@ -166,7 +166,7 @@ export default {
                 color: 'white',
                 backgroundColor: '#5effad',
                 pushOnOverlap: false,
-                zIndex: 3,
+                zIndex: 2,
               },
             },
             {
@@ -213,8 +213,8 @@ export default {
 
   methods: {
     onDragend(e) {
-      let {event, bar} = e
-      console.log('onDragend', {event: event.type, bar})
+      let { event, bar } = e
+      console.log('onDragend', { event: event.type, bar })
     },
   },
 }

@@ -273,8 +273,13 @@ export default {
     },
 
     drag(e) {
+      const chart = document.querySelector('#g-gantt-chart')
       let barWidth = this.$refs['g-gantt-bar'].getBoundingClientRect().width
-      let newXStart = e.clientX - this.barContainer.left - this.cursorOffsetX
+      let newXStart =
+        chart.scrollLeft +
+        e.clientX -
+        this.barContainer.left -
+        this.cursorOffsetX
       let newXEnd = newXStart + barWidth
       if (this.isPosOutOfDragRange(newXStart, newXEnd)) {
         return

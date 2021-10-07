@@ -1,25 +1,28 @@
 <template>
-  <div id="g-timeaxis">
+  <div
+    id="g-timeaxis"
+    :style="{
+      width: `${
+        getTimeCount() * 30 + parseInt(rowLabelWidth.replace('px', ''))
+      }px`,
+    }"
+  >
     <div
       class="g-timeaxis-empty-space"
-      :style="{ width: rowLabelWidth, background: themeColors.secondary }"
+      :style="{ minWidth: rowLabelWidth, background: themeColors.secondary }"
     />
-    <div
-      class="g-timeaxis-days"
-      :style="{ width: `${100 - rowLabelWidth.replace('%', '')}%` }"
-    >
+    <div class="g-timeaxis-days">
       <div
         v-for="(point, index) in axisPoints"
         :key="point.text"
         class="g-timeaxis-day"
         :style="{
-          width: point.widthPercentage + '%',
           background:
             index % 2 === 0 ? themeColors.primary : themeColors.secondary,
           color: themeColors.text,
         }"
       >
-        <div v-html="pointFormatted(point)||'&nbsp;'"></div>
+        <div v-html="pointFormatted(point) || '&nbsp;'"></div>
         <div
           :style="{ background: themeColors.ternary, color: themeColors.text }"
         >
@@ -28,7 +31,7 @@
             :key="childPoint.fullDatetime"
             class="g-timeaxis-hour"
             :style="{
-              width: childPoint.widthPercentage + '%',
+              width: '30px',
               background:
                 index % 2 === 0 ? themeColors.primary : themeColors.secondary,
               color: themeColors.text,
@@ -55,7 +58,7 @@ import moment from 'moment'
 export default {
   name: 'GGanttTimeaxis',
 
-  inject: ['ganttChartProps', 'getTimeUnit', 'getTimeFormat'],
+  inject: ['ganttChartProps', 'getTimeUnit', 'getTimeFormat', 'getTimeCount'],
 
   props: {
     chartStart: String,
@@ -230,29 +233,32 @@ export default {
 .g-timeaxis-day,
 .g-timeaxis-day > div {
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #g-timeaxis {
   position: sticky;
   top: 0;
-  width: 100%;
-  height: 8%;
-  min-height: 75px;
+  /* width: 100%; */
+  /* height: 8%; */
+  /* min-height: 75px; */
   background: white;
   z-index: 4;
   box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
 }
 
 #g-timeaxis > .g-timeaxis-empty-space {
-  width: 20%; /* this has to be as wide as .ganttRowTitle in VGanttastic.css */
-  height: 100%;
+  /* width: 20%; this has to be as wide as .ganttRowTitle in VGanttastic.css */
+  min-height: 100%;
   background: #f5f5f5;
+  z-index: 5;
+  left: 0;
+  position: sticky;
 }
 
 #g-timeaxis > .g-timeaxis-days {
   position: relative;
-  width: 80%;
+  /* width: 80%; */
   height: 100%;
 }
 
@@ -290,7 +296,7 @@ export default {
   align-items: flex-start;
   flex-direction: column;
   opacity: 0.5;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .g-timeaxis-hour-pin {

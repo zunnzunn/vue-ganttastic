@@ -21,7 +21,14 @@
       :highlighted-hours="highlightedHours"
     />
 
-    <div id="g-gantt-rows-container">
+    <div
+      id="g-gantt-rows-container"
+      :style="{
+        width: `${
+          timeCount * 30 + parseInt(rowLabelWidth.replace('px', ''))
+        }px`,
+      }"
+    >
       <slot />
       <!-- the g-gantt-row components go here -->
     </div>
@@ -48,7 +55,7 @@ export default {
     chartStart: { type: String },
     chartEnd: { type: String },
     hideTimeaxis: Boolean,
-    rowLabelWidth: { type: String, default: '10%' },
+    rowLabelWidth: { type: String, default: '200px' },
     rowHeight: { type: Number, default: 40 },
     locale: { type: String, default: 'en' },
     theme: { type: String },
@@ -188,7 +195,7 @@ export default {
       let movedBars = didSnapBack ? new Set() : this.movedBarsInDrag
       // Magnetic suction
       if (movedBars.size && this.isMagnetic) {
-        let { left, right/*, move*/ } = action
+        let { left, right /*, move*/ } = action
 
         movedBars.forEach((bar) => {
           if (this.timeaxisMode === 'month_days') {
@@ -286,10 +293,8 @@ export default {
         return
       }
       for (let side of ['left', 'right']) {
-        let [
-          totalGapDistance,
-          bundleBarsOnPath,
-        ] = this.countGapDistanceToNextImmobileBar(bar, null, side, false)
+        let [totalGapDistance, bundleBarsOnPath] =
+          this.countGapDistanceToNextImmobileBar(bar, null, side, false)
         for (let i = 0; i < bundleBarsOnPath.length; i++) {
           let barFromBundle = bundleBarsOnPath[i].bar
           let gapDist = bundleBarsOnPath[i].gapDistance
@@ -297,10 +302,8 @@ export default {
             barFromBundle.barConfig.bundle
           ).filter((otherBar) => otherBar !== barFromBundle)
           otherBarsFromBundle.forEach((otherBar) => {
-            let [
-              newGapDistance,
-              newBundleBars,
-            ] = this.countGapDistanceToNextImmobileBar(otherBar, gapDist, side)
+            let [newGapDistance, newBundleBars] =
+              this.countGapDistanceToNextImmobileBar(otherBar, gapDist, side)
             if (
               newGapDistance !== null &&
               (newGapDistance < totalGapDistance || !totalGapDistance)
@@ -479,9 +482,9 @@ export default {
 <style scoped>
 #g-gantt-chart {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+  /* display: flex; */
+  /* flex-direction: column; */
+  overflow: auto;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;

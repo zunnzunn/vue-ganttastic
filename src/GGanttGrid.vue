@@ -3,7 +3,7 @@
     class="g-grid-container"
     :style="{
       left: rowLabelWidth,
-      width: `${100 - this.rowLabelWidth.replace('%', '')}%`,
+      width: `${getTimeCount() * 30}px`,
     }"
   >
     <div
@@ -23,7 +23,7 @@ import moment from 'moment'
 export default {
   name: 'GGanttGrid',
 
-  inject: ['ganttChartProps'],
+  inject: ['ganttChartProps', 'getTimeCount'],
 
   props: {
     chartStart: { type: String },
@@ -57,8 +57,8 @@ export default {
 .g-grid-container {
   position: absolute;
   top: 0;
-  left: 30%; /* must correspond to width of row title */
-  width: 70%;
+  /* left: 30%; must correspond to width of row title */
+  /* width: 70%; */
   height: calc(100% - 23px);
   display: flex;
   justify-content: space-between;

@@ -85,7 +85,9 @@ export default {
 
     barsContainerStyle() {
       return {
-        width: `${100 - this.ganttChartProps.rowLabelWidth.replace('%', '')}%`,
+        width: `${
+          100 /*- this.ganttChartProps.rowLabelWidth.replace('%', '')*/
+        }%`,
       }
     },
   },
@@ -193,19 +195,22 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20%;
+  /* width: 20%; */
   background: #e8e8e8;
   color: #424242;
   font-size: 0.9em;
   z-index: 3;
   overflow: hidden;
   font-weight: bold;
+  left: 0;
+  position: sticky;
 }
 
 .g-gantt-row > .g-gantt-row-bars-container {
   position: relative;
   border-top: 1px solid #eaeaea;
-  width: 70%;
+  /* width: 70%; */
   border-bottom: 1px solid #eaeaea;
+  flex: 1;
 }
 </style>
