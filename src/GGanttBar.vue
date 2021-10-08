@@ -273,7 +273,8 @@ export default {
     },
 
     drag(e) {
-      const chart = document.querySelector('#g-gantt-chart')
+      const chart = e.target.closest('.g-gantt-chart')
+      if (!chart) return
       let barWidth = this.$refs['g-gantt-bar'].getBoundingClientRect().width
       let newXStart =
         chart.scrollLeft +
@@ -291,7 +292,9 @@ export default {
     },
 
     dragByHandleLeft(e) {
-      let newXStart = e.clientX - this.barContainer.left
+      const chart = e.target.closest('.g-gantt-chart')
+      if (!chart) return
+      let newXStart = chart.scrollLeft + e.clientX - this.barContainer.left
       let newStartMoment = this.mapPositionToTime(newXStart)
       if (
         this.barEndMoment.diff(newStartMoment, this.timeUnit) < 1 ||
@@ -304,7 +307,9 @@ export default {
     },
 
     dragByHandleRight(e) {
-      let newXEnd = e.clientX - this.barContainer.left
+      const chart = e.target.closest('.g-gantt-chart')
+      if (!chart) return
+      let newXEnd = chart.scrollLeft + e.clientX - this.barContainer.left
       let newEndMoment = this.mapPositionToTime(newXEnd)
       if (
         newEndMoment.isSameOrBefore(this.barStartMoment, this.timeUnit) ||

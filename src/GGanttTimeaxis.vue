@@ -1,6 +1,7 @@
 <template>
   <div
-    id="g-timeaxis"
+    ref="g-timeaxis"
+    class="g-timeaxis"
     :style="{
       width: `${
         getTimeCount() * 30 + parseInt(rowLabelWidth.replace('px', ''))
@@ -48,7 +49,7 @@
         </div>
       </div>
     </div>
-    <div id="g-timeaxis-marker" />
+    <div ref="g-timeaxis-marker" class="g-timeaxis-marker" />
   </div>
 </template>
 
@@ -83,7 +84,7 @@ export default {
   },
 
   mounted() {
-    this.timemarker = document.querySelector('#g-timeaxis-marker')
+    this.timemarker = this.$refs['g-timeaxis-marker']
     this.initAxis()
     this.onWindowResize()
     window.addEventListener('resize', this.onWindowResize)
@@ -175,7 +176,9 @@ export default {
     },
 
     moveTimemarker(event) {
+      const chart = this.timemarker.closest('.g-gantt-chart')
       this.timemarker.style.left =
+        chart.scrollLeft +
         event.clientX -
         this.timemarkerOffset -
         this.horizontalAxisContainer.left +
@@ -183,9 +186,8 @@ export default {
     },
 
     onWindowResize() {
-      this.horizontalAxisContainer = document
-        .querySelector('#g-timeaxis')
-        .getBoundingClientRect()
+      this.horizontalAxisContainer =
+        this.$refs['g-timeaxis'].getBoundingClientRect()
       this.hourFontSize =
         Math.min(
           9.5,
@@ -228,7 +230,7 @@ export default {
 </script>
 
 <style scoped>
-#g-timeaxis,
+.g-timeaxis,
 .g-timeaxis-days,
 .g-timeaxis-day,
 .g-timeaxis-day > div {
@@ -236,7 +238,7 @@ export default {
   /* overflow: hidden; */
 }
 
-#g-timeaxis {
+.g-timeaxis {
   position: sticky;
   top: 0;
   /* width: 100%; */
@@ -247,7 +249,7 @@ export default {
   box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
 }
 
-#g-timeaxis > .g-timeaxis-empty-space {
+.g-timeaxis > .g-timeaxis-empty-space {
   /* width: 20%; this has to be as wide as .ganttRowTitle in VGanttastic.css */
   min-height: 100%;
   background: #f5f5f5;
@@ -256,7 +258,7 @@ export default {
   position: sticky;
 }
 
-#g-timeaxis > .g-timeaxis-days {
+.g-timeaxis > .g-timeaxis-days {
   position: relative;
   /* width: 80%; */
   height: 100%;
@@ -304,7 +306,7 @@ export default {
   height: 8px;
 }
 
-#g-timeaxis-marker {
+.g-timeaxis-marker {
   position: absolute;
   top: 0;
   left: 0;

@@ -1,6 +1,6 @@
 <template>
   <div
-    id="g-gantt-chart"
+    class="g-gantt-chart"
     :style="{ width: width, background: themeColors.background }"
   >
     <g-gantt-timeaxis
@@ -22,7 +22,7 @@
     />
 
     <div
-      id="g-gantt-rows-container"
+      class="g-gantt-rows-container"
       :style="{
         width: `${
           timeCount * 30 + parseInt(rowLabelWidth.replace('px', ''))
@@ -480,7 +480,7 @@ export default {
 </script>
 
 <style scoped>
-#g-gantt-chart {
+.g-gantt-chart {
   position: relative;
   /* display: flex; */
   /* flex-direction: column; */
@@ -494,11 +494,11 @@ export default {
   padding-bottom: 23px;
 }
 
-#g-gantt-chart >>> * {
+.g-gantt-chart >>> * {
   font-family: Roboto, Verdana;
 }
 
-#g-gantt-rows-container {
+.g-gantt-rows-container {
   position: relative;
 }
 </style>
