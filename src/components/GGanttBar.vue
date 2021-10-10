@@ -3,7 +3,6 @@
     ref="barElement"
     class="g-gantt-bar"
     :style="barStyle"
-    @mousedown="onMousedown($event)"
   >
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
@@ -18,6 +17,7 @@
     </template>
 
     <g-gantt-bar-tooltip
+      :force-show="isDragging"
       :bar-style="barStyle"
     >
       {{ tooltipContent }}
@@ -43,7 +43,7 @@ const props = defineProps<{
 const barElement = ref<HTMLElement>()
 const { bar, barStart, barEnd, allBarsInRow } = toRefs(props)
 const { mapTimeToPosition } = useTimePositionMapping()
-const { onMousedown } = useBarDrag(bar, barElement, barStart, barEnd, allBarsInRow)
+const { isDragging } = useBarDrag(bar, barElement, barStart, barEnd, allBarsInRow)
 const tooltipContent = computed(() => {
   const barStartFormatted = dayjs(bar.value[barStart.value]).format("HH:mm")
   const barEndFormatted = dayjs(bar.value[barEnd.value]).format("HH:mm")
@@ -60,7 +60,7 @@ const barStyle = computed(() => {
     left: `${xStart}px`,
     width: `${xEnd - xStart}px`,
     height: "30px",
-    zIndex: 2
+    zIndex: isDragging.value ? 3 : 2
   }
 })
 
@@ -75,6 +75,7 @@ defineExpose({
   justify-content: center;
   align-items: center;
   background: cadetblue;
+  overflow: hidden;
 }
 
 .g-gantt-bar-label {

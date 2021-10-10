@@ -2,7 +2,7 @@ import dayjs from "dayjs"
 import INJECTION_KEYS from "../models/symbols"
 import GanttBarObject from "@/models/GanttBarObject"
 import useTimePositionMapping from "./useTimePositionMapping"
-import { Ref, inject, onMounted } from "vue"
+import { Ref, ref, inject, onMounted } from "vue"
 
 export default function useBarDrag (
   bar: Ref<GanttBarObject>,
@@ -11,6 +11,7 @@ export default function useBarDrag (
   barEnd: Ref<string>,
   allBarsInRow: Ref<GanttBarObject[]>
 ) {
+  const isDragging = ref(false)
   let cursorOffsetX = 0
   let barContainer: DOMRect | undefined
   let dragCallBack : (e: MouseEvent) => void
@@ -19,6 +20,7 @@ export default function useBarDrag (
 
   onMounted(() => {
     barContainer = barElement.value?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    barElement.value?.addEventListener("mousedown", onMousedown)
   })
 
   const onMousedown = (e: MouseEvent) => {
@@ -44,6 +46,7 @@ export default function useBarDrag (
         break
       default: dragCallBack = drag
     }
+    isDragging.value = true
     window.addEventListener("mousemove", dragCallBack)
     window.addEventListener("mouseup", endDrag)
   }
@@ -84,7 +87,7 @@ export default function useBarDrag (
   }
 
   const fixOverlaps = () => {
-    if (!pushOnOverlap) {
+    if (!pushOnOverlap?.value) {
       return
     }
     let currentBar = bar.value
@@ -132,12 +135,14 @@ export default function useBarDrag (
   }
 
   const endDrag = (e: MouseEvent) => {
+    isDragging.value = false
     document.body.style.cursor = "auto"
     window.removeEventListener("mousemove", dragCallBack)
     window.removeEventListener("mouseup", endDrag)
   }
 
   return {
-    onMousedown
+    onMousedown,
+    isDragging
   }
 }

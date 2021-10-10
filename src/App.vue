@@ -3,9 +3,11 @@
     chart-start="2021-07-25 02:00"
     chart-end="2021-07-27 23:59"
     precision="hour"
-    width="900px"
+    :push-on-overlap="false"
+    width="1200px"
   >
     <g-gantt-row
+      label="My row label"
       :bars="bars"
       bar-start="beginDate"
       bar-end="endDate"

@@ -5,7 +5,7 @@
       mode="out-in"
     >
       <div
-        v-if="showTooltip"
+        v-if="showTooltip || forceShow"
         class="g-gantt-tooltip"
         :style="{
           top: tooltipY,
@@ -29,6 +29,7 @@ import { computed, ref, toRefs, defineProps, watch, onMounted, defineExpose, get
 
 const props = defineProps<{
   barStyle: {top: string, left: string, background: string}
+  forceShow: boolean
 }>()
 
 const barElement = ref<HTMLElement>()
