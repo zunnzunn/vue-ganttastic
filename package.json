@@ -1,13 +1,27 @@
 {
-  "name": "@yicone/vue-ganttastic",
-  "version": "0.10.0",
+  "name": "@tenrok/vue-ganttastic",
+  "version": "0.10.2",
   "description": "A simple and customizable Gantt chart component for Vue.js",
-  "author": "Marko Zunic, Yicone Wong",
+  "author": {
+    "name": "Marko Zunic",
+    "email": "marko.zunic06@gmail.com",
+    "url": "https://github.com/InfectoOne/vue-ganttastic"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yicone/vue-ganttastic.git"
+    "url": "git+https://github.com/tenrok/vue-ganttastic.git"
   },
+  "contributors": [
+    {
+      "name": "Yicone Wong",
+      "url": "https://github.com/yicone"
+    },
+    {
+      "name": "Sergey Solodyagin",
+      "url": "https://github.com/solodyagin"
+    }
+  ],
   "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -37,7 +51,7 @@
     "vue": "^2.6.14"
   },
   "bugs": {
-    "url": "https://github.com/yicone/vue-ganttastic/issues"
+    "url": "https://github.com/tenrok/vue-ganttastic/issues"
   },
-  "homepage": "https://github.com/yicone/vue-ganttastic#readme"
+  "homepage": "https://github.com/tenrok/vue-ganttastic#readme"
 }
