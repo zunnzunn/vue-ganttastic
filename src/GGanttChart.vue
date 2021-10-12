@@ -65,13 +65,10 @@ export default {
     pushOnOverlap: { type: Boolean },
     isMagnetic: { type: Boolean },
     snapBackOnOverlap: { type: Boolean },
-    minGapBetweenBars: {
-      type: Number,
-      default: 0,
-    },
+    minGapBetweenBars: { type: Number, default: 0 },
     defaultBarLength: { type: Number, default: 1 },
-    // ["month_days", "day_hours"]
-    timeaxisMode: { type: String, default: 'month_days' },
+    // ["month", "day"]
+    precision: { type: String, default: 'month' },
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime,
   },
@@ -80,11 +77,9 @@ export default {
     return {
       timemarkerOffset: 0,
       movedBarsInDrag: new Set(),
-      timeUnit: this.timeaxisMode === 'month_days' ? 'days' : 'hours',
+      timeUnit: this.precision === 'month' ? 'days' : 'hours',
       timeFormat:
-        this.timeaxisMode === 'month_days'
-          ? 'YYYY-MM-DD HH'
-          : 'YYYY-MM-DD HH:mm',
+        this.precision === 'month' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm',
     }
   },
 
@@ -198,7 +193,7 @@ export default {
         let { left, right /*, move*/ } = action
 
         movedBars.forEach((bar) => {
-          if (this.timeaxisMode === 'month_days') {
+          if (this.precision === 'month') {
             if (left && bar == ganttBar.bar) {
               if (moment(bar[this.barStartKey]).hours() < 12) {
                 bar[this.barStartKey] = moment(bar[this.barStartKey])

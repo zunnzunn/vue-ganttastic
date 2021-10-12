@@ -84,11 +84,9 @@ export default {
       barEndBeforeDrag: null,
       timeUnit: this.getTimeUnit(),
       timeChildKey:
-        this.ganttChartProps.timeaxisMode === 'month_days'
-          ? 'hours'
-          : 'minutes',
+        this.ganttChartProps.precision === 'month' ? 'hours' : 'minutes',
       timeChildFormat:
-        this.ganttChartProps.timeaxisMode === 'month_days' ? 'MM-DD' : 'HH:mm',
+        this.ganttChartProps.precision === 'month' ? 'MM-DD' : 'HH:mm',
       timeFormat: this.getTimeFormat(),
       barStartKey: this.ganttChartProps.barStartKey,
       barEndKey: this.ganttChartProps.barEndKey,

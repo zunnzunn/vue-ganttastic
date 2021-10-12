@@ -76,8 +76,8 @@ export default {
       childPointCount: null,
       timemarker: null,
       hourFontSize: '11px',
-      dayFormat: 'MM-DD', // ISO 8601
-      mode: this.ganttChartProps.timeaxisMode,
+      dayFormat: 'DD MMMM',
+      precision: this.ganttChartProps.precision,
       timeUnit: this.getTimeUnit(),
       timeFormat: this.getTimeFormat(),
     }
@@ -94,9 +94,9 @@ export default {
 
   methods: {
     initAxis() {
-      if (this.mode === 'month_days') {
+      if (this.precision === 'month') {
         this.initAxisMonthsAndDays()
-      } else if (this.mode === 'day_hours') {
+      } else if (this.precision === 'day') {
         this.initAxisDaysAndHours()
       }
     },
@@ -196,9 +196,9 @@ export default {
     },
 
     pointFormatted(point) {
-      if (this.mode === 'month_days') {
+      if (this.precision === 'month') {
         return this.monthFormatted(point)
-      } else if (this.mode === 'day_hours') {
+      } else if (this.precision === 'day') {
         return this.dayFormatted(point)
       }
     },

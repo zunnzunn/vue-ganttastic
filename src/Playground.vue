@@ -8,7 +8,7 @@
       :hide-timeaxis="hideTimeaxis"
       :push-on-overlap="pushOnOverlap"
       snap-back-on-overlap
-      timeaxisMode="day_hours"
+      precision="day"
       :is-magnetic="isMagnetic"
       :highlighted-hours="highlightedHours"
       :row-label-width="rowLabelWidth"

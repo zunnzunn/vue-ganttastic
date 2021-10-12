@@ -37,12 +37,12 @@ export default {
       let momentChartStart = moment(this.chartStart)
       let momentChartEnd = moment(this.chartEnd)
       let res = []
-      const timeaxisMode = this.ganttChartProps.timeaxisMode
+      const precision = this.ganttChartProps.precision
       while (momentChartStart.isSameOrBefore(momentChartEnd)) {
-        if (timeaxisMode === 'month_days') {
+        if (precision === 'month') {
           res.push(momentChartStart.date())
           momentChartStart.add(1, 'day')
-        } else if (timeaxisMode === 'day_hours') {
+        } else if (precision === 'day') {
           res.push(momentChartStart.date())
           momentChartStart.add(1, 'hour')
         }
