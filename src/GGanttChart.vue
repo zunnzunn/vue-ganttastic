@@ -11,6 +11,9 @@
       :timemarker-offset="timemarkerOffset"
       :theme-colors="themeColors"
       :locale="locale"
+      :precision="precision"
+      :time-format="timeFormat"
+      :time-count="timeCount"
     />
 
     <g-gantt-grid
@@ -19,6 +22,8 @@
       :chart-end="chartEnd"
       :row-label-width="rowLabelWidth"
       :highlighted-hours="highlightedHours"
+      :precision="precision"
+      :time-count="timeCount"
     />
 
     <div
@@ -54,7 +59,7 @@ export default {
   props: {
     chartStart: { type: String },
     chartEnd: { type: String },
-    hideTimeaxis: Boolean,
+    hideTimeaxis: { type: Boolean },
     rowLabelWidth: { type: String, default: '200px' },
     rowHeight: { type: Number, default: 40 },
     locale: { type: String, default: 'en' },
@@ -67,8 +72,7 @@ export default {
     snapBackOnOverlap: { type: Boolean },
     minGapBetweenBars: { type: Number, default: 0 },
     defaultBarLength: { type: Number, default: 1 },
-    // ["month", "day"]
-    precision: { type: String, default: 'month' },
+    precision: { type: String, default: 'month' }, // 'month', 'day'
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime,
   },
@@ -77,13 +81,18 @@ export default {
     return {
       timemarkerOffset: 0,
       movedBarsInDrag: new Set(),
-      timeUnit: this.precision === 'month' ? 'days' : 'hours',
-      timeFormat:
-        this.precision === 'month' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm',
     }
   },
 
   computed: {
+    timeUnit() {
+      return this.precision === 'month' ? 'days' : 'hours'
+    },
+
+    timeFormat() {
+      return this.precision === 'month' ? 'YYYY-MM-DD HH' : 'YYYY-MM-DD HH:mm'
+    },
+
     timeCount() {
       let momentChartStart = moment(this.chartStart)
       let momentChartEnd = moment(this.chartEnd)

@@ -3,9 +3,7 @@
     ref="g-timeaxis"
     class="g-timeaxis"
     :style="{
-      width: `${
-        getTimeCount() * 30 + parseInt(rowLabelWidth.replace('px', ''))
-      }px`,
+      width: `${timeCount * 30 + parseInt(rowLabelWidth.replace('px', ''))}px`,
     }"
   >
     <div
@@ -59,15 +57,16 @@ import moment from 'moment'
 export default {
   name: 'GGanttTimeaxis',
 
-  inject: ['ganttChartProps', 'getTimeUnit', 'getTimeFormat', 'getTimeCount'],
-
   props: {
-    chartStart: String,
-    chartEnd: String,
-    rowLabelWidth: String,
+    chartStart: { type: String },
+    chartEnd: { type: String },
+    rowLabelWidth: { type: String },
     timemarkerOffset: { type: Number, default: 0 },
-    locale: String,
-    themeColors: Object,
+    locale: { type: String },
+    themeColors: { type: Object },
+    precision: { type: String },
+    timeFormat: { type: String },
+    timeCount: { type: Number },
   },
 
   data() {
@@ -77,10 +76,17 @@ export default {
       timemarker: null,
       hourFontSize: '11px',
       dayFormat: 'DD MMMM',
-      precision: this.ganttChartProps.precision,
-      timeUnit: this.getTimeUnit(),
-      timeFormat: this.getTimeFormat(),
+      monthFormat: 'MMMM YYYY',
     }
+  },
+
+  watch: {
+    chartStart() {
+      this.initAxis()
+    },
+    chartEnd() {
+      this.initAxis()
+    },
   },
 
   mounted() {
@@ -92,19 +98,27 @@ export default {
     window.addEventListener('dragover', (event) => this.moveTimemarker(event))
   },
 
+  destroyed() {
+    window.removeEventListener('resize', this.onWindowResize)
+  },
+
   methods: {
     initAxis() {
-      if (this.precision === 'month') {
-        this.initAxisMonthsAndDays()
-      } else if (this.precision === 'day') {
-        this.initAxisDaysAndHours()
+      switch (this.precision) {
+        case 'day':
+          this.initAxisDaysAndHours()
+          break
+        case 'month':
+          this.initAxisMonthsAndDays()
+          break
       }
     },
 
     initAxisMonthsAndDays() {
       let start = moment(this.chartStart)
       let end = moment(this.chartEnd)
-      this.childPointCount = Math.floor(end.diff(start, 'day', true))
+      this.childPointCount = Math.floor(end.diff(start, 'days', true))
+      this.axisPoints = []
       while (start.isBefore(end)) {
         let dayCountOfMonth = start.isSame(end, 'month')
           ? end.date() - 1
@@ -122,14 +136,14 @@ export default {
     initAxisDaysAndHours() {
       let start = moment(this.chartStart)
       let end = moment(this.chartEnd)
-      this.childPointCount = Math.floor(end.diff(start, 'hour', true))
+      this.childPointCount = Math.floor(end.diff(start, 'hours', true))
+      this.axisPoints = []
       while (start.isBefore(end)) {
         let hourCountOfDay = start.isSame(end, 'day')
           ? end.hour()
           : 24 - start.hour()
-
         let widthPercentage = (hourCountOfDay / this.childPointCount) * 100
-        let endHour = start.day() === end.day() ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
+        let endHour = start.date() === end.date() ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
         this.axisPoints.push(
           this.getAxisDayObject(start, widthPercentage, endHour)
         )
@@ -177,6 +191,7 @@ export default {
 
     moveTimemarker(event) {
       const chart = this.timemarker.closest('.g-gantt-chart')
+      if (!chart) return
       this.timemarker.style.left =
         chart.scrollLeft +
         event.clientX -
@@ -186,6 +201,7 @@ export default {
     },
 
     onWindowResize() {
+      if (!this.$refs['g-timeaxis']) return
       this.horizontalAxisContainer =
         this.$refs['g-timeaxis'].getBoundingClientRect()
       this.hourFontSize =
@@ -196,34 +212,28 @@ export default {
     },
 
     pointFormatted(point) {
-      if (this.precision === 'month') {
-        return this.monthFormatted(point)
-      } else if (this.precision === 'day') {
-        return this.dayFormatted(point)
+      switch (this.precision) {
+        case 'day':
+          return this.dayFormatted(point)
+        case 'month':
+          return this.monthFormatted(point)
       }
     },
 
     monthFormatted(point) {
       // do not display month text if the month is smaller than x%
-      return point.widthPercentage >= (1 / 32) * 100
-        ? moment().locale(this.locale).localeData().months(point.value)
-        : ''
+      // return point.widthPercentage >= (1 / 32) * 100
+      //   ? moment().locale(this.locale).localeData().months(point.value)
+      //   : ''
+      return moment(point.value).locale(this.locale).format(this.monthFormat)
     },
 
     dayFormatted(point) {
       // do not display day text if the day is smaller than 12%
-      return point.widthPercentage >= 12
-        ? moment(point.value).locale(this.locale).format(this.dayFormat)
-        : ''
-    },
-  },
-
-  watch: {
-    chartStart() {
-      this.initAxis()
-    },
-    chartEnd() {
-      this.initAxis()
+      // return point.widthPercentage >= 12
+      //   ? moment(point.value).locale(this.locale).format(this.dayFormat)
+      //   : ''
+      return moment(point.value).locale(this.locale).format(this.dayFormat)
     },
   },
 }

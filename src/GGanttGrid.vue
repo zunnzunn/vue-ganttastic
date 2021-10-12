@@ -3,16 +3,19 @@
     class="g-grid-container"
     :style="{
       left: rowLabelWidth,
-      width: `${getTimeCount() * 30}px`,
+      width: `${timeCount * 30}px`,
     }"
   >
     <div
       v-for="(childPoint, index) in allChildPoints"
       :key="index"
-      :class="{
-        'g-grid-line': true,
-        'g-grid-line-highlighted': highlightedHours.includes(childPoint),
-      }"
+      :class="[
+        'g-grid-line',
+        {
+          'g-grid-line-highlighted':
+            precision === 'day' && highlightedHours.includes(childPoint),
+        },
+      ]"
     />
   </div>
 </template>
@@ -23,13 +26,13 @@ import moment from 'moment'
 export default {
   name: 'GGanttGrid',
 
-  inject: ['ganttChartProps', 'getTimeCount'],
-
   props: {
     chartStart: { type: String },
     chartEnd: { type: String },
-    rowLabelWidth: String,
+    rowLabelWidth: { type: String },
     highlightedHours: { type: Array, default: () => [] },
+    precision: { type: String },
+    timeCount: { type: Number },
   },
 
   computed: {
@@ -37,14 +40,16 @@ export default {
       let momentChartStart = moment(this.chartStart)
       let momentChartEnd = moment(this.chartEnd)
       let res = []
-      const precision = this.ganttChartProps.precision
       while (momentChartStart.isSameOrBefore(momentChartEnd)) {
-        if (precision === 'month') {
-          res.push(momentChartStart.date())
-          momentChartStart.add(1, 'day')
-        } else if (precision === 'day') {
-          res.push(momentChartStart.date())
-          momentChartStart.add(1, 'hour')
+        switch (this.precision) {
+          case 'day':
+            res.push(momentChartStart.date())
+            momentChartStart.add(1, 'hour')
+            break
+          case 'month':
+            res.push(momentChartStart.date())
+            momentChartStart.add(1, 'day')
+            break
         }
       }
       return res

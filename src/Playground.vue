@@ -8,7 +8,7 @@
       :hide-timeaxis="hideTimeaxis"
       :push-on-overlap="pushOnOverlap"
       snap-back-on-overlap
-      precision="day"
+      :precision="precision"
       :is-magnetic="isMagnetic"
       :highlighted-hours="highlightedHours"
       :row-label-width="rowLabelWidth"
@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       chartStart: '2020-03-02 00:00',
-      chartEnd: '2020-03-05 10:00',
+      chartEnd: '2020-03-31 10:00',
+      precision: 'day',
       pushOnOverlap: true,
       isMagnetic: true,
       grid: true,
