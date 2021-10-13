@@ -2,13 +2,14 @@
   <div
     ref="g-timeaxis"
     class="g-timeaxis"
-    :style="{
-      width: `${timeCount * 30 + parseInt(rowLabelWidth.replace('px', ''))}px`,
-    }"
+    :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
   >
     <div
       class="g-timeaxis-empty-space"
-      :style="{ minWidth: rowLabelWidth, background: themeColors.secondary }"
+      :style="{
+        minWidth: `${rowLabelWidth}px`,
+        background: themeColors.secondary,
+      }"
     />
     <div class="g-timeaxis-days">
       <div
@@ -30,7 +31,7 @@
             :key="childPoint.fullDatetime"
             class="g-timeaxis-hour"
             :style="{
-              width: '30px',
+              width: `${gridSize}px`,
               background:
                 index % 2 === 0 ? themeColors.primary : themeColors.secondary,
               color: themeColors.text,
@@ -60,13 +61,14 @@ export default {
   props: {
     chartStart: { type: String },
     chartEnd: { type: String },
-    rowLabelWidth: { type: String },
+    rowLabelWidth: { type: Number },
     timemarkerOffset: { type: Number, default: 0 },
     locale: { type: String },
     themeColors: { type: Object },
     precision: { type: String },
     timeFormat: { type: String },
     timeCount: { type: Number },
+    gridSize: { type: Number },
   },
 
   data() {
@@ -192,12 +194,14 @@ export default {
     moveTimemarker(event) {
       const chart = this.timemarker.closest('.g-gantt-chart')
       if (!chart) return
-      this.timemarker.style.left =
+      let pos =
         chart.scrollLeft +
         event.clientX -
         this.timemarkerOffset -
-        this.horizontalAxisContainer.left +
-        'px'
+        this.horizontalAxisContainer.left
+      if (pos > this.horizontalAxisContainer.width)
+        pos = this.horizontalAxisContainer.width
+      this.timemarker.style.left = `${pos}px`
     },
 
     onWindowResize() {
@@ -222,10 +226,9 @@ export default {
 
     monthFormatted(point) {
       // do not display month text if the month is smaller than x%
-      // return point.widthPercentage >= (1 / 32) * 100
-      //   ? moment().locale(this.locale).localeData().months(point.value)
-      //   : ''
-      return moment(point.value).locale(this.locale).format(this.monthFormat)
+      return point.widthPercentage >= (3 / 32) * 100
+        ? moment(point.value).locale(this.locale).format(this.monthFormat)
+        : ''
     },
 
     dayFormatted(point) {
@@ -260,7 +263,6 @@ export default {
 }
 
 .g-timeaxis > .g-timeaxis-empty-space {
-  /* width: 20%; this has to be as wide as .ganttRowTitle in VGanttastic.css */
   min-height: 100%;
   background: #f5f5f5;
   z-index: 5;
@@ -270,7 +272,6 @@ export default {
 
 .g-timeaxis > .g-timeaxis-days {
   position: relative;
-  /* width: 80%; */
   height: 100%;
 }
 
@@ -308,7 +309,6 @@ export default {
   align-items: flex-start;
   flex-direction: column;
   opacity: 0.5;
-  /* width: 100%; */
 }
 
 .g-timeaxis-hour-pin {
@@ -325,4 +325,3 @@ export default {
   background: black;
 }
 </style>
-

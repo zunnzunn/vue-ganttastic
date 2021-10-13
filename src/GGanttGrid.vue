@@ -1,21 +1,20 @@
 <template>
   <div
     class="g-grid-container"
-    :style="{
-      left: rowLabelWidth,
-      width: `${timeCount * 30}px`,
-    }"
+    :style="{ left: `${rowLabelWidth}px`, width: `${timeCount * gridSize}px` }"
   >
     <div
       v-for="(childPoint, index) in allChildPoints"
       :key="index"
       :class="[
         'g-grid-line',
+        { 'g-grid-line-last': index === allChildPoints.length - 1 },
         {
           'g-grid-line-highlighted':
             precision === 'day' && highlightedHours.includes(childPoint),
         },
       ]"
+      :style="{ width: `${gridSize}px` }"
     />
   </div>
 </template>
@@ -29,26 +28,27 @@ export default {
   props: {
     chartStart: { type: String },
     chartEnd: { type: String },
-    rowLabelWidth: { type: String },
+    rowLabelWidth: { type: Number },
     highlightedHours: { type: Array, default: () => [] },
     precision: { type: String },
     timeCount: { type: Number },
+    gridSize: { type: Number },
   },
 
   computed: {
     allChildPoints() {
-      let momentChartStart = moment(this.chartStart)
-      let momentChartEnd = moment(this.chartEnd)
+      let start = moment(this.chartStart)
+      let end = moment(this.chartEnd)
       let res = []
-      while (momentChartStart.isSameOrBefore(momentChartEnd)) {
+      while (start.isBefore(end)) {
         switch (this.precision) {
           case 'day':
-            res.push(momentChartStart.date())
-            momentChartStart.add(1, 'hour')
+            res.push(start.hour())
+            start.add(1, 'hour')
             break
           case 'month':
-            res.push(momentChartStart.date())
-            momentChartStart.add(1, 'day')
+            res.push(start.date())
+            start.add(1, 'day').hour(23)
             break
         }
       }
@@ -62,21 +62,23 @@ export default {
 .g-grid-container {
   position: absolute;
   top: 0;
-  /* left: 30%; must correspond to width of row title */
-  /* width: 70%; */
   height: calc(100% - 23px);
-  display: flex;
-  justify-content: space-between;
+  overflow: hidden;
 }
 
 .g-grid-line {
-  width: 1px;
   height: 100%;
-  background: #eaeaea;
+  border: 1px solid transparent;
+  border-left: 1px solid #eaeaea;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.g-grid-line-last {
+  border-right: 1px solid #eaeaea;
 }
 
 .g-grid-line-highlighted {
-  background: #90caf9;
-  box-shadow: 0px 0px 0px 1px #90caf9;
+  background: #dcefff;
 }
 </style>

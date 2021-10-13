@@ -6,14 +6,13 @@
     v-on="$listeners"
   >
     <div class="g-gantt-row-label" :style="rowLabelStyle">
-      <slot name="label">
-        {{ label }}
-      </slot>
+      <span :title="label">
+        <slot name="label">{{ label }}</slot>
+      </span>
     </div>
     <div
       class="g-gantt-row-bars-container"
       ref="barContainer"
-      :style="barsContainerStyle"
       @dragover="onDragover($event)"
       @dragleave="onDragleave($event)"
       @drop="onDrop($event)"
@@ -51,11 +50,10 @@ export default {
   props: {
     label: { type: String, default: 'Row' },
     bars: { type: Array, default: () => [] },
-    highlightOnHover: Boolean,
+    highlightOnHover: { type: Boolean },
   },
 
   inject: [
-    'ganttChartProps',
     'getThemeColors',
     'getTimeCount',
     'getChartStart',
@@ -76,18 +74,10 @@ export default {
   computed: {
     rowLabelStyle() {
       return {
-        width: this.ganttChartProps.rowLabelWidth,
-        height: this.ganttChartProps.rowHeight,
+        width: `${this.$parent.rowLabelWidth}px`,
+        // height: `${this.$parent.rowHeight}px`,
         background: this.$parent.themeColors.ternary,
         color: this.$parent.themeColors.text,
-      }
-    },
-
-    barsContainerStyle() {
-      return {
-        width: `${
-          100 /*- this.ganttChartProps.rowLabelWidth.replace('%', '')*/
-        }%`,
       }
     },
   },
@@ -124,8 +114,8 @@ export default {
       )
       let bar = this.bars.find((bar) =>
         time.isBetween(
-          bar[this.ganttChartProps.barStartKey],
-          bar[this.ganttChartProps.barEndKey]
+          bar[this.$parent.barStartKey],
+          bar[this.$parent.barEndKey]
         )
       )
       this.$emit('drop', { event: e, bar, time: time.format(this.timeFormat) })
@@ -142,16 +132,16 @@ export default {
         this.timeUnit
       )
       let bar = {}
-      bar[this.ganttChartProps.barStartKey] = time.format()
-      bar[this.ganttChartProps.barEndKey] = time
+      bar[this.$parent.barStartKey] = time.format()
+      bar[this.$parent.barEndKey] = time
         .add(this.getDefaultBarLength(), this.timeUnit)
         .format()
 
       bar.ganttBarConfig = { handles: true }
       this.bars.push(bar)
       this.bars.sort((first, second) =>
-        moment(first[this.ganttChartProps.barStartKey]).diff(
-          second[this.ganttChartProps.barStartKey]
+        moment(first[this.$parent.barStartKey]).diff(
+          second[this.$parent.barStartKey]
         )
       )
     },
@@ -176,7 +166,7 @@ export default {
   },
 
   watch: {
-    'ganttChartProps.rowLabelWidth': function () {
+    '$parent.rowLabelWidth': function () {
       this.barContainer = this.$refs.barContainer.getBoundingClientRect()
     },
   },
@@ -193,23 +183,28 @@ export default {
 
 .g-gantt-row > .g-gantt-row-label {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  /* width: 20%; */
   background: #e8e8e8;
   color: #424242;
   font-size: 0.9em;
   z-index: 3;
-  overflow: hidden;
   font-weight: bold;
   left: 0;
   position: sticky;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.g-gantt-row > .g-gantt-row-label > * {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .g-gantt-row > .g-gantt-row-bars-container {
   position: relative;
-  border-top: 1px solid #eaeaea;
-  /* width: 70%; */
+  /* border-top: 1px solid #eaeaea; */
   border-bottom: 1px solid #eaeaea;
   flex: 1;
 }

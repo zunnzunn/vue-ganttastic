@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      :class="['g-gantt-bar', { 'g-gantt-bar-immobile': barConfig.immobile }]"
       ref="g-gantt-bar"
+      :class="['g-gantt-bar', { 'g-gantt-bar-immobile': barConfig.immobile }]"
       :style="barStyle"
       @mouseenter.stop="onMouseenter($event)"
       @mouseleave.stop="onMouseleave($event)"
@@ -35,9 +35,7 @@
               this.barStyle.background || this.barStyle.backgroundColor,
           }"
         />
-        {{ barStartText }}
-        -
-        {{ barEndText }}
+        {{ barStartText }} - {{ barEndText }}
       </div>
     </transition>
   </div>
@@ -75,11 +73,9 @@ export default {
       dragLimitLeft: null,
       dragLimitRight: null,
       isDragging: false,
-      isMainBarOfDrag: false, // is this the bar that was clicked on when starting to drag
-      // or is it dragged along some other bar from the same bundle
+      isMainBarOfDrag: false, // is this the bar that was clicked on when starting to drag or is it dragged along some other bar from the same bundle
       cursorOffsetX: 0,
-      mousemoveCallback: null, // gets initialized when starting to drag
-      // possible values: drag, dragByHandleLeft, dragByHandleRight,
+      mousemoveCallback: null, // gets initialized when starting to drag, possible values: drag, dragByHandleLeft, dragByHandleRight,
       barStartBeforeDrag: null,
       barEndBeforeDrag: null,
       timeUnit: this.getTimeUnit(),
@@ -102,6 +98,7 @@ export default {
         this.bar[this.barStartKey] = value.format(this.timeFormat)
       },
     },
+
     barEndMoment: {
       get() {
         return moment(this.bar[this.barEndKey])
@@ -110,6 +107,7 @@ export default {
         this.bar[this.barEndKey] = value.format(this.timeFormat)
       },
     },
+
     barStartText: {
       get() {
         return moment(this.barStartMoment).format(this.timeChildFormat)
@@ -210,6 +208,7 @@ export default {
       if (e.button === 2) {
         return
       }
+
       if (!this.barConfig.immobile && !this.barConfig.isShadow) {
         this.setDragLimitsOfGanttBar(this)
         // initialize the dragging on next mousemove event:

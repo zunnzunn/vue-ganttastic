@@ -14,6 +14,7 @@
       :precision="precision"
       :time-format="timeFormat"
       :time-count="timeCount"
+      :grid-size="gridSize"
     />
 
     <g-gantt-grid
@@ -24,15 +25,12 @@
       :highlighted-hours="highlightedHours"
       :precision="precision"
       :time-count="timeCount"
+      :grid-size="gridSize"
     />
 
     <div
       class="g-gantt-rows-container"
-      :style="{
-        width: `${
-          timeCount * 30 + parseInt(rowLabelWidth.replace('px', ''))
-        }px`,
-      }"
+      :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
     >
       <slot />
       <!-- the g-gantt-row components go here -->
@@ -60,11 +58,12 @@ export default {
     chartStart: { type: String },
     chartEnd: { type: String },
     hideTimeaxis: { type: Boolean },
-    rowLabelWidth: { type: String, default: '200px' },
+    rowLabelWidth: { type: Number, default: 200 },
     rowHeight: { type: Number, default: 40 },
     locale: { type: String, default: 'en' },
     theme: { type: String },
     grid: { type: Boolean },
+    gridSize: { type: Number, default: 30 },
     highlightedHours: { type: Array, default: () => [] },
     width: { type: String, default: '100%' }, // the total width of the entire ganttastic component in %
     pushOnOverlap: { type: Boolean },

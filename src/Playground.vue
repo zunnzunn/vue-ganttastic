@@ -5,6 +5,7 @@
       :chart-start="chartStart"
       :chart-end="chartEnd"
       :grid="grid"
+      :grid-size="gridSize"
       :hide-timeaxis="hideTimeaxis"
       :push-on-overlap="pushOnOverlap"
       snap-back-on-overlap
@@ -18,18 +19,17 @@
       barEndKey="myEnd"
       @dragend-bar="onDragend($event)"
     >
-      <template v-for="row in rowList">
-        <g-gantt-row
-          :key="row.label"
-          :label="row.label"
-          :bars="row.barList"
-          :highlight-on-hover="highlightOnHover"
-        >
-          <template #bar-label="{ bar }">
-            <span>{{ bar.label }}</span>
-          </template>
-        </g-gantt-row>
-      </template>
+      <g-gantt-row
+        v-for="row in rowList"
+        :key="row.label"
+        :label="row.label"
+        :bars="row.barList"
+        :highlight-on-hover="highlightOnHover"
+      >
+        <template #bar-label="{ bar }">
+          <span>{{ bar.label }}</span>
+        </template>
+      </g-gantt-row>
     </g-gantt-chart>
   </div>
 </template>
@@ -46,15 +46,16 @@ export default {
   data() {
     return {
       chartStart: '2020-03-02 00:00',
-      chartEnd: '2020-03-31 10:00',
+      chartEnd: '2020-03-10 10:00',
       precision: 'day',
       pushOnOverlap: true,
       isMagnetic: true,
       grid: true,
+      gridSize: 50,
       rowHeight: 40,
-      rowLabelWidth: '200px',
+      rowLabelWidth: 200,
       hideTimeaxis: false,
-      highlightOnHover: false,
+      highlightOnHover: true,
       hours: [...Array(24).keys()],
       highlightedHours: [10, 12],
       showContextmenu: false,
@@ -220,6 +221,3 @@ export default {
   },
 }
 </script>
-
-<style>
-</style>
