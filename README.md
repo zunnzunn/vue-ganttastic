@@ -122,7 +122,7 @@ Pull requests are warmly welcomed, while every major change or proposal ought to
 3. <code>Playground.vue</code> is a dedicated Vue SFC where all Vue-Ganttastic features can be
    played around with and tested out. Get it running using:
    ```
-     vue serve src/Playground.vue
+     npm run dev
    ```
 
 ## Dependencies

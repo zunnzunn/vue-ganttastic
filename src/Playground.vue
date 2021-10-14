@@ -39,6 +39,7 @@ import GGanttChart from './GGanttChart.vue'
 import GGanttRow from './GGanttRow.vue'
 
 export default {
+  name: 'playground',
   components: {
     GGanttChart,
     GGanttRow,
