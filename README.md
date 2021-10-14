@@ -59,7 +59,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
 <script>
 
-  import {GGanttChart, GGanttRow} from 'vue-ganttastic'
+  import { GGanttChart, GGanttRow } from 'vue-ganttastic'
 
   export default {
 
@@ -119,10 +119,10 @@ Pull requests are warmly welcomed, while every major change or proposal ought to
      npm install -g @vue/cli
      npm install -g @vue/cli-service-global
    ```
-3. <code>Playground.vue</code> is a dedicated Vue SFC where all Vue-Ganttastic features can be
+3. <code>App.vue</code> is a dedicated Vue SFC where all Vue-Ganttastic features can be
    played around with and tested out. Get it running using:
    ```
-     npm run dev
+     npm run serve
    ```
 
 ## Dependencies

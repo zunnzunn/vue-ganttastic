@@ -1,4 +1,3 @@
-<!-- use Playground.vue to play around with the gantt chart components and test out new features -->
 <template>
   <div>
     <g-gantt-chart
@@ -35,11 +34,10 @@
 </template>
 
 <script>
-import GGanttChart from './GGanttChart.vue'
-import GGanttRow from './GGanttRow.vue'
+import GGanttChart from '@/components/GGanttChart.vue'
+import GGanttRow from '@/components/GGanttRow.vue'
 
 export default {
-  name: 'playground',
   components: {
     GGanttChart,
     GGanttRow,

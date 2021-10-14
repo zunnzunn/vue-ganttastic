@@ -1,18 +1,8 @@
 import Vue from 'vue'
-import GGanttChart from './GGanttChart.vue'
-import GGanttRow from './GGanttRow.vue'
-import Playground from './Playground.vue'
+import App from './demo/App.vue'
 
-let uniqId = '#vue-ganttastic-825301a1'
+Vue.config.productionTip = false
 
-if (document.querySelector(uniqId)) {
-  Vue.component('GGanttChart', GGanttChart)
-  Vue.component('GGanttRow', GGanttRow)
-
-  new Vue({
-    el: uniqId,
-    render: (h) => h(Playground),
-  })
-}
-
-export { GGanttRow, GGanttChart }
+new Vue({
+  render: h => h(App),
+}).$mount('#app')

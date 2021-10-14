@@ -40,11 +40,11 @@
 
 <script>
 import moment from 'moment'
-import GanttasticThemeColors from './GanttasticThemeColors.js'
-import GGanttTimeaxis from './GGanttTimeaxis.vue'
-import GGanttGrid from './GGanttGrid.vue'
-import GGanttRow from './GGanttRow.vue'
-import GGanttBar from './GGanttBar.vue'
+import GanttasticThemeColors from '@/assets/GanttasticThemeColors.js'
+import GGanttTimeaxis from '@/components/GGanttTimeaxis.vue'
+import GGanttGrid from '@/components/GGanttGrid.vue'
+import GGanttRow from '@/components/GGanttRow.vue'
+import GGanttBar from '@/components/GGanttBar.vue'
 
 export default {
   name: 'GGanttChart',

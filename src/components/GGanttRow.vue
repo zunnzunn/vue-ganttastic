@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import GGanttBar from './GGanttBar.vue'
+import GGanttBar from '@/components/GGanttBar.vue'
 import moment from 'moment'
 
 export default {
