@@ -1,7 +1,13 @@
 <template>
   <div
+    ref="g-grid-container"
     class="g-grid-container"
-    :style="{ left: `${rowLabelWidth}px`, width: `${timeCount * gridSize}px` }"
+    :style="{
+      left: `${rowLabelWidth}px`,
+      width: `${timeCount * gridSize}px`,
+      top,
+      height,
+    }"
   >
     <div
       v-for="(childPoint, index) in allChildPoints"
@@ -11,7 +17,8 @@
         { 'g-grid-line-last': index === allChildPoints.length - 1 },
         {
           'g-grid-line-highlighted':
-            precision === 'day' && highlightedHours.includes(childPoint),
+            (precision === 'day' && highlightedHours.includes(childPoint)) ||
+            (precision === 'month' && highlightedDays.includes(childPoint)),
         },
       ]"
       :style="{ width: `${gridSize}px` }"
@@ -30,10 +37,16 @@ export default {
     chartEnd: { type: String },
     rowLabelWidth: { type: Number },
     highlightedHours: { type: Array, default: () => [] },
+    highlightedDays: { type: Array, default: () => [] },
     precision: { type: String },
     timeCount: { type: Number },
     gridSize: { type: Number },
   },
+
+  data: () => ({
+    top: '0px',
+    height: '0px',
+  }),
 
   computed: {
     allChildPoints() {
@@ -47,12 +60,32 @@ export default {
             start.add(1, 'hour')
             break
           case 'month':
-            res.push(start.date())
+            res.push(start.format('YYYY-MM-DD'))
             start.add(1, 'day').hour(23)
             break
         }
       }
       return res
+    },
+  },
+
+  mounted() {
+    this.$nextTick(() => this.onWindowResize())
+    window.addEventListener('resize', this.onWindowResize)
+  },
+
+  destroyed() {
+    window.removeEventListener('resize', this.onWindowResize)
+  },
+
+  methods: {
+    onWindowResize() {
+      let gridContainer = this.$refs['g-grid-container']
+      if (!gridContainer) return
+      let rowsContainer = gridContainer.nextSibling
+      if (!rowsContainer) return
+      this.top = `${rowsContainer.offsetTop}px`
+      this.height = `${rowsContainer.offsetHeight}px`
     },
   },
 }

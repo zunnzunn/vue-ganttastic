@@ -1,29 +1,64 @@
 <template>
   <div>
+    <h2>Chart #1</h2>
+
     <g-gantt-chart
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :grid="grid"
-      :grid-size="gridSize"
-      :hide-timeaxis="hideTimeaxis"
-      :push-on-overlap="pushOnOverlap"
+      :chart-start="chart1.chartStart"
+      :chart-end="chart1.chartEnd"
+      :grid="chart1.grid"
+      :grid-size="chart1.gridSize"
+      :hide-timeaxis="chart1.hideTimeaxis"
+      :push-on-overlap="chart1.pushOnOverlap"
       snap-back-on-overlap
-      :precision="precision"
-      :is-magnetic="isMagnetic"
-      :highlighted-hours="highlightedHours"
-      :row-label-width="rowLabelWidth"
-      :row-height="rowHeight"
-      :theme="selectedTheme"
-      barStartKey="myStart"
-      barEndKey="myEnd"
+      :precision="chart1.precision"
+      :is-magnetic="chart1.isMagnetic"
+      :highlighted-hours="chart1.highlightedHours"
+      :row-label-width="chart1.rowLabelWidth"
+      :row-height="chart1.rowHeight"
+      :theme="chart1.selectedTheme"
+      bar-start-key="myStart"
+      bar-end-key="myEnd"
       @dragend-bar="onDragend($event)"
     >
       <g-gantt-row
-        v-for="row in rowList"
+        v-for="row in chart1.rows"
         :key="row.label"
         :label="row.label"
-        :bars="row.barList"
-        :highlight-on-hover="highlightOnHover"
+        :bars="row.bars"
+        :highlight-on-hover="chart1.highlightOnHover"
+      >
+        <template #bar-label="{ bar }">
+          <span>{{ bar.label }}</span>
+        </template>
+      </g-gantt-row>
+    </g-gantt-chart>
+
+    <h2>Chart #2</h2>
+
+    <g-gantt-chart
+      :chart-start="chart2.chartStart"
+      :chart-end="chart2.chartEnd"
+      :grid="chart2.grid"
+      :grid-size="chart2.gridSize"
+      :hide-timeaxis="chart2.hideTimeaxis"
+      :push-on-overlap="chart2.pushOnOverlap"
+      snap-back-on-overlap
+      :precision="chart2.precision"
+      :is-magnetic="chart2.isMagnetic"
+      :highlighted-days="chart2.highlightedDays"
+      :row-label-width="chart2.rowLabelWidth"
+      :row-height="chart2.rowHeight"
+      :theme="chart2.selectedTheme"
+      :width="chart2.width"
+      :height="chart2.height"
+      :may-add="chart2.mayAdd"
+    >
+      <g-gantt-row
+        v-for="row in chart2.rows"
+        :key="row.label"
+        :label="row.label"
+        :bars="row.bars"
+        :highlight-on-hover="chart2.highlightOnHover"
       >
         <template #bar-label="{ bar }">
           <span>{{ bar.label }}</span>
@@ -42,43 +77,25 @@ export default {
     GGanttChart,
     GGanttRow,
   },
-  data() {
-    return {
+  data: () => ({
+    chart1: {
       chartStart: '2020-03-02 00:00',
       chartEnd: '2020-03-10 10:00',
       precision: 'day',
       pushOnOverlap: true,
       isMagnetic: true,
       grid: true,
-      gridSize: 50,
+      gridSize: 30,
       rowHeight: 40,
       rowLabelWidth: 200,
       hideTimeaxis: false,
       highlightOnHover: true,
-      hours: [...Array(24).keys()],
       highlightedHours: [10, 12],
-      showContextmenu: false,
-      contextmenuTimeout: null,
-      contextmenuX: 0,
-      contextmenuY: 0,
-      selectedTheme: 'default',
-      themes: [
-        'default',
-        'vue',
-        'dark',
-        'material-blue',
-        'creamy',
-        'slumber',
-        'sky',
-        'crimson',
-        'grove',
-        'fuchsia',
-        'flare',
-      ],
-      rowList: [
+      selectedTheme: 'default', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
+      rows: [
         {
           label: 'Row #1',
-          barList: [
+          bars: [
             {
               myStart: '2020-03-03 18:00',
               myEnd: '2020-03-03 23:00',
@@ -102,15 +119,13 @@ export default {
             },
           ],
         },
-
         {
           label: 'Row #2',
-          barList: [
+          bars: [
             {
               myStart: '2020-03-02 09:00',
               myEnd: '2020-03-02 18:00',
-              image: 'vue_ganttastic_logo_no_text.png',
-              label: 'I have an image',
+              label: 'Bar',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
@@ -135,14 +150,13 @@ export default {
             },
           ],
         },
-
         {
           label: 'Row #3',
-          barList: [
+          bars: [
             {
               myStart: '2020-03-02 09:00',
               myEnd: '2020-03-02 18:00',
-              label: 'I am with stupid ^',
+              label: 'We belong together ^',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
@@ -182,10 +196,9 @@ export default {
             },
           ],
         },
-
         {
           label: 'Row #4',
-          barList: [
+          bars: [
             {
               myStart: '2020-03-03 06:30',
               myEnd: '2020-03-03 20:00',
@@ -209,8 +222,108 @@ export default {
           ],
         },
       ],
-    }
-  },
+    },
+    chart2: {
+      chartStart: '2020-03-01 00:00',
+      chartEnd: '2020-04-01 00:00',
+      precision: 'month',
+      pushOnOverlap: true,
+      isMagnetic: true,
+      grid: true,
+      gridSize: 50,
+      rowHeight: 40,
+      rowLabelWidth: 300,
+      hideTimeaxis: false,
+      highlightOnHover: true,
+      highlightedDays: [
+        '2020-03-01',
+        '2020-03-08',
+        '2020-03-15',
+        '2020-03-22',
+        '2020-03-29',
+      ],
+      selectedTheme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
+      width: '1100px',
+      height: '250px',
+      mayAdd: false,
+      rows: [
+        {
+          label: 'Row #1',
+          bars: [
+            {
+              start: '2020-03-05 00:00',
+              end: '2020-03-10 23:59',
+              label: 'Bar',
+              ganttBarConfig: {
+                color: 'white',
+                backgroundColor: '#2e74a3',
+                bundle: 'blueBundle',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Row #2',
+          bars: [
+            {
+              start: '2020-03-02 00:00',
+              end: '2020-03-09 23:59',
+              label: 'We belong together ^',
+              ganttBarConfig: {
+                color: 'white',
+                backgroundColor: '#2e74a3',
+                bundle: 'blueBundle',
+              },
+            },
+            {
+              start: '2020-03-24 00:00',
+              end: '2020-03-26 23:00',
+              label: 'Bar',
+              ganttBarConfig: {
+                color: 'white',
+                backgroundColor: '#de3b26',
+              },
+            },
+          ],
+        },
+        {
+          label: 'Row #3',
+          bars: [
+            {
+              start: '2020-03-15 00:00',
+              end: '2020-03-18 23:59',
+              label: 'Bar',
+              ganttBarConfig: {
+                color: 'white',
+                backgroundColor: '#408e2f',
+              },
+            },
+          ],
+        },
+        {
+          label:
+            'Lorem ipsum dolor sit amet. Vel odit debitis qui aliquam sequi et reprehenderit Quis. Et ipsam enim aut culpa quia sed maiores veniam in consequuntur accusantium.',
+          bars: [],
+        },
+        {
+          label: 'Row #5',
+          bars: [],
+        },
+        {
+          label: 'Row #6',
+          bars: [],
+        },
+        {
+          label: 'Row #7',
+          bars: [],
+        },
+        {
+          label: 'Row #8',
+          bars: [],
+        },
+      ],
+    },
+  }),
 
   methods: {
     onDragend(e) {

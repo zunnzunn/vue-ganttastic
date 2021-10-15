@@ -112,7 +112,7 @@ export default {
         timeDiffFromStart,
         this.timeUnit
       )
-      let bar = this.bars.find((bar) =>
+      let bar = this.bars.find(bar =>
         time.isBetween(
           bar[this.$parent.barStartKey],
           bar[this.$parent.barEndKey]
@@ -122,6 +122,7 @@ export default {
     },
 
     onDoubleClick(e) {
+      if (!this.$parent.mayAdd) return
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
       let timeDiffFromStart = Math.floor(

@@ -1,7 +1,7 @@
 <template>
   <div
     class="g-gantt-chart"
-    :style="{ width: width, background: themeColors.background }"
+    :style="{ width, height, background: themeColors.background }"
   >
     <g-gantt-timeaxis
       v-if="!hideTimeaxis"
@@ -23,6 +23,7 @@
       :chart-end="chartEnd"
       :row-label-width="rowLabelWidth"
       :highlighted-hours="highlightedHours"
+      :highlighted-days="highlightedDays"
       :precision="precision"
       :time-count="timeCount"
       :grid-size="gridSize"
@@ -65,7 +66,9 @@ export default {
     grid: { type: Boolean },
     gridSize: { type: Number, default: 30 },
     highlightedHours: { type: Array, default: () => [] },
+    highlightedDays: { type: Array, default: () => [] }, // format YYYY-MM-DD
     width: { type: String, default: '100%' }, // the total width of the entire ganttastic component in %
+    height: { type: String, default: '100%' },
     pushOnOverlap: { type: Boolean },
     isMagnetic: { type: Boolean },
     snapBackOnOverlap: { type: Boolean },
@@ -73,7 +76,8 @@ export default {
     defaultBarLength: { type: Number, default: 1 },
     precision: { type: String, default: 'month' }, // 'month', 'day'
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
-    barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime,
+    barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime
+    mayAdd: { type: Boolean, default: true },
   },
 
   data() {
@@ -109,11 +113,11 @@ export default {
     getGanttBarChildrenList() {
       let ganttBarChildren = []
       let ganttRowChildrenList = this.$children.filter(
-        (childComp) => childComp.$options.name === GGanttRow.name
+        childComp => childComp.$options.name === GGanttRow.name
       )
-      ganttRowChildrenList.forEach((row) => {
+      ganttRowChildrenList.forEach(row => {
         let ganttBarChildrenOfRow = row.$children.filter(
-          (childComp) => childComp.$options.name === GGanttBar.name
+          childComp => childComp.$options.name === GGanttBar.name
         )
         ganttBarChildren.push(...ganttBarChildrenOfRow)
       })
@@ -125,7 +129,7 @@ export default {
         return []
       }
       return this.getGanttBarChildrenList().filter(
-        (ganttBarChild) => ganttBarChild.barConfig.bundle === bundleId
+        ganttBarChild => ganttBarChild.barConfig.bundle === bundleId
       )
     },
 
@@ -136,7 +140,7 @@ export default {
         gGanttBar.barConfig.bundle !== null &&
         gGanttBar.barConfig.bundle !== undefined
       ) {
-        this.getGanttBarChildrenList().forEach((ganttBarChild) => {
+        this.getGanttBarChildrenList().forEach(ganttBarChild => {
           if (
             ganttBarChild.barConfig.bundle === gGanttBar.barConfig.bundle &&
             ganttBarChild !== gGanttBar
@@ -154,7 +158,7 @@ export default {
       if (bundleId === undefined || bundleId === null) {
         return
       }
-      this.getGanttBarChildrenList().forEach((ganttBarChild) => {
+      this.getGanttBarChildrenList().forEach(ganttBarChild => {
         if (
           ganttBarChild.barConfig.bundle === bundleId &&
           ganttBarChild.bar !== pushedBar
@@ -180,10 +184,10 @@ export default {
       let barsFromBundle = this.getBarsFromBundle(ganttBar.barConfig.bundle)
       if (
         this.shouldSnapBackBar(ganttBar) ||
-        barsFromBundle.some((gBar) => this.shouldSnapBackBar(gBar))
+        barsFromBundle.some(gBar => this.shouldSnapBackBar(gBar))
       ) {
         ganttBar.snapBack()
-        barsFromBundle.forEach((gBar) => gBar.snapBack())
+        barsFromBundle.forEach(gBar => gBar.snapBack())
         return true
       }
       return false
@@ -200,7 +204,7 @@ export default {
       if (movedBars.size && this.isMagnetic) {
         let { left, right /*, move*/ } = action
 
-        movedBars.forEach((bar) => {
+        movedBars.forEach(bar => {
           if (this.precision === 'month') {
             if (left && bar == ganttBar.bar) {
               if (moment(bar[this.barStartKey]).hours() < 12) {
@@ -303,8 +307,8 @@ export default {
           let gapDist = bundleBarsOnPath[i].gapDistance
           let otherBarsFromBundle = this.getBarsFromBundle(
             barFromBundle.barConfig.bundle
-          ).filter((otherBar) => otherBar !== barFromBundle)
-          otherBarsFromBundle.forEach((otherBar) => {
+          ).filter(otherBar => otherBar !== barFromBundle)
+          otherBarsFromBundle.forEach(otherBar => {
             let [newGapDistance, newBundleBars] =
               this.countGapDistanceToNextImmobileBar(otherBar, gapDist, side)
             if (
@@ -313,10 +317,10 @@ export default {
             ) {
               totalGapDistance = newGapDistance
             }
-            newBundleBars.forEach((newBundleBar) => {
+            newBundleBars.forEach(newBundleBar => {
               if (
                 !bundleBarsOnPath.find(
-                  (barAndGap) => barAndGap.bar === newBundleBar.bar
+                  barAndGap => barAndGap.bar === newBundleBar.bar
                 )
               ) {
                 bundleBarsOnPath.push(newBundleBar)
@@ -338,7 +342,7 @@ export default {
       let barsFromBundleOfClickedBar = this.getBarsFromBundle(
         bar.barConfig.bundle
       )
-      barsFromBundleOfClickedBar.forEach((barFromBundle) => {
+      barsFromBundleOfClickedBar.forEach(barFromBundle => {
         barFromBundle.dragLimitLeft = bar.dragLimitLeft
         barFromBundle.dragLimitRight = bar.dragLimitRight
       })
@@ -409,7 +413,7 @@ export default {
     getNextGanttBar(bar, side = 'left') {
       let allBarsLeftOrRight = []
       if (side === 'left') {
-        allBarsLeftOrRight = bar.$parent.$children.filter((gBar) => {
+        allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return (
             gBar.$options.name === GGanttBar.name &&
             gBar.$parent === bar.$parent &&
@@ -420,7 +424,7 @@ export default {
           )
         })
       } else {
-        allBarsLeftOrRight = bar.$parent.$children.filter((gBar) => {
+        allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
           return (
             gBar.$options.name === GGanttBar.name &&
             gBar.$parent === bar.$parent &&
@@ -466,13 +470,13 @@ export default {
         this.initDragOfBarsFromBundle(bundleId, e),
       moveBarsFromBundleOfPushedBar: (bar, minuteDiff, overlapType) =>
         this.moveBarsFromBundleOfPushedBar(bar, minuteDiff, overlapType),
-      setDragLimitsOfGanttBar: (ganttBar) =>
+      setDragLimitsOfGanttBar: ganttBar =>
         this.setDragLimitsOfGanttBar(ganttBar),
       onBarEvent: (e, ganttBar) => this.onBarEvent(e, ganttBar),
       onDragendBar: (e, ganttBar, action) =>
         this.onDragendBar(e, ganttBar, action),
       shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
-      snapBackBundle: (ganttBar) => this.snapBackBundle(ganttBar),
+      snapBackBundle: ganttBar => this.snapBackBundle(ganttBar),
       getMinGapBetweenBars: () => this.minGapBetweenBars,
       getDefaultBarLength: () => this.defaultBarLength,
       getTimeUnit: () => this.timeUnit,
@@ -495,6 +499,8 @@ export default {
   -ms-user-select: none;
   user-select: none;
   padding-bottom: 23px;
+  border: 1px solid #eaeaea;
+  box-sizing: border-box;
 }
 
 .g-gantt-chart >>> * {

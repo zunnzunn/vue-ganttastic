@@ -356,14 +356,14 @@ export default {
         newXEnd &&
         moment(this.bar[this.barEndKey]).isAfter(this.barEndBeforeDrag)
 
-      const currentIndex = this.allBarsInRow.findIndex((bar) => bar == this.bar)
+      const currentIndex = this.allBarsInRow.findIndex(bar => bar == this.bar)
 
       let otherBars = []
       if (isSqueezeToRight) {
         otherBars = this.allBarsInRow.slice(currentIndex + 1)
         if (otherBars.length) {
           let otherBarTotalWidth = otherBars
-            .map((bar) => this.getBarWidth(bar))
+            .map(bar => this.getBarWidth(bar))
             .reduce((accumulator, currentValue) => accumulator + currentValue)
           if (newXEnd > this.barContainer.width - otherBarTotalWidth) {
             return true
@@ -373,7 +373,7 @@ export default {
         otherBars = this.allBarsInRow.slice(0, currentIndex)
         if (otherBars.length) {
           let otherBarTotalWidth = otherBars
-            .map((bar) => this.getBarWidth(bar))
+            .map(bar => this.getBarWidth(bar))
             .reduce((accumulator, currentValue) => accumulator + currentValue)
           if (newXStart < otherBarTotalWidth) {
             return true
@@ -478,7 +478,7 @@ export default {
       let barStartMoment = moment(bar[this.barStartKey])
       let barEndMoment = moment(bar[this.barEndKey])
       let overlapLeft, overlapRight, overlapInBetween
-      let overlapBar = this.allBarsInRow.find((otherBar) => {
+      let overlapBar = this.allBarsInRow.find(otherBar => {
         if (
           otherBar === bar ||
           otherBar.ganttBarConfig.pushOnOverlap === false
