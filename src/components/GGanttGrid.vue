@@ -12,17 +12,19 @@
 </template>
 
 <script setup lang="ts">
-import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineProps, toRefs } from "vue"
+import useTimeaxisUnits from "@/composables/useTimeaxisUnits"
+import { defineProps, inject, toRefs } from "vue"
+import INJECTION_KEYS from "@/models/symbols"
 
 const props = defineProps<{
-    chartStart: string
-    chartEnd: string
-    precision: "hour" | "day" | "month"
-    highlightedUnits: number[]
-  }>()
-const { chartStart, chartEnd, precision } = toRefs(props)
-const { timeaxisUnits } = useTimeaxisUnits(chartStart.value, chartEnd.value, precision.value)
+  highlightedUnits: number[]
+}>()
+const { highlightedUnits } = toRefs(props)
+const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
+if (!gGanttChartPropsRefs) {
+  throw new Error("GGanttBar: Provide/Inject of values from GGanttChart failed!")
+}
+const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
 </script>
 
 <style scoped>

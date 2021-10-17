@@ -39,7 +39,8 @@
 <script setup lang="ts">
 import { ColorScheme } from "./color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineProps } from "vue"
+import { defineProps, inject } from "vue"
+import INJECTION_KEYS from "@/models/symbols"
 
 defineProps<{
   chartStart: string
@@ -47,8 +48,11 @@ defineProps<{
   precision: "hour" | "day" | "month"
   colors: ColorScheme
 }>()
-
-const { timeaxisUnits } = useTimeaxisUnits()
+const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
+if (!gGanttChartPropsRefs) {
+  throw new Error("GGanttBar: Provide/Inject of values from GGanttChart failed!")
+}
+const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
 </script>
 
 <style scoped>

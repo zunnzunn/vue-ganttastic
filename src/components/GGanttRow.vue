@@ -23,8 +23,6 @@
         :key="`ganttastic_bar_${index}`"
         ref="ganttBar"
         :bar="bar"
-        :bar-start="barStart"
-        :bar-end="barEnd"
         :all-bars-in-row="bars"
       />
     </div>
@@ -33,14 +31,12 @@
 
 <script setup lang="ts">
 import { defineProps } from "vue"
-import GanttBarObject from "../models/GanttBarObject"
+import { GanttBarObject } from "../models/GanttBarObject"
 import GGanttBar from "./GGanttBar.vue"
 
 const props = defineProps<{
   label: string
   bars: GanttBarObject[]
-  barStart: string,
-  barEnd: string,
   highlightOnHover: boolean
 }>()
 

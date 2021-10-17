@@ -1,11 +1,11 @@
-import INJECTION_KEYS from "@/models/symbols"
+import { GGanttChartPropsRefs } from "@/models/GanttBarObject"
 import dayjs from "dayjs"
-import { computed, inject, Ref } from "vue"
+import { computed } from "vue"
 
-export default function useTimeaxisUnits () {
-  const chartStart = inject(INJECTION_KEYS.chartStartKey) as Ref<string>
-  const chartEnd = inject(INJECTION_KEYS.chartEndKey) as Ref<string>
-  const precision = inject(INJECTION_KEYS.precisionKey) as Ref<"day" | "hour" | "month">
+export default function useTimeaxisUnits (
+  gGanttChartPropsRefs: GGanttChartPropsRefs
+) {
+  const { chartStart, chartEnd, precision } = gGanttChartPropsRefs
   const upperPrecision = computed(() => {
     switch (precision?.value) {
       case "hour":

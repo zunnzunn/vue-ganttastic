@@ -13,9 +13,6 @@
 
     <g-gantt-grid
       v-if="grid"
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :precision="precision"
     />
     <div id="g-gantt-rows-container">
       <slot />   <!-- the g-gantt-row components go here -->
@@ -24,33 +21,57 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs"
 import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { defineComponent, computed, provide, toRefs, ref, defineProps } from "vue"
+import { computed, provide, toRefs, ref, defineProps, useSlots } from "vue"
+import { GanttBarObject } from "@/models/GanttBarObject"
 
 const props = defineProps<{
-    chartStart: string
-    chartEnd: string
-    precision: "hour" | "day" | "month"
-    width: string
-    hideTimeaxis: boolean
-    colorScheme: string,
-    grid: boolean,
-    pushOnOverlap: boolean
-  }>()
+  chartStart: string
+  chartEnd: string
+  precision: "hour" | "day" | "month"
+  barStart: string
+  barEnd: string
+  width: string
+  hideTimeaxis: boolean
+  colorScheme: string
+  grid: boolean
+  pushOnOverlap: boolean
+}>()
 
-const { chartStart, chartEnd, precision, width, pushOnOverlap } = toRefs(props)
+const { chartStart, chartEnd, barStart, barEnd, precision, width, pushOnOverlap } = toRefs(props)
+const slots = useSlots()
+
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
 })
+const allBarsInChart = computed(() => {
+  const defaultSlot = slots.default?.()
+  const allBars: GanttBarObject[] = []
+  if (defaultSlot) {
+    defaultSlot.forEach(child => {
+      console.log("🚀 ~ file: GGanttChart.vue ~ line 53 ~ allBarsInChart ~ child", child)
+      if (child.props?.bars) {
+        const bars = child.props.bars as GanttBarObject[]
+        allBars.push(...bars)
+      }
+    })
+  }
+  return allBars
+})
+
 provide(INJECTION_KEYS.chartStartKey, chartStart)
 provide(INJECTION_KEYS.chartEndKey, chartEnd)
+provide(INJECTION_KEYS.barStartKey, barStart)
+provide(INJECTION_KEYS.barEndKey, barEnd)
 provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
 provide(INJECTION_KEYS.precisionKey, precision)
 provide(INJECTION_KEYS.pushOnOverlapKey, pushOnOverlap)
+provide(INJECTION_KEYS.allBarsInChartKey, allBarsInChart)
+provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
+
 </script>
 
 <style scoped>

@@ -1,59 +1,49 @@
 import dayjs from "dayjs"
 import INJECTION_KEYS from "../models/symbols"
-import GanttBarObject from "@/models/GanttBarObject"
+import { GanttBarObject, GGanttChartPropsRefs } from "@/models/GanttBarObject"
 import useTimePositionMapping from "./useTimePositionMapping"
-import { Ref, ref, inject, onMounted } from "vue"
+import { Ref, ref, inject } from "vue"
 
 export default function useBarDrag (
   bar: Ref<GanttBarObject>,
-  barElement: Ref<HTMLElement | undefined>,
-  barStart: Ref<string>,
-  barEnd: Ref<string>,
-  allBarsInRow: Ref<GanttBarObject[]>
+  allBarsInRow: Ref<GanttBarObject[]>,
+  gGanttChartPropsRefs: GGanttChartPropsRefs
 ) {
+  const { barStart, barEnd } = gGanttChartPropsRefs
+
   const isDragging = ref(false)
   let cursorOffsetX = 0
-  let barContainer: DOMRect | undefined
   let dragCallBack : (e: MouseEvent) => void
-  const { mapPositionToTime } = useTimePositionMapping()
+  const { mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
   const pushOnOverlap = inject(INJECTION_KEYS.pushOnOverlapKey)
 
-  onMounted(() => {
-    barContainer = barElement.value?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
-    barElement.value?.addEventListener("mousedown", onMousedown)
-  })
-
-  const onMousedown = (e: MouseEvent) => {
-    e.preventDefault()
-    window.addEventListener("mousemove", initDrag, { once: true }) // on first mousemove event
-    window.addEventListener("mouseup",
-      () => window.removeEventListener("mousemove", initDrag),
-      { once: true }
-    )
-  }
-
   const initDrag = (e: MouseEvent) => {
-    cursorOffsetX = e.clientX - (barElement.value?.getBoundingClientRect().left || 0)
-    const mousedownType = (e.target as Element).className
-    switch (mousedownType) {
-      case "g-gantt-bar-handle-left":
-        document.body.style.cursor = "w-resize"
-        dragCallBack = dragByLeftHandle
-        break
-      case "g-gantt-bar-handle-right":
-        document.body.style.cursor = "w-resize"
-        dragCallBack = dragByRightHandle
-        break
-      default: dragCallBack = drag
+    const barElement = document.getElementById(bar.value.id)
+    if (barElement) {
+      cursorOffsetX = e.clientX - (barElement.getBoundingClientRect().left || 0)
+      const mousedownType = (e.target as Element).className
+      switch (mousedownType) {
+        case "g-gantt-bar-handle-left":
+          document.body.style.cursor = "w-resize"
+          dragCallBack = dragByLeftHandle
+          break
+        case "g-gantt-bar-handle-right":
+          document.body.style.cursor = "w-resize"
+          dragCallBack = dragByRightHandle
+          break
+        default: dragCallBack = drag
+      }
+      isDragging.value = true
+      window.addEventListener("mousemove", dragCallBack)
+      window.addEventListener("mouseup", endDrag)
     }
-    isDragging.value = true
-    window.addEventListener("mousemove", dragCallBack)
-    window.addEventListener("mouseup", endDrag)
   }
 
   const drag = (e: MouseEvent) => {
-    if (barElement.value && barContainer) {
-      const barWidth = barElement.value?.getBoundingClientRect().width
+    const barElement = document.getElementById(bar.value.id)
+    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    if (barElement && barContainer) {
+      const barWidth = barElement.getBoundingClientRect().width
       const xStart = (e.clientX - barContainer.left - cursorOffsetX)
       const xEnd = xStart + barWidth
       bar.value[barStart.value] = mapPositionToTime(xStart)
@@ -63,7 +53,9 @@ export default function useBarDrag (
   }
 
   const dragByLeftHandle = (e: MouseEvent) => {
-    if (barElement.value && barContainer) {
+    const barElement = document.getElementById(bar.value.id)
+    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    if (barElement && barContainer) {
       const xStart = e.clientX - barContainer.left
       const newBarStart = mapPositionToTime(xStart)
       if (dayjs(newBarStart).isSameOrAfter(bar.value[barEnd.value])) {
@@ -75,7 +67,9 @@ export default function useBarDrag (
   }
 
   const dragByRightHandle = (e: MouseEvent) => {
-    if (barElement.value && barContainer) {
+    const barElement = document.getElementById(bar.value.id)
+    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    if (barElement && barContainer) {
       const xEnd = e.clientX - barContainer.left
       const newBarEnd = mapPositionToTime(xEnd)
       if (dayjs(newBarEnd).isSameOrBefore(bar.value[barStart.value])) {
@@ -142,7 +136,7 @@ export default function useBarDrag (
   }
 
   return {
-    onMousedown,
-    isDragging
+    isDragging,
+    initDrag
   }
 }
