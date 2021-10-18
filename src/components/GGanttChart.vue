@@ -54,14 +54,14 @@ export default {
   },
 
   props: {
-    chartStart: { type: String },
-    chartEnd: { type: String },
-    hideTimeaxis: { type: Boolean },
+    chartStart: { type: String, required: true },
+    chartEnd: { type: String, required: true },
+    hideTimeaxis: { type: Boolean, default: false },
     rowLabelWidth: { type: Number, default: 200 },
     rowHeight: { type: Number, default: 40 },
     locale: { type: String, default: 'en' },
     theme: { type: String },
-    grid: { type: Boolean },
+    grid: { type: Boolean, default: false },
     gridSize: { type: Number, default: 30 },
     highlightedHours: { type: Array, default: () => [] },
     highlightedDays: { type: Array, default: () => [] }, // format YYYY-MM-DD

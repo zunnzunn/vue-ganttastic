@@ -13,7 +13,7 @@ A simple and easy-to-use Gantt chart component for Vue.js
 You can install and use Vue-Ganttastic in your project using <kbd>npm</kbd>:
 
 ```
-npm install vue-ganttastic
+npm install @tenrok/vue-ganttastic
 ```
 
 [Moment.js](https://momentjs.com/) is a peer-dependency of Vue-Ganttastic. In order for Vue-Ganttastic to work correctly, you need to install it in your project:
@@ -24,10 +24,10 @@ npm install moment
 
 ## Basic Usage
 
-Import the components <code>GGanttChart</code> and <code>GGanttRow</code>.  
-Use <code>g-gantt-chart</code> in your template, pass the desired chart start and chart end time as props (<code>chart-start</code> and <code>chart-end</code>) and add <code>g-gantt-row</code>s
-to the default template slot.  
-Pass an array containing your bar objects to every row using the <code>bars</code> prop, while specifying the name of the properties in your bar objects that stand for the bar start and bar end time using the props <code>bar-start</code> and <code>bar-end</code>
+Import the components `GGanttChart` and `GGanttRow`.
+Use `g-gantt-chart` in your template, pass the desired chart start and chart end time as props (`chart-start` and `chart-end`) and add `g-gantt-row`s
+to the default template slot.
+Pass an array containing your bar objects to every row using the `bars` prop, while specifying the name of the properties in your bar objects that stand for the bar start and bar end time using the props `bar-start` and `bar-end`
 
 For more detailed information, such as how to style the bars or additional configuration options, please refer to the [docs](https://infectoone.github.io/vue-ganttastic-homepage/#/docs) on the project's homepage (coming soon).
 
@@ -107,6 +107,33 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 </script>
 ```
 
+## Setup
+
+### Parameters
+
+| Props(Parameter)         | Type            | Default   | Description                                                         |
+| ------------------------ | --------------- | --------- | ------------------------------------------------------------------- |
+| bar-start-key            | `String`        | `start`   | property name of the bar objects that represents the start datetime |
+| bar-end-key              | `String`        | `end`     | property name of the bar objects that represents the end datetime   |
+| chart-start (_required_) | `String`        | -         | format `YYYY-MM-DD HH:mm`                                           |
+| chart-end (_required_)   | `String`        | -         | format `YYYY-MM-DD HH:mm`                                           |
+| grid                     | `Boolean`       | `false`   | hide/show grid                                                      |
+| grid-size                | `Number`        | `30`      | horizontal cell width in pixels                                     |
+| height                   | `String`        | -         | the total height of the entire ganttastic component                 |
+| hide-timeaxis            | `Boolean`       | `false`   | hide timeaxis                                                       |
+| highlighted-days         | `Array<String>` | `[]`      | format of day `YYYY-MM-DD`                                          |
+| highlighted-hours        | `Array<Number>` | `[]`      |                                                                     |
+| is-magnetic              | `Boolean`       | -         | magnetic effect                                                     |
+| locale                   | `String`        | `en`      | localization                                                        |
+| may-add                  | `Boolean`       | `true`    | add new bar on double click                                         |
+| precision                | `String`        | `month`   | day, month                                                          |
+| push-on-overlap          | `Boolean`       | -         |                                                                     |
+| row-height               | `Number`        | `40`      |                                                                     |
+| row-label-width          | `Number`        | `200`     | label width in pixels                                               |
+| snap-back-on-overlap     | `Boolean`       | -         |                                                                     |
+| theme                    | `String`        | `default` |                                                                     |
+| width                    | `String`        | `100%`    | the total width of the entire ganttastic component                  |
+
 ## Contributing
 
 Pull requests are warmly welcomed, while every major change or proposal ought to be discussed in an issue first. As the project is still new, I will gladly accept suggestions, proposals, contributions etc.
@@ -119,7 +146,7 @@ Pull requests are warmly welcomed, while every major change or proposal ought to
      npm install -g @vue/cli
      npm install -g @vue/cli-service-global
    ```
-3. <code>App.vue</code> is a dedicated Vue SFC where all Vue-Ganttastic features can be
+3. `App.vue` is a dedicated Vue SFC where all Vue-Ganttastic features can be
    played around with and tested out. Get it running using:
    ```
      npm run serve
