@@ -96,12 +96,14 @@ export default {
     this.initAxis()
     this.onWindowResize()
     window.addEventListener('resize', this.onWindowResize)
-    window.addEventListener('mousemove', event => this.moveTimemarker(event))
-    window.addEventListener('dragover', event => this.moveTimemarker(event))
+    window.addEventListener('mousemove', this.moveTimemarker)
+    window.addEventListener('dragover', this.moveTimemarker)
   },
 
   destroyed() {
     window.removeEventListener('resize', this.onWindowResize)
+    window.removeEventListener('mousemove', this.moveTimemarker)
+    window.removeEventListener('dragover', this.moveTimemarker)
   },
 
   methods: {

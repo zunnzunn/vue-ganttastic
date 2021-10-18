@@ -2,12 +2,7 @@
   <div
     ref="g-grid-container"
     class="g-grid-container"
-    :style="{
-      left: `${rowLabelWidth}px`,
-      width: `${timeCount * gridSize}px`,
-      top,
-      height,
-    }"
+    :style="{ left: `${rowLabelWidth}px`, width: `${timeCount * gridSize}px` }"
   >
     <div
       v-for="(childPoint, index) in allChildPoints"
@@ -43,11 +38,6 @@ export default {
     gridSize: { type: Number },
   },
 
-  data: () => ({
-    top: '0px',
-    height: '0px',
-  }),
-
   computed: {
     allChildPoints() {
       let start = moment(this.chartStart)
@@ -68,26 +58,6 @@ export default {
       return res
     },
   },
-
-  mounted() {
-    this.$nextTick(() => this.onWindowResize())
-    window.addEventListener('resize', this.onWindowResize)
-  },
-
-  destroyed() {
-    window.removeEventListener('resize', this.onWindowResize)
-  },
-
-  methods: {
-    onWindowResize() {
-      let gridContainer = this.$refs['g-grid-container']
-      if (!gridContainer) return
-      let rowsContainer = gridContainer.nextSibling
-      if (!rowsContainer) return
-      this.top = `${rowsContainer.offsetTop}px`
-      this.height = `${rowsContainer.offsetHeight}px`
-    },
-  },
 }
 </script>
 
@@ -95,7 +65,7 @@ export default {
 .g-grid-container {
   position: absolute;
   top: 0;
-  height: calc(100% - 23px);
+  bottom: 0;
   overflow: hidden;
 }
 

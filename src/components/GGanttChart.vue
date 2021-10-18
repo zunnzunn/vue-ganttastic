@@ -17,24 +17,22 @@
       :grid-size="gridSize"
     />
 
-    <g-gantt-grid
-      v-if="grid"
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :row-label-width="rowLabelWidth"
-      :highlighted-hours="highlightedHours"
-      :highlighted-days="highlightedDays"
-      :precision="precision"
-      :time-count="timeCount"
-      :grid-size="gridSize"
-    />
-
     <div
       class="g-gantt-rows-container"
       :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
     >
+      <g-gantt-grid
+        v-if="grid"
+        :chart-start="chartStart"
+        :chart-end="chartEnd"
+        :row-label-width="rowLabelWidth"
+        :highlighted-hours="highlightedHours"
+        :highlighted-days="highlightedDays"
+        :precision="precision"
+        :time-count="timeCount"
+        :grid-size="gridSize"
+      />
       <slot />
-      <!-- the g-gantt-row components go here -->
     </div>
   </div>
 </template>
