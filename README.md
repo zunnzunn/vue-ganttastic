@@ -59,7 +59,6 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
 <script>
   import { GGanttChart, GGanttRow } from '@tenrok/vue-ganttastic'
-  import '@tenrok/vue-ganttastic/dist/vue-ganttastic.css'
 
   export default {
 
@@ -105,6 +104,15 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
   }
 </script>
+
+<style lang="scss">
+  @import '~@tenrok/vue-ganttastic/dist/vue-ganttastic.css';
+
+  // Custom
+  .g-grid-line-highlighted {
+    background: #ffb0b0;
+  }
+</style>
 ```
 
 ## Setup
