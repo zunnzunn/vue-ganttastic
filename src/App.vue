@@ -69,14 +69,7 @@
 </template>
 
 <script>
-import GGanttChart from '@/components/GGanttChart.vue'
-import GGanttRow from '@/components/GGanttRow.vue'
-
 export default {
-  components: {
-    GGanttChart,
-    GGanttRow,
-  },
   data: () => ({
     chart1: {
       chartStart: '2020-03-02 00:00',
@@ -104,8 +97,8 @@ export default {
                 color: 'white',
                 backgroundColor: '#404040',
                 opacity: 0.5,
-                immobile: true,
-              },
+                immobile: true
+              }
             },
             {
               myStart: '2020-03-03 04:00',
@@ -114,10 +107,10 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
-                bundle: 'blueBundle',
-              },
-            },
-          ],
+                bundle: 'blueBundle'
+              }
+            }
+          ]
         },
         {
           label: 'Row #2',
@@ -129,8 +122,8 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
-                bundle: 'redBundle',
-              },
+                bundle: 'redBundle'
+              }
             },
             {
               myStart: '2020-03-03 04:00',
@@ -139,16 +132,16 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
-                bundle: 'blueBundle',
-              },
+                bundle: 'blueBundle'
+              }
             },
             {
               myStart: '2020-03-03 18:00',
               myEnd: '2020-03-03 22:00',
               label: 'Bar',
-              ganttBarConfig: { color: 'white', backgroundColor: '#aa34a3' },
-            },
-          ],
+              ganttBarConfig: { color: 'white', backgroundColor: '#aa34a3' }
+            }
+          ]
         },
         {
           label: 'Row #3',
@@ -160,8 +153,8 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
-                bundle: 'redBundle',
-              },
+                bundle: 'redBundle'
+              }
             },
             {
               myStart: '2020-03-02 22:30',
@@ -170,8 +163,8 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#a23def',
-                handles: true,
-              },
+                handles: true
+              }
             },
             {
               myStart: '2020-03-02 01:00',
@@ -181,8 +174,8 @@ export default {
                 color: 'white',
                 backgroundColor: '#5effad',
                 pushOnOverlap: false,
-                zIndex: 2,
-              },
+                zIndex: 2
+              }
             },
             {
               myStart: '2020-03-03 14:00',
@@ -191,10 +184,10 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 background:
-                  'repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)',
-              },
-            },
-          ],
+                  'repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)'
+              }
+            }
+          ]
         },
         {
           label: 'Row #4',
@@ -206,8 +199,8 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#d18aaf',
-                handles: true,
-              },
+                handles: true
+              }
             },
             {
               myStart: '2020-03-02 00:30',
@@ -216,12 +209,12 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#f2840f',
-                borderRadius: 0,
-              },
-            },
-          ],
-        },
-      ],
+                borderRadius: 0
+              }
+            }
+          ]
+        }
+      ]
     },
     chart2: {
       chartStart: '2020-03-01 00:00',
@@ -240,7 +233,7 @@ export default {
         '2020-03-08',
         '2020-03-15',
         '2020-03-22',
-        '2020-03-29',
+        '2020-03-29'
       ],
       selectedTheme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       width: '1100px',
@@ -257,10 +250,10 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
-                bundle: 'blueBundle',
-              },
-            },
-          ],
+                bundle: 'blueBundle'
+              }
+            }
+          ]
         },
         {
           label: 'Row #2',
@@ -272,8 +265,8 @@ export default {
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
-                bundle: 'blueBundle',
-              },
+                bundle: 'blueBundle'
+              }
             },
             {
               start: '2020-03-24 00:00',
@@ -281,10 +274,10 @@ export default {
               label: 'Bar',
               ganttBarConfig: {
                 color: 'white',
-                backgroundColor: '#de3b26',
-              },
-            },
-          ],
+                backgroundColor: '#de3b26'
+              }
+            }
+          ]
         },
         {
           label: 'Row #3',
@@ -295,41 +288,43 @@ export default {
               label: 'Bar',
               ganttBarConfig: {
                 color: 'white',
-                backgroundColor: '#408e2f',
-              },
-            },
-          ],
+                backgroundColor: '#408e2f'
+              }
+            }
+          ]
         },
         {
           label:
             'Lorem ipsum dolor sit amet. Vel odit debitis qui aliquam sequi et reprehenderit Quis. Et ipsam enim aut culpa quia sed maiores veniam in consequuntur accusantium.',
-          bars: [],
+          bars: []
         },
         {
           label: 'Row #5',
-          bars: [],
+          bars: []
         },
         {
           label: 'Row #6',
-          bars: [],
+          bars: []
         },
         {
           label: 'Row #7',
-          bars: [],
+          bars: []
         },
         {
           label: 'Row #8',
-          bars: [],
-        },
-      ],
-    },
+          bars: []
+        }
+      ]
+    }
   }),
 
   methods: {
     onDragend(e) {
       let { event, bar } = e
       console.log('onDragend', { event: event.type, bar })
-    },
-  },
+    }
+  }
 }
 </script>
+
+<style lang="scss" src="../lib/scss/vue-ganttastic.scss"></style>

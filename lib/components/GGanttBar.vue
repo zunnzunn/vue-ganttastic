@@ -32,7 +32,7 @@
           class="color-indicator"
           :style="{
             background:
-              this.barStyle.background || this.barStyle.backgroundColor,
+              this.barStyle.background || this.barStyle.backgroundColor
           }"
         />
         {{ barStartText }} - {{ barEndText }}
@@ -50,7 +50,7 @@ export default {
   props: {
     bar: { type: Object },
     barContainer: [Object, DOMRect],
-    allBarsInRow: { type: Array },
+    allBarsInRow: { type: Array }
   },
 
   inject: [
@@ -63,7 +63,7 @@ export default {
     'onDragendBar',
     'getMinGapBetweenBars',
     'getTimeUnit',
-    'getTimeFormat',
+    'getTimeFormat'
   ],
 
   data() {
@@ -85,7 +85,7 @@ export default {
         this.ganttChartProps.precision === 'month' ? 'MM-DD' : 'HH:mm',
       timeFormat: this.getTimeFormat(),
       barStartKey: this.ganttChartProps.barStartKey,
-      barEndKey: this.ganttChartProps.barEndKey,
+      barEndKey: this.ganttChartProps.barEndKey
     }
   },
 
@@ -96,7 +96,7 @@ export default {
       },
       set(value) {
         this.bar[this.barStartKey] = value.format(this.timeFormat)
-      },
+      }
     },
 
     barEndMoment: {
@@ -105,20 +105,20 @@ export default {
       },
       set(value) {
         this.bar[this.barEndKey] = value.format(this.timeFormat)
-      },
+      }
     },
 
     barStartText: {
       get() {
         return moment(this.barStartMoment).format(this.timeChildFormat)
-      },
+      }
     },
 
     barEndText: {
       get() {
         let endMoment = moment(this.barEndMoment)
         return endMoment.format(this.timeChildFormat)
-      },
+      }
     },
 
     barConfig() {
@@ -131,7 +131,7 @@ export default {
               this.bar.ganttBarConfig.backgroundColor,
           opacity: this.bar.ganttBarConfig.isShadow
             ? '0.3'
-            : this.bar.ganttBarConfig.opacity,
+            : this.bar.ganttBarConfig.opacity
         }
       }
       return {}
@@ -147,14 +147,14 @@ export default {
         left: `${xStart}px`,
         width: `${xEnd - xStart}px`,
         height: `${this.ganttChartProps.rowHeight - 6}px`,
-        zIndex: this.barConfig.zIndex || (this.isDragging ? 2 : 1),
+        zIndex: this.barConfig.zIndex || (this.isDragging ? 2 : 1)
       }
     },
 
     tooltipStyle() {
       return {
         left: this.barStyle.left,
-        top: `${this.ganttChartProps.rowHeight}px`,
+        top: `${this.ganttChartProps.rowHeight}px`
       }
     },
 
@@ -164,7 +164,7 @@ export default {
 
     chartEndMoment() {
       return moment(this.ganttChartProps.chartEnd)
-    },
+    }
   },
 
   methods: {
@@ -213,7 +213,7 @@ export default {
         this.setDragLimitsOfGanttBar(this)
         // initialize the dragging on next mousemove event:
         window.addEventListener('mousemove', this.onFirstMousemove, {
-          once: true,
+          once: true
         })
         // if next mousemove happens after mouse up (if user just presses mouse button down, then up, without moving):
         window.addEventListener(
@@ -569,120 +569,7 @@ export default {
         timeDiffFromStart = duration.asHours()
       }
       return moment(this.chartStartMoment).add(timeDiffFromStart, 'hours')
-    },
-  },
+    }
+  }
 }
 </script>
-
-<style scoped>
-.g-gantt-bar {
-  position: absolute;
-  top: 2px;
-  left: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  width: 300px;
-  height: 34px;
-  border-radius: 15px;
-  background: #79869c;
-  overflow: hidden;
-  cursor: move;
-}
-
-.g-gantt-bar-immobile {
-  cursor: unset;
-}
-
-.g-gantt-bar-label {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0 14px 0 14px; /* 14px is the width of the handle */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.g-gantt-bar-label > * {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.g-gantt-bar > .g-gantt-bar-handle-left,
-.g-gantt-bar > .g-gantt-bar-handle-right {
-  position: absolute;
-  width: 10px;
-  height: 100%;
-  background: white;
-  opacity: 0.7;
-  border-radius: 40px;
-}
-
-.g-gantt-bar-handle-left {
-  left: 0;
-  cursor: w-resize;
-}
-
-.g-gantt-bar-handle-right {
-  right: 0;
-  cursor: e-resize;
-}
-
-.g-gantt-bar-label img {
-  pointer-events: none;
-}
-
-.g-gantt-tooltip {
-  position: absolute;
-  background: black;
-  color: white;
-  z-index: 3;
-  font-size: 0.7em;
-  padding: 3px;
-  border-radius: 3px;
-  transition: opacity 0.2s;
-  display: flex;
-  align-items: center;
-}
-
-.g-gantt-tooltip:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 10%;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-bottom-color: black;
-  border-top: 0;
-  margin-left: -5px;
-  margin-top: -5px;
-}
-
-.g-gantt-tooltip > .color-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 100%;
-  margin-right: 4px;
-}
-
-.fade-enter-active {
-  animation: fade-in 0.3s;
-}
-
-.fade-leave-active {
-  animation: fade-in 0.3s reverse;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-</style>

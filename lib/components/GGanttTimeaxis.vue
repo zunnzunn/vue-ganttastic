@@ -8,7 +8,7 @@
       class="g-timeaxis-empty-space"
       :style="{
         minWidth: `${rowLabelWidth}px`,
-        background: themeColors.secondary,
+        background: themeColors.secondary
       }"
     />
     <div class="g-timeaxis-days">
@@ -19,7 +19,7 @@
         :style="{
           background:
             index % 2 === 0 ? themeColors.primary : themeColors.secondary,
-          color: themeColors.text,
+          color: themeColors.text
         }"
       >
         <div v-html="pointFormatted(point) || '&nbsp;'"></div>
@@ -34,7 +34,7 @@
               width: `${gridSize}px`,
               background:
                 index % 2 === 0 ? themeColors.primary : themeColors.secondary,
-              color: themeColors.text,
+              color: themeColors.text
             }"
           >
             <span :style="{ fontSize: hourFontSize }">{{
@@ -68,7 +68,7 @@ export default {
     precision: { type: String },
     timeFormat: { type: String },
     timeCount: { type: Number },
-    gridSize: { type: Number },
+    gridSize: { type: Number }
   },
 
   data() {
@@ -78,7 +78,7 @@ export default {
       timemarker: null,
       hourFontSize: '11px',
       dayFormat: 'DD MMMM',
-      monthFormat: 'MMMM YYYY',
+      monthFormat: 'MMMM YYYY'
     }
   },
 
@@ -88,7 +88,7 @@ export default {
     },
     chartEnd() {
       this.initAxis()
-    },
+    }
   },
 
   mounted() {
@@ -160,13 +160,13 @@ export default {
       let axisMonthObject = {
         widthPercentage: widthPercentage,
         value: moment(datetime, 'YYYY-MM'),
-        childPoints: [],
+        childPoints: []
       }
       let startDay = datetimeMoment.date()
       for (let i = 0; i <= endDay - startDay; i++) {
         let day = {
           text: datetimeMoment.format('D'),
-          fullDatetime: datetimeMoment.format(this.timeFormat),
+          fullDatetime: datetimeMoment.format(this.timeFormat)
         }
         axisMonthObject.childPoints.push(day)
         datetimeMoment.add(1, 'day')
@@ -179,13 +179,13 @@ export default {
       let axisDayObject = {
         widthPercentage: widthPercentage,
         value: moment(datetime, 'YYYY-MM-DD'), // ISO 8601
-        childPoints: [],
+        childPoints: []
       }
       let startHour = datetimeMoment.hour()
       for (let i = 0; i <= endHour - startHour; i++) {
         let hour = {
           text: datetimeMoment.format('HH'),
-          fullDatetime: datetimeMoment.format(this.timeFormat),
+          fullDatetime: datetimeMoment.format(this.timeFormat)
         }
         axisDayObject.childPoints.push(hour)
         datetimeMoment.add(1, 'hour')
@@ -239,91 +239,7 @@ export default {
       //   ? moment(point.value).locale(this.locale).format(this.dayFormat)
       //   : ''
       return moment(point.value).locale(this.locale).format(this.dayFormat)
-    },
-  },
+    }
+  }
 }
 </script>
-
-<style scoped>
-.g-timeaxis,
-.g-timeaxis-days,
-.g-timeaxis-day,
-.g-timeaxis-day > div {
-  display: flex;
-  /* overflow: hidden; */
-}
-
-.g-timeaxis {
-  position: sticky;
-  top: 0;
-  /* width: 100%; */
-  /* height: 8%; */
-  /* min-height: 75px; */
-  background: white;
-  z-index: 4;
-  box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
-}
-
-.g-timeaxis > .g-timeaxis-empty-space {
-  min-height: 100%;
-  background: #f5f5f5;
-  z-index: 5;
-  left: 0;
-  position: sticky;
-}
-
-.g-timeaxis > .g-timeaxis-days {
-  position: relative;
-  height: 100%;
-}
-
-.g-timeaxis-day {
-  height: 100%;
-  flex-direction: column;
-  background: #e0e0e0;
-}
-
-.g-timeaxis-day:nth-child(odd) {
-  background: #e8e8e8;
-}
-
-.g-timeaxis-day > div:nth-child(1) {
-  /* day text */
-  height: 50%;
-  justify-content: space-around;
-  font-weight: bold;
-  align-items: center;
-}
-
-.g-timeaxis-day > div:nth-child(2) {
-  /* hours of a day */
-  align-items: flex-end;
-  height: 50%;
-  justify-content: space-between;
-  background: #f5f5f5;
-  padding-top: 2px;
-  color: #212121;
-}
-
-.g-timeaxis-hour {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-direction: column;
-  opacity: 0.5;
-}
-
-.g-timeaxis-hour-pin {
-  width: 1px;
-  height: 8px;
-}
-
-.g-timeaxis-marker {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 3px;
-  background: black;
-}
-</style>

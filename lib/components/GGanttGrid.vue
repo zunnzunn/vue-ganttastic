@@ -13,8 +13,8 @@
         {
           'g-grid-line-highlighted':
             (precision === 'day' && highlightedHours.includes(childPoint)) ||
-            (precision === 'month' && highlightedDays.includes(childPoint)),
-        },
+            (precision === 'month' && highlightedDays.includes(childPoint))
+        }
       ]"
       :style="{ width: `${gridSize}px` }"
     />
@@ -35,7 +35,7 @@ export default {
     highlightedDays: { type: Array, default: () => [] },
     precision: { type: String },
     timeCount: { type: Number },
-    gridSize: { type: Number },
+    gridSize: { type: Number }
   },
 
   computed: {
@@ -56,32 +56,7 @@ export default {
         }
       }
       return res
-    },
-  },
+    }
+  }
 }
 </script>
-
-<style scoped>
-.g-grid-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  overflow: hidden;
-}
-
-.g-grid-line {
-  height: 100%;
-  border: 1px solid transparent;
-  border-left: 1px solid #eaeaea;
-  box-sizing: border-box;
-  display: inline-block;
-}
-
-.g-grid-line-last {
-  border-right: 1px solid #eaeaea;
-}
-
-.g-grid-line-highlighted {
-  background: #dcefff;
-}
-</style>

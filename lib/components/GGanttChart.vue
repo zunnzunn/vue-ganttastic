@@ -39,18 +39,18 @@
 
 <script>
 import moment from 'moment'
-import GanttasticThemeColors from '@/assets/GanttasticThemeColors.js'
-import GGanttTimeaxis from '@/components/GGanttTimeaxis.vue'
-import GGanttGrid from '@/components/GGanttGrid.vue'
-import GGanttRow from '@/components/GGanttRow.vue'
-import GGanttBar from '@/components/GGanttBar.vue'
+import GanttasticThemeColors from './GanttasticThemeColors.js'
+import GGanttTimeaxis from './GGanttTimeaxis.vue'
+import GGanttGrid from './GGanttGrid.vue'
+import GGanttRow from './GGanttRow.vue'
+import GGanttBar from './GGanttBar.vue'
 
 export default {
   name: 'GGanttChart',
 
   components: {
     GGanttTimeaxis,
-    GGanttGrid,
+    GGanttGrid
   },
 
   props: {
@@ -75,13 +75,13 @@ export default {
     precision: { type: String, default: 'month' }, // 'month', 'day'
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime
-    mayAdd: { type: Boolean, default: true },
+    mayAdd: { type: Boolean, default: true }
   },
 
   data() {
     return {
       timemarkerOffset: 0,
-      movedBarsInDrag: new Set(),
+      movedBarsInDrag: new Set()
     }
   },
 
@@ -104,7 +104,7 @@ export default {
 
     themeColors() {
       return GanttasticThemeColors[this.theme] || GanttasticThemeColors.default
-    },
+    }
   },
 
   methods: {
@@ -376,7 +376,7 @@ export default {
           } else if (nextBar.barConfig.bundle) {
             bundleBarsAndGapDist.push({
               bar: nextBar,
-              gapDistance: gapDistanceSoFar,
+              gapDistance: gapDistanceSoFar
             })
           }
           currentBar = nextBar
@@ -398,7 +398,7 @@ export default {
           } else if (nextBar.barConfig.bundle) {
             bundleBarsAndGapDist.push({
               bar: nextBar,
-              gapDistance: gapDistanceSoFar,
+              gapDistance: gapDistanceSoFar
             })
           }
           currentBar = nextBar
@@ -448,7 +448,7 @@ export default {
       } else {
         return null
       }
-    },
+    }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -478,34 +478,8 @@ export default {
       getMinGapBetweenBars: () => this.minGapBetweenBars,
       getDefaultBarLength: () => this.defaultBarLength,
       getTimeUnit: () => this.timeUnit,
-      getTimeFormat: () => this.timeFormat,
+      getTimeFormat: () => this.timeFormat
     }
-  },
+  }
 }
 </script>
-
-<style scoped>
-.g-gantt-chart {
-  position: relative;
-  /* display: flex; */
-  /* flex-direction: column; */
-  overflow: auto;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  padding-bottom: 23px;
-  border: 1px solid #eaeaea;
-  box-sizing: border-box;
-}
-
-.g-gantt-chart >>> * {
-  font-family: Roboto, Verdana;
-}
-
-.g-gantt-rows-container {
-  position: relative;
-}
-</style>

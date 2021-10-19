@@ -58,8 +58,8 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 </template>
 
 <script>
-
-  import { GGanttChart, GGanttRow } from 'vue-ganttastic'
+  import { GGanttChart, GGanttRow } from '@tenrok/vue-ganttastic'
+  import '@tenrok/vue-ganttastic/dist/vue-ganttastic.css'
 
   export default {
 

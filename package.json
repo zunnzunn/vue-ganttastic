@@ -1,6 +1,6 @@
 {
   "name": "@tenrok/vue-ganttastic",
-  "version": "0.10.11",
+  "version": "0.10.12",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "keywords": [
     "gantt",
@@ -40,8 +40,8 @@
     "url": "git+https://github.com/tenrok/vue-ganttastic.git"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name vue-ganttastic src/lib.js",
+    "serve": "vue-cli-service serve --open",
+    "build": "vue-cli-service build --target lib --name vue-ganttastic lib/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

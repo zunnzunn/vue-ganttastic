@@ -37,20 +37,20 @@
 </template>
 
 <script>
-import GGanttBar from '@/components/GGanttBar.vue'
+import GGanttBar from './GGanttBar.vue'
 import moment from 'moment'
 
 export default {
   name: 'GGanttRow',
 
   components: {
-    GGanttBar,
+    GGanttBar
   },
 
   props: {
     label: { type: String, default: 'Row' },
     bars: { type: Array, default: () => [] },
-    highlightOnHover: { type: Boolean },
+    highlightOnHover: { type: Boolean }
   },
 
   inject: [
@@ -60,14 +60,14 @@ export default {
     'getChartEnd',
     'getDefaultBarLength',
     'getTimeUnit',
-    'getTimeFormat',
+    'getTimeFormat'
   ],
 
   data() {
     return {
       barContainer: {},
       timeUnit: this.getTimeUnit(),
-      timeFormat: this.getTimeFormat(),
+      timeFormat: this.getTimeFormat()
     }
   },
 
@@ -77,9 +77,9 @@ export default {
         width: `${this.$parent.rowLabelWidth}px`,
         // height: `${this.$parent.rowHeight}px`,
         background: this.$parent.themeColors.ternary,
-        color: this.$parent.themeColors.text,
+        color: this.$parent.themeColors.text
       }
-    },
+    }
   },
 
   mounted() {
@@ -163,50 +163,13 @@ export default {
       if (this.$refs.barContainer) {
         this.barContainer = this.$refs.barContainer.getBoundingClientRect()
       }
-    },
+    }
   },
 
   watch: {
     '$parent.rowLabelWidth': function () {
       this.barContainer = this.$refs.barContainer.getBoundingClientRect()
-    },
-  },
+    }
+  }
 }
 </script>
-
-<style scoped>
-.g-gantt-row {
-  display: flex;
-  width: 100%;
-  height: 40px;
-  transition: background-color 0.2s;
-}
-
-.g-gantt-row > .g-gantt-row-label {
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  background: #e8e8e8;
-  color: #424242;
-  font-size: 0.9em;
-  z-index: 3;
-  font-weight: bold;
-  left: 0;
-  position: sticky;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-.g-gantt-row > .g-gantt-row-label > * {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.g-gantt-row > .g-gantt-row-bars-container {
-  position: relative;
-  /* border-top: 1px solid #eaeaea; */
-  border-bottom: 1px solid #eaeaea;
-  flex: 1;
-}
-</style>
