@@ -5,15 +5,20 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "daily"
-      time: "12:00"
-      timezone: "Europe/Moscow"
+      interval: 'daily'
+      time: '12:00'
+      timezone: 'Europe/Moscow'
+    ignore:
+      - dependency-name: 'eslint'
+        versions: ['>=7.0.0']
+      - dependency-name: 'sass-loader'
+        versions: ['>=11.0.0']
     reviewers:
-      - "solodyagin"
+      - 'solodyagin'
     labels:
-      - "Type: Dependencies"
-    versioning-strategy: increase
-    rebase-strategy: disabled
+      - 'Type: Dependencies'
+    versioning-strategy: 'increase'
+    rebase-strategy: 'disabled'
