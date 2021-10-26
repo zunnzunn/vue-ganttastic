@@ -35,7 +35,10 @@
               this.barStyle.background || this.barStyle.backgroundColor
           }"
         />
-        {{ barStartText }} - {{ barEndText }}
+        <div>
+          <div>{{ bar.tooltip }}</div>
+          <div>{{ barStartText }} - {{ barEndText }}</div>
+        </div>
       </div>
     </transition>
   </div>
@@ -55,13 +58,12 @@ export default {
 
   inject: [
     'getTimeCount',
-    'ganttChartProps',
+    'getChartProps',
     'initDragOfBarsFromBundle',
     'moveBarsFromBundleOfPushedBar',
     'setDragLimitsOfGanttBar',
     'onBarEvent',
     'onDragendBar',
-    'getMinGapBetweenBars',
     'getTimeUnit',
     'getTimeFormat'
   ],
@@ -77,19 +79,49 @@ export default {
       cursorOffsetX: 0,
       mousemoveCallback: null, // gets initialized when starting to drag, possible values: drag, dragByHandleLeft, dragByHandleRight,
       barStartBeforeDrag: null,
-      barEndBeforeDrag: null,
-      timeUnit: this.getTimeUnit(),
-      timeChildKey:
-        this.ganttChartProps.precision === 'month' ? 'hours' : 'minutes',
-      timeChildFormat:
-        this.ganttChartProps.precision === 'month' ? 'MM-DD' : 'HH:mm',
-      timeFormat: this.getTimeFormat(),
-      barStartKey: this.ganttChartProps.barStartKey,
-      barEndKey: this.ganttChartProps.barEndKey
+      barEndBeforeDrag: null
     }
   },
 
   computed: {
+    chartProps() {
+      return this.getChartProps()
+    },
+
+    minGapBetweenBars() {
+      return this.chartProps.minGapBetweenBars
+    },
+
+    timeChildKey() {
+      return this.chartProps.precision === 'month' ? 'hours' : 'minutes'
+    },
+
+    timeChildFormat() {
+      return this.chartProps.precision === 'month'
+        ? 'DD.MM.YYYY'
+        : 'DD.MM.YYYY HH:mm'
+    },
+
+    barStartKey() {
+      return this.chartProps.barStartKey
+    },
+
+    barEndKey() {
+      return this.chartProps.barEndKey
+    },
+
+    timeCount() {
+      return this.getTimeCount()
+    },
+
+    timeUnit() {
+      return this.getTimeUnit()
+    },
+
+    timeFormat() {
+      return this.getTimeFormat()
+    },
+
     barStartMoment: {
       get() {
         return moment(this.bar[this.barStartKey], this.timeFormat)
@@ -146,7 +178,7 @@ export default {
         ...(this.barConfig || {}),
         left: `${xStart}px`,
         width: `${xEnd - xStart}px`,
-        height: `${this.ganttChartProps.rowHeight - 6}px`,
+        height: `${this.chartProps.rowHeight - 6}px`,
         zIndex: this.barConfig.zIndex || (this.isDragging ? 2 : 1)
       }
     },
@@ -154,16 +186,16 @@ export default {
     tooltipStyle() {
       return {
         left: this.barStyle.left,
-        top: `${this.ganttChartProps.rowHeight}px`
+        top: `${this.chartProps.rowHeight}px`
       }
     },
 
     chartStartMoment() {
-      return moment(this.ganttChartProps.chartStart)
+      return moment(this.chartProps.chartStart)
     },
 
     chartEndMoment() {
-      return moment(this.ganttChartProps.chartEnd)
+      return moment(this.chartProps.chartEnd)
     }
   },
 
@@ -328,26 +360,26 @@ export default {
       if (
         newXStart &&
         this.dragLimitLeft !== null &&
-        newXStart < this.dragLimitLeft + this.getMinGapBetweenBars()
+        newXStart < this.dragLimitLeft + this.minGapBetweenBars
       ) {
         return true
       }
       if (
         newXEnd &&
         this.dragLimitRight !== null &&
-        newXEnd > this.dragLimitRight - this.getMinGapBetweenBars()
+        newXEnd > this.dragLimitRight - this.minGapBetweenBars
       ) {
         return true
       }
 
-      if (
-        moment(this.bar[this.barStartKey]).isAfter(this.barStartBeforeDrag) &&
-        moment(this.bar[this.barStartKey])
-          .add(1, this.timeUnit)
-          .isAfter(this.bar[this.barEndBeforeDrag])
-      ) {
-        return true
-      }
+      // if (
+      //   moment(this.bar[this.barStartKey]).isAfter(this.barStartBeforeDrag) &&
+      //   moment(this.bar[this.barStartKey])
+      //     .add(1, this.timeUnit)
+      //     .isAfter(this.bar[this.barEndBeforeDrag])
+      // ) {
+      //   return true
+      // }
 
       const isSqueezeToLeft =
         newXStart &&
@@ -419,7 +451,7 @@ export default {
 
     manageOverlapping() {
       if (
-        !this.ganttChartProps.pushOnOverlap ||
+        !this.chartProps.pushOnOverlap ||
         this.barConfig.pushOnOverlap === false
       ) {
         return
@@ -439,9 +471,9 @@ export default {
                 currentStartMoment,
                 this.timeChildKey,
                 true
-              ) + this.getMinGapBetweenBars()
+              ) + this.minGapBetweenBars
             overlapBar[this.barEndKey] = currentStartMoment
-              .subtract(this.getMinGapBetweenBars(), this.timeChildKey, true)
+              .subtract(this.minGapBetweenBars, this.timeChildKey, true)
               .format(this.timeFormat)
             overlapBar[this.barStartKey] = overlapStartMoment
               .subtract(minuteDiff, this.timeChildKey, true)
@@ -453,9 +485,9 @@ export default {
                 overlapStartMoment,
                 this.timeChildKey,
                 true
-              ) + this.getMinGapBetweenBars()
+              ) + this.minGapBetweenBars
             overlapBar[this.barStartKey] = currentEndMoment
-              .add(this.getMinGapBetweenBars(), this.timeChildKey, true)
+              .add(this.minGapBetweenBars, this.timeChildKey, true)
               .format(this.timeFormat)
             overlapBar[this.barEndKey] = overlapEndMoment
               .add(minuteDiff, this.timeChildKey, true)
@@ -556,14 +588,12 @@ export default {
         this.timeUnit,
         true
       )
-      let pos =
-        (timeDiffFromStart / this.getTimeCount()) * this.barContainer.width
+      let pos = (timeDiffFromStart / this.timeCount) * this.barContainer.width
       return pos
     },
 
     mapPositionToTime(xPos) {
-      let timeDiffFromStart =
-        (xPos / this.barContainer.width) * this.getTimeCount()
+      let timeDiffFromStart = (xPos / this.barContainer.width) * this.timeCount
       if (this.timeUnit === 'days') {
         let duration = moment.duration(timeDiffFromStart, 'days')
         timeDiffFromStart = duration.asHours()

@@ -93,6 +93,7 @@ export default {
               myStart: '2020-03-03 18:00',
               myEnd: '2020-03-03 23:00',
               label: 'Immobile',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#404040',
@@ -104,6 +105,7 @@ export default {
               myStart: '2020-03-03 04:00',
               myEnd: '2020-03-03 15:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
@@ -119,6 +121,7 @@ export default {
               myStart: '2020-03-02 09:00',
               myEnd: '2020-03-02 18:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
@@ -129,6 +132,7 @@ export default {
               myStart: '2020-03-03 04:00',
               myEnd: '2020-03-03 15:00',
               label: 'We belong together ^',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
@@ -139,6 +143,7 @@ export default {
               myStart: '2020-03-03 18:00',
               myEnd: '2020-03-03 22:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: { color: 'white', backgroundColor: '#aa34a3' }
             }
           ]
@@ -150,6 +155,7 @@ export default {
               myStart: '2020-03-02 09:00',
               myEnd: '2020-03-02 18:00',
               label: 'We belong together ^',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26',
@@ -160,6 +166,7 @@ export default {
               myStart: '2020-03-02 22:30',
               myEnd: '2020-03-03 05:00',
               label: 'With handles!',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#a23def',
@@ -170,6 +177,7 @@ export default {
               myStart: '2020-03-02 01:00',
               myEnd: '2020-03-02 07:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#5effad',
@@ -181,6 +189,7 @@ export default {
               myStart: '2020-03-03 14:00',
               myEnd: '2020-03-03 20:00',
               label: 'Woooow!',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 background:
@@ -196,6 +205,7 @@ export default {
               myStart: '2020-03-03 06:30',
               myEnd: '2020-03-03 20:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#d18aaf',
@@ -206,6 +216,7 @@ export default {
               myStart: '2020-03-02 00:30',
               myEnd: '2020-03-03 01:00',
               label: 'Rectangular',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#f2840f',
@@ -247,6 +258,7 @@ export default {
               start: '2020-03-05 00:00',
               end: '2020-03-10 23:59',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
@@ -262,6 +274,7 @@ export default {
               start: '2020-03-02 00:00',
               end: '2020-03-09 23:59',
               label: 'We belong together ^',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
@@ -272,6 +285,7 @@ export default {
               start: '2020-03-24 00:00',
               end: '2020-03-26 23:00',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#de3b26'
@@ -286,6 +300,7 @@ export default {
               start: '2020-03-15 00:00',
               end: '2020-03-18 23:59',
               label: 'Bar',
+              tooltip: 'Bar tooltip',
               ganttBarConfig: {
                 color: 'white',
                 backgroundColor: '#408e2f'

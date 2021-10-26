@@ -88,6 +88,9 @@ export default {
     },
     chartEnd() {
       this.initAxis()
+    },
+    gridSize() {
+      this.onWindowResize()
     }
   },
 

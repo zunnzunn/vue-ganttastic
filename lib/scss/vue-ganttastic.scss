@@ -9,7 +9,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  padding-bottom: 23px;
+  padding-bottom: 34px;
   border: 1px solid #eaeaea;
   box-sizing: border-box;
 }
@@ -147,6 +147,8 @@
   position: sticky;
   padding: 0 10px;
   box-sizing: border-box;
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
 }
 
 .g-gantt-row > .g-gantt-row-label > * {
@@ -157,7 +159,7 @@
 
 .g-gantt-row > .g-gantt-row-bars-container {
   position: relative;
-  /* border-top: 1px solid #eaeaea; */
+  border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
   flex: 1;
 }

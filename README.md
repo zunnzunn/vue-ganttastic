@@ -151,13 +151,12 @@ Pull requests are warmly welcomed, while every major change or proposal ought to
 1. Clone the project
 2. Install the Vue CLI service, if you don't already have it installed:
    ```
-     npm install -g @vue/cli
-     npm install -g @vue/cli-service-global
+   npm install -g @vue/cli
    ```
 3. `App.vue` is a dedicated Vue SFC where all Vue-Ganttastic features can be
    played around with and tested out. Get it running using:
    ```
-     npm run serve
+   npm run serve
    ```
 
 ## Dependencies

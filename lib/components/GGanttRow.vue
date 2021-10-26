@@ -2,7 +2,7 @@
   <div
     class="g-gantt-row"
     ref="g-gantt-row"
-    :style="{ height: `${$parent.rowHeight}px` }"
+    :style="{ height: `${chartProps.rowHeight}px` }"
     v-on="$listeners"
   >
     <div class="g-gantt-row-label" :style="rowLabelStyle">
@@ -23,8 +23,8 @@
       <g-gantt-bar
         v-for="(bar, index) in bars"
         :key="`ganttastic_bar_${index}`"
-        :bar="bar"
         ref="ganttBar"
+        :bar="bar"
         :bar-container="barContainer"
         :all-bars-in-row="bars"
       >
@@ -54,30 +54,55 @@ export default {
   },
 
   inject: [
+    'getChartProps',
     'getThemeColors',
     'getTimeCount',
-    'getChartStart',
-    'getChartEnd',
-    'getDefaultBarLength',
     'getTimeUnit',
     'getTimeFormat'
   ],
 
   data() {
     return {
-      barContainer: {},
-      timeUnit: this.getTimeUnit(),
-      timeFormat: this.getTimeFormat()
+      barContainer: {}
     }
   },
 
   computed: {
+    themeColors() {
+      return this.getThemeColors()
+    },
+
+    defaultBarLength() {
+      return this.chartProps.defaultBarLength
+    },
+
+    chartProps() {
+      return this.getChartProps()
+    },
+
+    timeUnit() {
+      return this.getTimeUnit()
+    },
+
+    timeFormat() {
+      return this.getTimeFormat()
+    },
+
+    timeCount() {
+      return this.getTimeCount()
+    },
+
+    chartStart() {
+      return this.chartProps.chartStart
+    },
+
     rowLabelStyle() {
       return {
-        width: `${this.$parent.rowLabelWidth}px`,
-        // height: `${this.$parent.rowHeight}px`,
-        background: this.$parent.themeColors.ternary,
-        color: this.$parent.themeColors.text
+        width: `${this.chartProps.rowLabelWidth}px`,
+        background: this.themeColors.ternary,
+        color: this.themeColors.text,
+        borderTop: `1px solid ${this.themeColors.rowLabelBorder}`,
+        borderBottom: `1px solid ${this.themeColors.rowLabelBorder}`
       }
     }
   },
@@ -96,7 +121,7 @@ export default {
       e.preventDefault() // enables dropping content on row
       if (this.highlightOnHover) {
         this.$refs['g-gantt-row'].style.backgroundColor =
-          this.getThemeColors().hoverHighlight
+          this.themeColors.hoverHighlight
       }
     },
 
@@ -107,42 +132,36 @@ export default {
     onDrop(e) {
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
-      let timeDiffFromStart = (xPos / barContainer.width) * this.getTimeCount()
-      let time = moment(this.getChartStart()).add(
-        timeDiffFromStart,
-        this.timeUnit
-      )
+      let timeDiffFromStart = (xPos / barContainer.width) * this.timeCount
+      let time = moment(this.chartStart).add(timeDiffFromStart, this.timeUnit)
       let bar = this.bars.find(bar =>
         time.isBetween(
-          bar[this.$parent.barStartKey],
-          bar[this.$parent.barEndKey]
+          bar[this.chartProps.barStartKey],
+          bar[this.chartProps.barEndKey]
         )
       )
       this.$emit('drop', { event: e, bar, time: time.format(this.timeFormat) })
     },
 
     onDoubleClick(e) {
-      if (!this.$parent.mayAdd) return
+      if (!this.chartProps.mayAdd) return
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
       let timeDiffFromStart = Math.floor(
-        (xPos / barContainer.width) * this.getTimeCount()
+        (xPos / barContainer.width) * this.timeCount
       )
-      let time = moment(this.getChartStart()).add(
-        timeDiffFromStart,
-        this.timeUnit
-      )
+      let time = moment(this.chartStart).add(timeDiffFromStart, this.timeUnit)
       let bar = {}
-      bar[this.$parent.barStartKey] = time.format()
-      bar[this.$parent.barEndKey] = time
-        .add(this.getDefaultBarLength(), this.timeUnit)
+      bar[this.chartProps.barStartKey] = time.format()
+      bar[this.chartProps.barEndKey] = time
+        .add(this.defaultBarLength, this.timeUnit)
         .format()
 
       bar.ganttBarConfig = { handles: true }
       this.bars.push(bar)
       this.bars.sort((first, second) =>
-        moment(first[this.$parent.barStartKey]).diff(
-          second[this.$parent.barStartKey]
+        moment(first[this.chartProps.barStartKey]).diff(
+          second[this.chartProps.barStartKey]
         )
       )
     },
@@ -150,7 +169,7 @@ export default {
     onMouseover() {
       if (this.highlightOnHover) {
         this.$refs['g-gantt-row'].style.backgroundColor =
-          this.getThemeColors().hoverHighlight
+          this.themeColors.hoverHighlight
       }
     },
 
@@ -167,7 +186,11 @@ export default {
   },
 
   watch: {
-    '$parent.rowLabelWidth': function () {
+    'chartProps.rowLabelWidth': function () {
+      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    },
+
+    'chartProps.gridSize': function () {
       this.barContainer = this.$refs.barContainer.getBoundingClientRect()
     }
   }

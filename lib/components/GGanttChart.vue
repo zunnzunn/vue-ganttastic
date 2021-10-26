@@ -459,10 +459,8 @@ export default {
   // the following values by using Vue's "inject" option:
   provide() {
     return {
-      getChartStart: () => this.chartStart,
-      getChartEnd: () => this.chartEnd,
       getTimeCount: () => this.timeCount,
-      ganttChartProps: this.$props,
+      getChartProps: () => this.$props,
       getThemeColors: () => this.themeColors,
       initDragOfBarsFromBundle: (bundleId, e) =>
         this.initDragOfBarsFromBundle(bundleId, e),
@@ -473,10 +471,6 @@ export default {
       onBarEvent: (e, ganttBar) => this.onBarEvent(e, ganttBar),
       onDragendBar: (e, ganttBar, action) =>
         this.onDragendBar(e, ganttBar, action),
-      shouldSnapBackOnOverlap: () => this.snapBackOnOverlap,
-      snapBackBundle: ganttBar => this.snapBackBundle(ganttBar),
-      getMinGapBetweenBars: () => this.minGapBetweenBars,
-      getDefaultBarLength: () => this.defaultBarLength,
       getTimeUnit: () => this.timeUnit,
       getTimeFormat: () => this.timeFormat
     }
