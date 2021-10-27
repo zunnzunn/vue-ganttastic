@@ -77,7 +77,7 @@ export default {
       childPointCount: null,
       timemarker: null,
       hourFontSize: '11px',
-      dayFormat: 'DD MMMM',
+      dayFormat: 'ddd DD MMMM',
       monthFormat: 'MMMM YYYY'
     }
   },

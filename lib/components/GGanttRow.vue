@@ -107,6 +107,24 @@ export default {
     }
   },
 
+  watch: {
+    'chartProps.chartStart'() {
+      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    },
+
+    'chartProps.chartEnd'() {
+      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    },
+
+    'chartProps.rowLabelWidth'() {
+      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    },
+
+    'chartProps.gridSize'() {
+      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    }
+  },
+
   mounted() {
     this.barContainer = this.$refs.barContainer.getBoundingClientRect()
     window.addEventListener('resize', this.onWindowResize)
@@ -182,16 +200,6 @@ export default {
       if (this.$refs.barContainer) {
         this.barContainer = this.$refs.barContainer.getBoundingClientRect()
       }
-    }
-  },
-
-  watch: {
-    'chartProps.rowLabelWidth': function () {
-      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
-    },
-
-    'chartProps.gridSize': function () {
-      this.barContainer = this.$refs.barContainer.getBoundingClientRect()
     }
   }
 }

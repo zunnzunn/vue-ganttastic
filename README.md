@@ -115,11 +115,9 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 </style>
 ```
 
-## Setup
+## Props
 
-### Parameters
-
-| Props(Parameter)         | Type            | Default   | Description                                                         |
+| Prop                     | Type            | Default   | Description                                                         |
 | ------------------------ | --------------- | --------- | ------------------------------------------------------------------- |
 | bar-start-key            | `String`        | `start`   | property name of the bar objects that represents the start datetime |
 | bar-end-key              | `String`        | `end`     | property name of the bar objects that represents the end datetime   |
