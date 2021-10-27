@@ -336,8 +336,8 @@ export default {
 
   methods: {
     onDragend(e) {
-      let { event, bar } = e
-      console.log('onDragend', { event: event.type, bar })
+      let { event, bar, movedBars } = e
+      console.log('onDragend', { event: event.type, bar, movedBars })
     }
   }
 }

@@ -21,12 +21,12 @@
       @mouseleave="onMouseleave()"
     >
       <g-gantt-bar
-        v-for="(bar, index) in bars"
+        v-for="(bar, index) in localBars"
         :key="`ganttastic_bar_${index}`"
         ref="ganttBar"
         :bar="bar"
         :bar-container="barContainer"
-        :all-bars-in-row="bars"
+        :all-bars-in-row="localBars"
       >
         <template #bar-label="{ bar }">
           <slot name="bar-label" :bar="bar" />
@@ -63,7 +63,8 @@ export default {
 
   data() {
     return {
-      barContainer: {}
+      barContainer: {},
+      localBars: this.bars
     }
   },
 
@@ -126,6 +127,10 @@ export default {
 
     'chartProps.gridSize'() {
       this.barContainer = this.$refs.barContainer.getBoundingClientRect()
+    },
+
+    bars(value) {
+      this.localBars = value
     }
   },
 
@@ -156,7 +161,7 @@ export default {
       let xPos = e.clientX - barContainer.left
       let timeDiffFromStart = (xPos / barContainer.width) * this.timeCount
       let time = moment(this.chartStart).add(timeDiffFromStart, this.timeUnit)
-      let bar = this.bars.find(bar =>
+      let bar = this.localBars.find(bar =>
         time.isBetween(
           bar[this.chartProps.barStartKey],
           bar[this.chartProps.barEndKey]
@@ -180,8 +185,8 @@ export default {
         .format()
 
       bar[this.barConfigKey] = { handles: true }
-      this.bars.push(bar)
-      this.bars.sort((first, second) =>
+      this.localBars.push(bar)
+      this.localBars.sort((first, second) =>
         moment(first[this.chartProps.barStartKey]).diff(
           second[this.chartProps.barStartKey]
         )

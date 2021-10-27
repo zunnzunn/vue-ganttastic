@@ -12,7 +12,7 @@
       @contextmenu="onContextmenu($event)"
     >
       <div class="g-gantt-bar-label">
-        <slot name="bar-label" :bar="bar">
+        <slot name="bar-label" :bar="localBar">
           {{ barConfig.label || '' }}
         </slot>
       </div>
@@ -36,7 +36,7 @@
           }"
         />
         <div>
-          <div>{{ bar.tooltip }}</div>
+          <div>{{ localBar.tooltip }}</div>
           <div>{{ barStartText }} - {{ barEndText }}</div>
         </div>
       </div>
@@ -79,7 +79,8 @@ export default {
       cursorOffsetX: 0,
       mousemoveCallback: null, // gets initialized when starting to drag, possible values: drag, dragByHandleLeft, dragByHandleRight,
       barStartBeforeDrag: null,
-      barEndBeforeDrag: null
+      barEndBeforeDrag: null,
+      localBar: this.bar
     }
   },
 
@@ -128,19 +129,19 @@ export default {
 
     barStartMoment: {
       get() {
-        return moment(this.bar[this.barStartKey], this.timeFormat)
+        return moment(this.localBar[this.barStartKey], this.timeFormat)
       },
       set(value) {
-        this.bar[this.barStartKey] = value.format(this.timeFormat)
+        this.localBar[this.barStartKey] = value.format(this.timeFormat)
       }
     },
 
     barEndMoment: {
       get() {
-        return moment(this.bar[this.barEndKey])
+        return moment(this.localBar[this.barEndKey])
       },
       set(value) {
-        this.bar[this.barEndKey] = value.format(this.timeFormat)
+        this.localBar[this.barEndKey] = value.format(this.timeFormat)
       }
     },
 
@@ -158,16 +159,16 @@ export default {
     },
 
     barConfig() {
-      if (this.bar[this.barConfigKey]) {
+      if (this.localBar[this.barConfigKey]) {
         return {
-          ...this.bar[this.barConfigKey],
-          background: this.bar[this.barConfigKey].isShadow
+          ...this.localBar[this.barConfigKey],
+          background: this.localBar[this.barConfigKey].isShadow
             ? 'grey'
-            : this.bar[this.barConfigKey].background ||
-              this.bar[this.barConfigKey].backgroundColor,
-          opacity: this.bar[this.barConfigKey].isShadow
+            : this.localBar[this.barConfigKey].background ||
+              this.localBar[this.barConfigKey].backgroundColor,
+          opacity: this.localBar[this.barConfigKey].isShadow
             ? '0.3'
-            : this.bar[this.barConfigKey].opacity
+            : this.localBar[this.barConfigKey].opacity
         }
       }
       return {}
@@ -200,6 +201,12 @@ export default {
 
     chartEndMoment() {
       return moment(this.chartProps.chartEnd)
+    }
+  },
+
+  watch: {
+    bar(value) {
+      this.localBar = value
     }
   },
 
@@ -277,8 +284,8 @@ export default {
     initDrag(e) {
       // "e" must be the mousedown event
       this.isDragging = true
-      this.barStartBeforeDrag = this.bar[this.barStartKey]
-      this.barEndBeforeDrag = this.bar[this.barEndKey]
+      this.barStartBeforeDrag = this.localBar[this.barStartKey]
+      this.barEndBeforeDrag = this.localBar[this.barEndKey]
 
       let barX = this.$refs['g-gantt-bar'].getBoundingClientRect().left
       this.cursorOffsetX = e.clientX - barX
@@ -377,22 +384,26 @@ export default {
       }
 
       // if (
-      //   moment(this.bar[this.barStartKey]).isAfter(this.barStartBeforeDrag) &&
-      //   moment(this.bar[this.barStartKey])
+      //   moment(this.localBar[this.barStartKey]).isAfter(this.barStartBeforeDrag) &&
+      //   moment(this.localBar[this.barStartKey])
       //     .add(1, this.timeUnit)
-      //     .isAfter(this.bar[this.barEndBeforeDrag])
+      //     .isAfter(this.localBar[this.barEndBeforeDrag])
       // ) {
       //   return true
       // }
 
       const isSqueezeToLeft =
         newXStart &&
-        moment(this.bar[this.barStartKey]).isBefore(this.barStartBeforeDrag)
+        moment(this.localBar[this.barStartKey]).isBefore(
+          this.barStartBeforeDrag
+        )
       const isSqueezeToRight =
         newXEnd &&
-        moment(this.bar[this.barEndKey]).isAfter(this.barEndBeforeDrag)
+        moment(this.localBar[this.barEndKey]).isAfter(this.barEndBeforeDrag)
 
-      const currentIndex = this.allBarsInRow.findIndex(bar => bar == this.bar)
+      const currentIndex = this.allBarsInRow.findIndex(
+        bar => bar == this.localBar
+      )
 
       let otherBars = []
       if (isSqueezeToRight) {
@@ -460,7 +471,7 @@ export default {
       ) {
         return
       }
-      let currentBar = this.bar
+      let currentBar = this.localBar
       let { overlapBar, overlapType } = this.getOverlapBarAndType(currentBar)
       while (overlapBar) {
         let minuteDiff
