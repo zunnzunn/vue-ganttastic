@@ -74,7 +74,6 @@ export default {
   data() {
     return {
       axisPoints: [],
-      childPointCount: null,
       timemarker: null,
       hourFontSize: '11px',
       dayFormat: 'ddd DD MMMM',
@@ -124,15 +123,15 @@ export default {
     initAxisMonthsAndDays() {
       let start = moment(this.chartStart)
       let end = moment(this.chartEnd)
-      this.childPointCount = Math.floor(end.diff(start, 'days', true))
       this.axisPoints = []
       while (start.isBefore(end)) {
         let dayCountOfMonth = start.isSame(end, 'month')
           ? end.date() - 1
           : start.daysInMonth() - start.date() + 1
-        let widthPercentage = (dayCountOfMonth / this.childPointCount) * 100
-        let endDay =
-          start.month() === end.month() ? end.date() - 1 : start.daysInMonth()
+        let widthPercentage = (dayCountOfMonth / this.timeCount) * 100
+        let endDay = start.isSame(end, 'month')
+          ? end.date() - 1
+          : start.daysInMonth()
         this.axisPoints.push(
           this.getAxisMonthObject(start, widthPercentage, endDay)
         )
@@ -143,14 +142,13 @@ export default {
     initAxisDaysAndHours() {
       let start = moment(this.chartStart)
       let end = moment(this.chartEnd)
-      this.childPointCount = Math.floor(end.diff(start, 'hours', true))
       this.axisPoints = []
       while (start.isBefore(end)) {
         let hourCountOfDay = start.isSame(end, 'day')
           ? end.hour()
           : 24 - start.hour()
-        let widthPercentage = (hourCountOfDay / this.childPointCount) * 100
-        let endHour = start.date() === end.date() ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
+        let widthPercentage = (hourCountOfDay / this.timeCount) * 100
+        let endHour = start.isSame(end, 'day') ? end.hour() - 1 : 23 // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
         this.axisPoints.push(
           this.getAxisDayObject(start, widthPercentage, endHour)
         )
@@ -216,7 +214,7 @@ export default {
       this.hourFontSize =
         Math.min(
           9.5,
-          0.75 * (this.horizontalAxisContainer.width / this.childPointCount)
+          0.75 * (this.horizontalAxisContainer.width / this.timeCount)
         ) + 'px'
     },
 
