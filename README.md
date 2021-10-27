@@ -48,6 +48,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
       v-for="row in rows"
       :key="row.label"
       :label="row.label"
+      :label-style="row.labelStyle"
       :bars="row.bars"
       bar-start="myStart"
       bar-end="myEnd"
@@ -76,6 +77,9 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
         rows: [
           {
             label: "My row #1",
+            labelStyle: {
+              justifyContent: "end"
+            },
             bars: [
               {
                 myStart: "2020-03-01 12:10",

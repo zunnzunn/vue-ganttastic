@@ -25,6 +25,7 @@
         v-for="row in chart1.rows"
         :key="row.label"
         :label="row.label"
+        :label-style="row.labelStyle"
         :bars="row.bars"
         :highlight-on-hover="chart1.highlightOnHover"
       >
@@ -117,6 +118,9 @@ export default {
         },
         {
           label: 'Row #2',
+          labelStyle: {
+            justifyContent: 'end'
+          },
           bars: [
             {
               myStart: '2020-03-02 09:00',

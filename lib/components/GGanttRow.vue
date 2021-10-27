@@ -49,6 +49,7 @@ export default {
 
   props: {
     label: { type: String, default: 'Row' },
+    labelStyle: { type: Object },
     bars: { type: Array, default: () => [] },
     highlightOnHover: { type: Boolean }
   },
@@ -107,7 +108,8 @@ export default {
         background: this.themeColors.ternary,
         color: this.themeColors.text,
         borderTop: `1px solid ${this.themeColors.rowLabelBorder}`,
-        borderBottom: `1px solid ${this.themeColors.rowLabelBorder}`
+        borderBottom: `1px solid ${this.themeColors.rowLabelBorder}`,
+        ...this.labelStyle
       }
     }
   },
