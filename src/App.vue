@@ -15,7 +15,8 @@
       :highlighted-hours="chart1.highlightedHours"
       :row-label-width="chart1.rowLabelWidth"
       :row-height="chart1.rowHeight"
-      :theme="chart1.selectedTheme"
+      :theme="chart1.theme"
+      bar-config-key="config"
       bar-start-key="myStart"
       bar-end-key="myEnd"
       @dragend-bar="onDragend($event)"
@@ -48,7 +49,7 @@
       :highlighted-days="chart2.highlightedDays"
       :row-label-width="chart2.rowLabelWidth"
       :row-height="chart2.rowHeight"
-      :theme="chart2.selectedTheme"
+      :theme="chart2.theme"
       :width="chart2.width"
       :height="chart2.height"
       :may-add="chart2.mayAdd"
@@ -84,7 +85,7 @@ export default {
       hideTimeaxis: false,
       highlightOnHover: true,
       highlightedHours: [10, 12],
-      selectedTheme: 'default', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
+      theme: 'default', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       rows: [
         {
           label: 'Row #1',
@@ -94,7 +95,7 @@ export default {
               myEnd: '2020-03-03 23:00',
               label: 'Immobile',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#404040',
                 opacity: 0.5,
@@ -106,7 +107,7 @@ export default {
               myEnd: '2020-03-03 15:00',
               label: 'Bar',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
                 bundle: 'blueBundle'
@@ -122,7 +123,7 @@ export default {
               myEnd: '2020-03-02 18:00',
               label: 'Bar',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#de3b26',
                 bundle: 'redBundle'
@@ -133,7 +134,7 @@ export default {
               myEnd: '2020-03-03 15:00',
               label: 'We belong together ^',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#2e74a3',
                 bundle: 'blueBundle'
@@ -144,7 +145,7 @@ export default {
               myEnd: '2020-03-03 22:00',
               label: 'Bar',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: { color: 'white', backgroundColor: '#aa34a3' }
+              config: { color: 'white', backgroundColor: '#aa34a3' }
             }
           ]
         },
@@ -156,7 +157,7 @@ export default {
               myEnd: '2020-03-02 18:00',
               label: 'We belong together ^',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#de3b26',
                 bundle: 'redBundle'
@@ -167,7 +168,7 @@ export default {
               myEnd: '2020-03-03 05:00',
               label: 'With handles!',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#a23def',
                 handles: true
@@ -178,7 +179,7 @@ export default {
               myEnd: '2020-03-02 07:00',
               label: 'Bar',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#5effad',
                 pushOnOverlap: false,
@@ -190,7 +191,7 @@ export default {
               myEnd: '2020-03-03 20:00',
               label: 'Woooow!',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 background:
                   'repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)'
@@ -206,7 +207,7 @@ export default {
               myEnd: '2020-03-03 20:00',
               label: 'Bar',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#d18aaf',
                 handles: true
@@ -217,7 +218,7 @@ export default {
               myEnd: '2020-03-03 01:00',
               label: 'Rectangular',
               tooltip: 'Bar tooltip',
-              ganttBarConfig: {
+              config: {
                 color: 'white',
                 backgroundColor: '#f2840f',
                 borderRadius: 0
@@ -231,7 +232,7 @@ export default {
       chartStart: '2020-03-01 00:00',
       chartEnd: '2020-04-01 00:00',
       precision: 'month',
-      pushOnOverlap: true,
+      pushOnOverlap: false,
       isMagnetic: true,
       grid: true,
       gridSize: 50,
@@ -246,7 +247,7 @@ export default {
         '2020-03-22',
         '2020-03-29'
       ],
-      selectedTheme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
+      theme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       width: '1100px',
       height: '250px',
       mayAdd: false,

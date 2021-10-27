@@ -102,6 +102,10 @@ export default {
         : 'DD.MM.YYYY HH:mm'
     },
 
+    barConfigKey() {
+      return this.chartProps.barConfigKey
+    },
+
     barStartKey() {
       return this.chartProps.barStartKey
     },
@@ -154,16 +158,16 @@ export default {
     },
 
     barConfig() {
-      if (this.bar.ganttBarConfig) {
+      if (this.bar[this.barConfigKey]) {
         return {
-          ...this.bar.ganttBarConfig,
-          background: this.bar.ganttBarConfig.isShadow
+          ...this.bar[this.barConfigKey],
+          background: this.bar[this.barConfigKey].isShadow
             ? 'grey'
-            : this.bar.ganttBarConfig.background ||
-              this.bar.ganttBarConfig.backgroundColor,
-          opacity: this.bar.ganttBarConfig.isShadow
+            : this.bar[this.barConfigKey].background ||
+              this.bar[this.barConfigKey].backgroundColor,
+          opacity: this.bar[this.barConfigKey].isShadow
             ? '0.3'
-            : this.bar.ganttBarConfig.opacity
+            : this.bar[this.barConfigKey].opacity
         }
       }
       return {}
@@ -513,7 +517,8 @@ export default {
       let overlapBar = this.allBarsInRow.find(otherBar => {
         if (
           otherBar === bar ||
-          otherBar.ganttBarConfig.pushOnOverlap === false
+          (otherBar[this.barConfigKey] &&
+            otherBar[this.barConfigKey].pushOnOverlap === false)
         ) {
           return false
         }

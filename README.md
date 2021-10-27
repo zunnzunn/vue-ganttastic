@@ -117,28 +117,29 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
 ## Props
 
-| Prop                     | Type            | Default   | Description                                                         |
-| ------------------------ | --------------- | --------- | ------------------------------------------------------------------- |
-| bar-start-key            | `String`        | `start`   | property name of the bar objects that represents the start datetime |
-| bar-end-key              | `String`        | `end`     | property name of the bar objects that represents the end datetime   |
-| chart-start (_required_) | `String`        | -         | format `YYYY-MM-DD HH:mm`                                           |
-| chart-end (_required_)   | `String`        | -         | format `YYYY-MM-DD HH:mm`                                           |
-| grid                     | `Boolean`       | `false`   | hide/show grid                                                      |
-| grid-size                | `Number`        | `30`      | horizontal cell width in pixels                                     |
-| height                   | `String`        | -         | the total height of the entire ganttastic component                 |
-| hide-timeaxis            | `Boolean`       | `false`   | hide timeaxis                                                       |
-| highlighted-days         | `Array<String>` | `[]`      | format of day `YYYY-MM-DD`                                          |
-| highlighted-hours        | `Array<Number>` | `[]`      |                                                                     |
-| is-magnetic              | `Boolean`       | -         | magnetic effect                                                     |
-| locale                   | `String`        | `en`      | localization                                                        |
-| may-add                  | `Boolean`       | `true`    | add new bar on double click                                         |
-| precision                | `String`        | `month`   | day, month                                                          |
-| push-on-overlap          | `Boolean`       | -         |                                                                     |
-| row-height               | `Number`        | `40`      |                                                                     |
-| row-label-width          | `Number`        | `200`     | label width in pixels                                               |
-| snap-back-on-overlap     | `Boolean`       | -         |                                                                     |
-| theme                    | `String`        | `default` |                                                                     |
-| width                    | `String`        | `100%`    | the total width of the entire ganttastic component                  |
+| Prop                     | Type            | Default          | Description                                                         |
+| ------------------------ | --------------- | ---------------- | ------------------------------------------------------------------- |
+| bar-config-key           | `String`        | `ganttBarConfig` |                                                                     |
+| bar-start-key            | `String`        | `start`          | property name of the bar objects that represents the start datetime |
+| bar-end-key              | `String`        | `end`            | property name of the bar objects that represents the end datetime   |
+| chart-start (_required_) | `String`        | -                | format `YYYY-MM-DD HH:mm`                                           |
+| chart-end (_required_)   | `String`        | -                | format `YYYY-MM-DD HH:mm`                                           |
+| grid                     | `Boolean`       | `false`          | hide/show grid                                                      |
+| grid-size                | `Number`        | `30`             | horizontal cell width in pixels                                     |
+| height                   | `String`        | -                | the total height of the entire Vue-Ganttastic component             |
+| hide-timeaxis            | `Boolean`       | `false`          | hide timeaxis                                                       |
+| highlighted-days         | `Array<String>` | `[]`             | format of day `YYYY-MM-DD`                                          |
+| highlighted-hours        | `Array<Number>` | `[]`             |                                                                     |
+| is-magnetic              | `Boolean`       | -                | magnetic effect                                                     |
+| locale                   | `String`        | `en`             | localization                                                        |
+| may-add                  | `Boolean`       | `true`           | add new bar on double click                                         |
+| precision                | `String`        | `month`          | day, month                                                          |
+| push-on-overlap          | `Boolean`       | -                |                                                                     |
+| row-height               | `Number`        | `40`             |                                                                     |
+| row-label-width          | `Number`        | `200`            | label width in pixels                                               |
+| snap-back-on-overlap     | `Boolean`       | -                |                                                                     |
+| theme                    | `String`        | `default`        |                                                                     |
+| width                    | `String`        | `100%`           | the total width of the entire Vue-Ganttastic component              |
 
 ## Contributing
 

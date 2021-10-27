@@ -80,6 +80,14 @@ export default {
       return this.getChartProps()
     },
 
+    chartStart() {
+      return this.chartProps.chartStart
+    },
+
+    barConfigKey() {
+      return this.chartProps.barConfigKey
+    },
+
     timeUnit() {
       return this.getTimeUnit()
     },
@@ -90,10 +98,6 @@ export default {
 
     timeCount() {
       return this.getTimeCount()
-    },
-
-    chartStart() {
-      return this.chartProps.chartStart
     },
 
     rowLabelStyle() {
@@ -175,7 +179,7 @@ export default {
         .add(this.defaultBarLength, this.timeUnit)
         .format()
 
-      bar.ganttBarConfig = { handles: true }
+      bar[this.barConfigKey] = { handles: true }
       this.bars.push(bar)
       this.bars.sort((first, second) =>
         moment(first[this.chartProps.barStartKey]).diff(

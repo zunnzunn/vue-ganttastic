@@ -73,6 +73,7 @@ export default {
     minGapBetweenBars: { type: Number, default: 0 },
     defaultBarLength: { type: Number, default: 1 },
     precision: { type: String, default: 'month' }, // 'month', 'day'
+    barConfigKey: { type: String, default: 'ganttBarConfig' },
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime
     mayAdd: { type: Boolean, default: true }
@@ -152,7 +153,9 @@ export default {
 
     moveBarsFromBundleOfPushedBar(pushedBar, minuteDiff, overlapType) {
       this.movedBarsInDrag.add(pushedBar)
-      let bundleId = pushedBar.ganttBarConfig.bundle
+      let bundleId = pushedBar[this.barConfigKey]
+        ? pushedBar[this.barConfigKey].bundle
+        : null
       if (bundleId === undefined || bundleId === null) {
         return
       }
