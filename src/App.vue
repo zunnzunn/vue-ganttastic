@@ -26,23 +26,20 @@ import GGanttChart from "./components/GGanttChart.vue"
 
 const bars1 = ref([
   {
-    id: "Test1",
     beginDate: "2021-07-26 00:00",
     endDate: "2021-07-27 02:00",
     ganttBarConfig: {
-      id: "Test1",
+      id: "test1",
       hasHandles: true,
       label: "I'm in a bundle",
       bundle: "bundle1",
       style: {
-        id: "test1",
         background: "#5484b7",
         borderRadius: "20px"
       }
     }
   },
   {
-    id: "Test2",
     beginDate: "2021-07-27 16:00",
     endDate: "2021-07-27 22:00",
     ganttBarConfig: {
@@ -55,11 +52,10 @@ const bars1 = ref([
 
 const bars2 = ref([
   {
-    id: "Test3",
     beginDate: "2021-07-26 00:00",
     endDate: "2021-07-27 02:00",
     ganttBarConfig: {
-      id: "Test3",
+      id: "test3",
       hasHandles: true,
       label: "I am in a bundle",
       bundle: "bundle1",
@@ -70,7 +66,6 @@ const bars2 = ref([
     }
   },
   {
-    id: "Test4",
     beginDate: "2021-07-27 13:00",
     endDate: "2021-07-27 19:00",
     ganttBarConfig: {

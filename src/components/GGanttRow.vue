@@ -23,7 +23,6 @@
         :key="`ganttastic_bar_${index}`"
         ref="ganttBar"
         :bar="bar"
-        :all-bars-in-row="bars"
       />
     </div>
   </div>

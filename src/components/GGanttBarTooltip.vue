@@ -25,24 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRefs, defineProps, watch, onMounted, defineExpose, getCurrentInstance } from "vue"
+import { computed, ref, toRefs, defineProps, watch, onMounted } from "vue"
 
 const props = defineProps<{
+  barId: string,
   barStyle: {top: string, left: string, background: string}
   forceShow: boolean
 }>()
 
-const barElement = ref<HTMLElement>()
 const showTooltip = ref(false)
 let tooltipTimeoutId : number
-
+const { barId } = toRefs(props)
 onMounted(() => {
-  barElement.value = getCurrentInstance()?.parent?.refs.barElement as HTMLElement
-  if (!barElement.value) {
-    throw Error("GGanttBarTooltip: Parent must be a GGanttBar element with a 'barElement' ref!")
+  const barElement = document.getElementById(barId.value)
+  if (!barElement) {
+    console.warn("GGanttBarTooltip: No bar element with id " + barId.value)
   }
-  barElement.value.addEventListener("mouseenter", onMouseenter)
-  barElement.value.addEventListener("mouseleave", onMouseleave)
+  barElement?.addEventListener("mouseenter", onMouseenter)
+  barElement?.addEventListener("mouseleave", onMouseleave)
   setTooltipPosition()
 })
 
@@ -64,16 +64,13 @@ const tooltipX = ref("0px")
 const tooltipY = ref("0px")
 
 const setTooltipPosition = () => {
-  const { top, left } = barElement?.value?.getBoundingClientRect() || { top: 0, left: 0 }
+  const barElement = document.getElementById(barId.value)
+  const { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
   tooltipX.value = `${left}px`
   tooltipY.value = `${top + 30}px`
 }
 
 watch(barStyle, () => setTooltipPosition(), { deep: true })
-
-defineExpose({
-  barElement
-})
 </script>
 
 <style>

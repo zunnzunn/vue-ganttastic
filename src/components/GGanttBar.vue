@@ -1,7 +1,6 @@
 <template>
   <div
-    :id="bar.id"
-    ref="barElement"
+    :id="bar.ganttBarConfig.id"
     class="g-gantt-bar"
     :style="barStyle"
     @mousedown="onMousedown"
@@ -19,7 +18,9 @@
     </template>
 
     <g-gantt-bar-tooltip
+      :bar-id="bar.ganttBarConfig.id"
       :bar-style="barStyle"
+      :force-show="false"
     >
       {{ tooltipContent }}
     </g-gantt-bar-tooltip>
@@ -27,32 +28,38 @@
 </template>
 
 <script setup lang="ts">
-import useBarBundleMoving from "@/composables/useBarBundleMoving"
+import useBarDragManagement from "@/composables/useBarDragManagement"
 import useTimePositionMapping from "@/composables/useTimePositionMapping"
 import { GanttBarObject } from "../models/GanttBarObject"
 import GGanttBarTooltip from "@/components/GGanttBarTooltip.vue"
 import dayjs from "dayjs"
-import { defineProps, computed, ref, toRefs, defineExpose, inject } from "vue"
+import { defineProps, computed, toRefs, inject } from "vue"
 import INJECTION_KEYS from "@/models/symbols"
 
 const props = defineProps<{
   bar: GanttBarObject
-  allBarsInRow: GanttBarObject[]
 }>()
+
+const allRowsInChart = inject(INJECTION_KEYS.allBarsInChartKey)
 const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
-const allBarsInChart = inject(INJECTION_KEYS.allBarsInChartKey)
-if (!gGanttChartPropsRefs || !allBarsInChart) {
-  throw new Error("GGanttBar: Provide/Inject of values from GGanttChart failed!")
+if (!allRowsInChart || !gGanttChartPropsRefs) {
+  throw Error("GGanttBar: Failed to inject GGanttChart props!")
 }
 
-const barElement = ref<HTMLElement>()
 const { bar } = toRefs(props)
 const { mapTimeToPosition } = useTimePositionMapping(gGanttChartPropsRefs)
-const { initDragOfBarsFromBundle } = useBarBundleMoving(allBarsInChart, gGanttChartPropsRefs)
+const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs)
+
+let firstMousemoveCallback : (e: MouseEvent) => void
+if (bar.value.ganttBarConfig.bundle) {
+  firstMousemoveCallback = (e: MouseEvent) => initDragOfBundle(bar.value.ganttBarConfig.bundle, e)
+} else {
+  firstMousemoveCallback = (e: MouseEvent) => initDragOfBar(bar.value, e)
+}
+
 const onMousedown = (e: MouseEvent) => {
   e.preventDefault()
   if (!bar.value.ganttBarConfig.immobile) {
-    const firstMousemoveCallback = (e: MouseEvent) => initDragOfBarsFromBundle(bar.value.ganttBarConfig.bundle, e)
     window.addEventListener("mousemove", firstMousemoveCallback, { once: true }) // on first mousemove event
     window.addEventListener("mouseup", // in case user does not move the mouse after mousedown at all
       () => window.removeEventListener("mousemove", firstMousemoveCallback),
@@ -82,9 +89,6 @@ const barStyle = computed(() => {
   }
 })
 
-defineExpose({
-  barElement
-})
 </script>
 
 <style scoped>

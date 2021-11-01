@@ -9,7 +9,7 @@ const INJECTION_KEYS = {
   widthKey: Symbol("widthKey") as InjectionKey<Ref<number>>,
   precisionKey: Symbol("precisionKey") as InjectionKey<Ref<"hour" | "day" | "month">>,
   pushOnOverlapKey: Symbol("pushOnOverlapKey") as InjectionKey<Ref<boolean>>,
-  allBarsInChartKey: Symbol("allbarsInChartKey") as InjectionKey<ComputedRef<GanttBarObject[]>>,
+  allBarsInChartKey: Symbol("allbarsInChartKey") as InjectionKey<ComputedRef<GanttBarObject[][]>>,
   gGanttChartPropsKey: Symbol("gGanttChartPropsKey") as InjectionKey<{
     chartStart: Ref<string>
     chartEnd: Ref<string>

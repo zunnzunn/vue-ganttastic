@@ -1,13 +1,12 @@
 import dayjs from "dayjs"
-import INJECTION_KEYS from "../models/symbols"
 import { GanttBarObject, GGanttChartPropsRefs } from "@/models/GanttBarObject"
 import useTimePositionMapping from "./useTimePositionMapping"
-import { Ref, ref, inject } from "vue"
+import { Ref, ref } from "vue"
 
 export default function useBarDrag (
   bar: Ref<GanttBarObject>,
-  allBarsInRow: Ref<GanttBarObject[]>,
-  gGanttChartPropsRefs: GGanttChartPropsRefs
+  gGanttChartPropsRefs: GGanttChartPropsRefs,
+  onDrag: (bar: GanttBarObject) => void = () => null
 ) {
   const { barStart, barEnd } = gGanttChartPropsRefs
 
@@ -15,10 +14,9 @@ export default function useBarDrag (
   let cursorOffsetX = 0
   let dragCallBack : (e: MouseEvent) => void
   const { mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
-  const pushOnOverlap = inject(INJECTION_KEYS.pushOnOverlapKey)
 
   const initDrag = (e: MouseEvent) => {
-    const barElement = document.getElementById(bar.value.id)
+    const barElement = document.getElementById(bar.value.ganttBarConfig.id)
     if (barElement) {
       cursorOffsetX = e.clientX - (barElement.getBoundingClientRect().left || 0)
       const mousedownType = (e.target as Element).className
@@ -40,7 +38,7 @@ export default function useBarDrag (
   }
 
   const drag = (e: MouseEvent) => {
-    const barElement = document.getElementById(bar.value.id)
+    const barElement = document.getElementById(bar.value.ganttBarConfig.id)
     const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
     if (barElement && barContainer) {
       const barWidth = barElement.getBoundingClientRect().width
@@ -48,12 +46,12 @@ export default function useBarDrag (
       const xEnd = xStart + barWidth
       bar.value[barStart.value] = mapPositionToTime(xStart)
       bar.value[barEnd.value] = mapPositionToTime(xEnd)
-      fixOverlaps()
+      onDrag(bar.value)
     }
   }
 
   const dragByLeftHandle = (e: MouseEvent) => {
-    const barElement = document.getElementById(bar.value.id)
+    const barElement = document.getElementById(bar.value.ganttBarConfig.id)
     const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
     if (barElement && barContainer) {
       const xStart = e.clientX - barContainer.left
@@ -62,12 +60,12 @@ export default function useBarDrag (
         return
       }
       bar.value[barStart.value] = newBarStart
-      fixOverlaps()
+      onDrag(bar.value)
     }
   }
 
   const dragByRightHandle = (e: MouseEvent) => {
-    const barElement = document.getElementById(bar.value.id)
+    const barElement = document.getElementById(bar.value.ganttBarConfig.id)
     const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
     if (barElement && barContainer) {
       const xEnd = e.clientX - barContainer.left
@@ -76,56 +74,8 @@ export default function useBarDrag (
         return
       }
       bar.value[barEnd.value] = newBarEnd
-      fixOverlaps()
+      onDrag(bar.value)
     }
-  }
-
-  const fixOverlaps = () => {
-    if (!pushOnOverlap?.value) {
-      return
-    }
-    let currentBar = bar.value
-    let { overlapBar, overlapType } = getOverlapBarAndType(currentBar)
-    while (overlapBar) {
-      const currentBarStart = dayjs(currentBar[barStart.value])
-      const currentBarEnd = dayjs(currentBar[barEnd.value])
-      const overlapBarStart = dayjs(overlapBar[barStart.value])
-      const overlapBarEnd = dayjs(overlapBar[barEnd.value])
-      let minuteDiff : number
-      switch (overlapType) {
-        case "left":
-          minuteDiff = overlapBarEnd.diff(currentBarStart, "minutes", true)
-          overlapBar[barEnd.value] = currentBarStart.format("YYYY-MM-DD HH:mm:ss")
-          overlapBar[barStart.value] = overlapBarStart.subtract(minuteDiff, "minutes").format("YYYY-MM-DD HH:mm:ss")
-          break
-        case "right":
-          minuteDiff = currentBarEnd.diff(overlapBarStart, "minutes", true)
-          overlapBar[barStart.value] = currentBarEnd.format("YYYY-MM-DD HH:mm:ss")
-          overlapBar[barEnd.value] = overlapBarEnd.add(minuteDiff, "minutes").format("YYYY-MM-DD HH:mm:ss")
-          break
-        default:
-          console.warn("Vue-Ganttastic: One bar is inside of the other one! This should never occur while push-on-overlap is active!")
-          return
-      }
-      currentBar = overlapBar;
-      ({ overlapBar, overlapType } = getOverlapBarAndType(overlapBar))
-    }
-  }
-
-  const getOverlapBarAndType = (ganttBar: GanttBarObject) => {
-    let overlapLeft, overlapRight, overlapInBetween
-    const overlapBar = allBarsInRow.value.find(otherBar => {
-      if (otherBar === ganttBar) {
-        return false
-      }
-      overlapLeft = dayjs(ganttBar[barStart.value]).isBetween(otherBar[barStart.value], otherBar[barEnd.value])
-      overlapRight = dayjs(ganttBar[barEnd.value]).isBetween(otherBar[barStart.value], otherBar[barEnd.value])
-      overlapInBetween = dayjs(otherBar[barStart.value]).isBetween(ganttBar[barStart.value], ganttBar[barEnd.value]) ||
-                        dayjs(otherBar[barEnd.value]).isBetween(ganttBar[barStart.value], ganttBar[barEnd.value])
-      return overlapLeft || overlapRight || overlapInBetween
-    })
-    const overlapType = overlapLeft ? "left" : (overlapRight ? "right" : (overlapInBetween ? "between" : null))
-    return { overlapBar, overlapType }
   }
 
   const endDrag = (e: MouseEvent) => {

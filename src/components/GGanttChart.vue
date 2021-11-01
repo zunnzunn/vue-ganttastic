@@ -47,15 +47,14 @@ const slots = useSlots()
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
 })
-const allBarsInChart = computed(() => {
+const allRowsInChart = computed(() => {
   const defaultSlot = slots.default?.()
-  const allBars: GanttBarObject[] = []
+  const allBars: GanttBarObject[][] = []
   if (defaultSlot) {
     defaultSlot.forEach(child => {
-      console.log("🚀 ~ file: GGanttChart.vue ~ line 53 ~ allBarsInChart ~ child", child)
       if (child.props?.bars) {
         const bars = child.props.bars as GanttBarObject[]
-        allBars.push(...bars)
+        allBars.push(bars)
       }
     })
   }
@@ -69,7 +68,7 @@ provide(INJECTION_KEYS.barEndKey, barEnd)
 provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
 provide(INJECTION_KEYS.precisionKey, precision)
 provide(INJECTION_KEYS.pushOnOverlapKey, pushOnOverlap)
-provide(INJECTION_KEYS.allBarsInChartKey, allBarsInChart)
+provide(INJECTION_KEYS.allBarsInChartKey, allRowsInChart)
 provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
 
 </script>
