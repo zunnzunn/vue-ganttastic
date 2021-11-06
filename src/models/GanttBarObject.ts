@@ -7,7 +7,11 @@ export type GanttBarObject = {
     label?: string
     hasHandles?: boolean
     immobile?: boolean
-    bundle: string
+    bundle?: string
+    pushOnOverlap?: boolean
+    shadow?: boolean
+    dragLimitLeft?: number
+    dragLimitRight?: number
     style?: {
       background?: string
       borderRadius?: string

@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import useBarDragManagement from "@/composables/useBarDragManagement"
 import useTimePositionMapping from "@/composables/useTimePositionMapping"
+import useBarDragLimit from "@/composables/useBarDragLimit"
 import { GanttBarObject } from "../models/GanttBarObject"
 import GGanttBarTooltip from "@/components/GGanttBarTooltip.vue"
 import dayjs from "dayjs"
@@ -49,6 +50,7 @@ if (!allRowsInChart || !gGanttChartPropsRefs) {
 const { bar } = toRefs(props)
 const { mapTimeToPosition } = useTimePositionMapping(gGanttChartPropsRefs)
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs)
+const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
 
 let firstMousemoveCallback : (e: MouseEvent) => void
 if (bar.value.ganttBarConfig.bundle) {
@@ -59,6 +61,7 @@ if (bar.value.ganttBarConfig.bundle) {
 
 const onMousedown = (e: MouseEvent) => {
   e.preventDefault()
+  setDragLimitsOfGanttBar(bar.value)
   if (!bar.value.ganttBarConfig.immobile) {
     window.addEventListener("mousemove", firstMousemoveCallback, { once: true }) // on first mousemove event
     window.addEventListener("mouseup", // in case user does not move the mouse after mousedown at all

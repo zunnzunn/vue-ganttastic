@@ -40,8 +40,8 @@ const bars1 = ref([
     }
   },
   {
-    beginDate: "2021-07-27 16:00",
-    endDate: "2021-07-27 22:00",
+    beginDate: "2021-07-27 13:00",
+    endDate: "2021-07-27 19:00",
     ganttBarConfig: {
       id: "test2",
       label: "Lorem ipsum dolor",
@@ -75,6 +75,19 @@ const bars2 = ref([
       style: {
         background: "cyan",
         borderRadius: "20px"
+      }
+    }
+  },
+  {
+    beginDate: "2021-07-27 20:00",
+    endDate: "2021-07-27 23:00",
+    ganttBarConfig: {
+      id: "immobile",
+      label: "Immobile",
+      immobile: true,
+      style: {
+        background: "gray",
+        borderRadius: "10px"
       }
     }
   }

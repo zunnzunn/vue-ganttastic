@@ -8,7 +8,7 @@ export default function useBarDrag (
   gGanttChartPropsRefs: GGanttChartPropsRefs,
   onDrag: (bar: GanttBarObject) => void = () => null
 ) {
-  const { barStart, barEnd } = gGanttChartPropsRefs
+  const { barStart, barEnd, pushOnOverlap } = gGanttChartPropsRefs
 
   const isDragging = ref(false)
   let cursorOffsetX = 0
@@ -44,6 +44,9 @@ export default function useBarDrag (
       const barWidth = barElement.getBoundingClientRect().width
       const xStart = (e.clientX - barContainer.left - cursorOffsetX)
       const xEnd = xStart + barWidth
+      if (isOutOfRange(xStart, xEnd)) {
+        return
+      }
       bar.value[barStart.value] = mapPositionToTime(xStart)
       bar.value[barEnd.value] = mapPositionToTime(xEnd)
       onDrag(bar.value)
@@ -76,6 +79,21 @@ export default function useBarDrag (
       bar.value[barEnd.value] = newBarEnd
       onDrag(bar.value)
     }
+  }
+
+  const isOutOfRange = (xStart?: number, xEnd?: number) => {
+    if (!pushOnOverlap) {
+      return false
+    }
+    const dragLimitLeft = bar.value.ganttBarConfig.dragLimitLeft
+    const dragLimitRight = bar.value.ganttBarConfig.dragLimitRight
+    if (xStart && dragLimitLeft != null && xStart < dragLimitLeft) {
+      return true
+    }
+    if (xEnd && dragLimitRight != null && xEnd > dragLimitRight) {
+      return true
+    }
+    return false
   }
 
   const endDrag = (e: MouseEvent) => {
