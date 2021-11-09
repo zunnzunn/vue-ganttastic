@@ -49,6 +49,7 @@ export default {
   name:"GGanttTimeaxis",
 
   props: {
+    dayFormat: {type: String, default: "dddd, DD. MMMM"},
     chartStart: String,
     chartEnd: String,
     rowLabelWidth: String,
@@ -62,8 +63,7 @@ export default {
       axisDays: [],
       hourCount: null,
       timemarker: null,
-      hourFontSize: "11px",
-      dayFormat: "dddd, DD. MMMM"
+      hourFontSize: "11px"
     }
   },
 

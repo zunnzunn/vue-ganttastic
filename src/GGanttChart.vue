@@ -7,6 +7,7 @@
       v-if="!hideTimeaxis"
       :chart-start="chartStart"
       :chart-end="chartEnd"
+      :day-format="dayFormat"
       :row-label-width="rowLabelWidth"
       :timemarker-offset="timemarkerOffset"
       :theme-colors="themeColors"
@@ -46,6 +47,7 @@ export default {
   },
 
   props:{
+    dayFormat: {type: String, default: "dddd, DD. MMMM"},
     chartStart: {type: String, default: moment().startOf("day").format("YYYY-MM-DD HH:mm:ss")},
     chartEnd: {type: String, default: moment().startOf("day").add(12,"hours").format("YYYY-MM-DD HH:mm:ss")},
     hideTimeaxis: Boolean,
@@ -284,6 +286,7 @@ export default {
   provide(){
     return {
       getChartStart: () => this.chartStart,
+      getDayFormat: () => this.dayFormat,
       getChartEnd: () => this.chartEnd,
       getHourCount: () => this.hourCount,
       ganttChartProps: this.$props,
