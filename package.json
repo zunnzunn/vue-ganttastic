@@ -1,6 +1,6 @@
 {
   "name": "@tenrok/vue-ganttastic",
-  "version": "0.10.17",
+  "version": "0.10.18",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "keywords": [
     "gantt",
@@ -19,7 +19,7 @@
   "author": {
     "name": "Marko Zunic",
     "email": "marko.zunic06@gmail.com",
-    "url": "https://github.com/InfectoOne/vue-ganttastic"
+    "url": "https://github.com/InfectoOne"
   },
   "contributors": [
     {
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",
-    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.15",
     "@vue/cli-service": "~4.5.15",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",

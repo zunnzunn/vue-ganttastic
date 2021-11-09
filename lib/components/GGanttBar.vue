@@ -392,6 +392,13 @@ export default {
       //   return true
       // }
 
+      if (
+        !this.chartProps.pushOnOverlap ||
+        this.barConfig.pushOnOverlap === false
+      ) {
+        return false
+      }
+
       const isSqueezeToLeft =
         newXStart &&
         moment(this.localBar[this.barStartKey]).isBefore(
