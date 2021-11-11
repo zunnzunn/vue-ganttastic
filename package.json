@@ -1,6 +1,6 @@
 {
   "name": "@tenrok/vue-ganttastic",
-  "version": "0.10.18",
+  "version": "0.10.19",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "keywords": [
     "gantt",
@@ -32,7 +32,7 @@
     }
   ],
   "files": [
-    "dist"
+    "dist/vue-ganttastic.*"
   ],
   "main": "dist/vue-ganttastic.common.js",
   "repository": {

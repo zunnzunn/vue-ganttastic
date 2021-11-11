@@ -53,7 +53,7 @@
       :theme="chart2.theme"
       :width="chart2.width"
       :height="chart2.height"
-      :may-add="chart2.mayAdd"
+      :allow-add="chart2.allowAdd"
     >
       <g-gantt-row
         v-for="row in chart2.rows"
@@ -254,7 +254,7 @@ export default {
       theme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       width: '1100px',
       height: '250px',
-      mayAdd: false,
+      allowAdd: false,
       rows: [
         {
           label: 'Row #1',

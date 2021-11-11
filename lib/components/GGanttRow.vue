@@ -173,7 +173,7 @@ export default {
     },
 
     onDoubleClick(e) {
-      if (!this.chartProps.mayAdd) return
+      if (!this.chartProps.allowAdd) return
       let barContainer = this.$refs.barContainer.getBoundingClientRect()
       let xPos = e.clientX - barContainer.left
       let timeDiffFromStart = Math.floor(

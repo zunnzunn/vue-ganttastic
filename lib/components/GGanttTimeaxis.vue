@@ -68,16 +68,16 @@ export default {
     precision: { type: String },
     timeFormat: { type: String },
     timeCount: { type: Number },
-    gridSize: { type: Number }
+    gridSize: { type: Number },
+    dayFormat: { type: String },
+    monthFormat: { type: String }
   },
 
   data() {
     return {
       axisPoints: [],
       timemarker: null,
-      hourFontSize: '11px',
-      dayFormat: 'ddd DD MMMM',
-      monthFormat: 'MMMM YYYY'
+      hourFontSize: '11px'
     }
   },
 

@@ -123,20 +123,24 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
 | Prop                     | Type            | Default          | Description                                                         |
 | ------------------------ | --------------- | ---------------- | ------------------------------------------------------------------- |
+| allow-add                | `Boolean`       | `true`           | allow to add new bar on double click                                |
 | bar-config-key           | `String`        | `ganttBarConfig` |                                                                     |
 | bar-start-key            | `String`        | `start`          | property name of the bar objects that represents the start datetime |
 | bar-end-key              | `String`        | `end`            | property name of the bar objects that represents the end datetime   |
 | chart-start (_required_) | `String`        | -                | format `YYYY-MM-DD HH:mm`                                           |
 | chart-end (_required_)   | `String`        | -                | format `YYYY-MM-DD HH:mm`                                           |
+| day-format               | `String`        | `ddd DD MMMM`    |                                                                     |
 | grid                     | `Boolean`       | `false`          | hide/show grid                                                      |
 | grid-size                | `Number`        | `30`             | horizontal cell width in pixels                                     |
+| default-bar-length       | `Number`        | `1`              |                                                                     |
 | height                   | `String`        | -                | the total height of the entire Vue-Ganttastic component             |
 | hide-timeaxis            | `Boolean`       | `false`          | hide timeaxis                                                       |
 | highlighted-days         | `Array<String>` | `[]`             | format of day `YYYY-MM-DD`                                          |
 | highlighted-hours        | `Array<Number>` | `[]`             |                                                                     |
 | is-magnetic              | `Boolean`       | -                | magnetic effect                                                     |
 | locale                   | `String`        | `en`             | localization                                                        |
-| may-add                  | `Boolean`       | `true`           | add new bar on double click                                         |
+| min-gap-between-bars     | `Number`        | `0`              |                                                                     |
+| month-format             | `String`        | `MMMM YYYY`      |                                                                     |
 | precision                | `String`        | `month`          | day, month                                                          |
 | push-on-overlap          | `Boolean`       | -                |                                                                     |
 | row-height               | `Number`        | `40`             |                                                                     |

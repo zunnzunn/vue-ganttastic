@@ -15,6 +15,8 @@
       :time-format="timeFormat"
       :time-count="timeCount"
       :grid-size="gridSize"
+      :day-format="dayFormat"
+      :month-format="monthFormat"
     />
 
     <div
@@ -76,7 +78,9 @@ export default {
     barConfigKey: { type: String, default: 'ganttBarConfig' },
     barStartKey: { type: String, default: 'start' }, // property name of the bar objects that represents the start datetime
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime
-    mayAdd: { type: Boolean, default: true }
+    allowAdd: { type: Boolean, default: true },
+    dayFormat: { type: String, default: 'ddd DD MMMM' },
+    monthFormat: { type: String, default: 'MMMM YYYY' }
   },
 
   data() {
