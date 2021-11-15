@@ -67,6 +67,6 @@ export default {
 
   .g-grid-line-highlighted{
     background: #90CAF9;
-    box-shadow: 0px 0px 0px 1px #90CAF9;
+    box-shadow: 0 0 0 1px #90CAF9;
   }
 </style>
