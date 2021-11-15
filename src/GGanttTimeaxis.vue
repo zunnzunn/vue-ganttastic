@@ -84,7 +84,7 @@ export default {
       let end = moment(this.chartEnd)
       this.hourCount = Math.floor(end.diff(start, "hour", true))
       while(start.isBefore(end)){
-        let hourCountOfDay = start.format("DD.MM.YYYY")==end.format("DD.MM.YYYY") ? end.hour() : 24-start.hour()
+        let hourCountOfDay = start.format("DD.MM.YYYY") === end.format("DD.MM.YYYY") ? end.hour() : 24-start.hour()
         let widthPercentage = hourCountOfDay/this.hourCount*100
         let endHour = start.day()===end.day() ? end.hour()-1 : 23   // -1 because the last hour is not included e.g if chartEnd=04:00 the last interval we display is between 03 and 04
         this.axisDays.push(this.getAxisDayObject(start, widthPercentage, endHour))
@@ -151,7 +151,7 @@ export default {
     min-height: 75px;
     background: white;
     z-index: 4;
-    box-shadow: 0px 1px 3px 2px rgba(50,50,50, 0.5);
+    box-shadow: 0 1px 3px 2px rgba(50,50,50, 0.5);
   }
 
   #g-timeaxis > .g-timeaxis-empty-space {
@@ -163,7 +163,7 @@ export default {
   #g-timeaxis > .g-timeaxis-days {
     position: relative;
     width: 80%;
-    height: 100%,
+    height: 100%;
   }
 
   .g-timeaxis-day {
