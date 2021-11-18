@@ -40,9 +40,9 @@ export default {
 
   computed: {
     allChildPoints() {
-      let start = moment(this.chartStart)
-      let end = moment(this.chartEnd)
-      let res = []
+      const start = moment(this.chartStart)
+      const end = moment(this.chartEnd)
+      const res = []
       while (start.isBefore(end)) {
         switch (this.precision) {
           case 'day':
