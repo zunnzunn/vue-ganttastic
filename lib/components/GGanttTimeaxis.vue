@@ -110,14 +110,7 @@ export default {
 
   methods: {
     initAxis() {
-      switch (this.precision) {
-        case 'day':
-          this.initAxisDaysAndHours()
-          break
-        case 'month':
-          this.initAxisMonthsAndDays()
-          break
-      }
+     this.precision ===  'day'? this.initAxisDaysAndHours() : this.initAxisMonthsAndDays()
     },
 
     initAxisMonthsAndDays() {
