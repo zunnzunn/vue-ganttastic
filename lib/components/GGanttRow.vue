@@ -159,11 +159,11 @@ export default {
     },
 
     onDrop(e) {
-      let barContainer = this.$refs.barContainer.getBoundingClientRect()
-      let xPos = e.clientX - barContainer.left
-      let timeDiffFromStart = (xPos / barContainer.width) * this.timeCount
-      let time = moment(this.chartStart).add(timeDiffFromStart, this.timeUnit)
-      let bar = this.localBars.find(bar =>
+      const barContainer = this.$refs.barContainer.getBoundingClientRect()
+      const xPos = e.clientX - barContainer.left
+      const timeDiffFromStart = (xPos / barContainer.width) * this.timeCount
+      const time = moment(this.chartStart).add(timeDiffFromStart, this.timeUnit)
+      const bar = this.localBars.find(bar =>
         time.isBetween(
           bar[this.chartProps.barStartKey],
           bar[this.chartProps.barEndKey]
