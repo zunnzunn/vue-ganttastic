@@ -41,7 +41,8 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build --target lib --name vue-ganttastic lib/index.js",
+    "demo:build": "vue-cli-service build",
+    "lib:build": "vue-cli-service build --target lib --name vue-ganttastic lib/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

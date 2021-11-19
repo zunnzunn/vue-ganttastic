@@ -252,7 +252,7 @@ export default {
         '2020-03-29'
       ],
       theme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
-      width: '1100px',
+      width: '90vw',
       height: '250px',
       allowAdd: false,
       rows: [
