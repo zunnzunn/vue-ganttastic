@@ -8,6 +8,8 @@ A simple and easy-to-use Gantt chart component for Vue.js
 
 [Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
 
+[DEMO](https://tenrok.github.io/vue-ganttastic/)
+
 ## Installation
 
 You can install and use Vue-Ganttastic in your project using <kbd>npm</kbd>:
@@ -112,7 +114,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 <style lang="scss">
   @import '~@tenrok/vue-ganttastic/dist/vue-ganttastic.css';
 
-  // Custom
+  /* Custom */
   .g-grid-line-highlighted {
     background: #ffb0b0;
   }
