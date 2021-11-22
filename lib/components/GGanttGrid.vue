@@ -10,11 +10,7 @@
       :class="[
         'g-grid-line',
         { 'g-grid-line-last': index === allChildPoints.length - 1 },
-        {
-          'g-grid-line-highlighted':
-            (precision === 'day' && highlightedHours.includes(childPoint)) ||
-            (precision === 'month' && highlightedDays.includes(childPoint))
-        }
+        { 'g-grid-line-highlighted': isHighlighted(childPoint) }
       ]"
       :style="{ width: `${gridSize}px` }"
     />
@@ -46,7 +42,7 @@ export default {
       while (start.isBefore(end)) {
         switch (this.precision) {
           case 'day':
-            res.push(start.hour())
+            res.push(start.format('YYYY-MM-DD H'))
             start.add(1, 'hour')
             break
           case 'month':
@@ -56,6 +52,27 @@ export default {
         }
       }
       return res
+    }
+  },
+
+  methods: {
+    isHighlighted(point) {
+      switch (this.precision) {
+        case 'day':
+          if (
+            this.highlightedDays.includes(
+              moment(point, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            )
+          ) {
+            return true
+          } else {
+            return this.highlightedHours.includes(
+              moment(point, 'YYYY-MM-DD H').get('hour')
+            )
+          }
+        case 'month':
+          return this.highlightedDays.includes(point)
+      }
     }
   }
 }
