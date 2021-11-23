@@ -13,6 +13,7 @@
     <div
       class="g-gantt-row-bars-container"
       ref="barContainer"
+      :style="rowStyle"
       @dragover="onDragover($event)"
       @dragleave="onDragleave($event)"
       @drop="onDrop($event)"
@@ -50,6 +51,7 @@ export default {
   props: {
     label: { type: String, default: 'Row' },
     labelStyle: { type: Object },
+    rowStyle: { type: Object },
     bars: { type: Array, default: () => [] },
     highlightOnHover: { type: Boolean }
   },

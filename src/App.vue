@@ -59,6 +59,7 @@
         v-for="row in chart2.rows"
         :key="row.label"
         :label="row.label"
+        :row-style="row.style"
         :bars="row.bars"
         :highlight-on-hover="chart2.highlightOnHover"
       >
@@ -311,7 +312,16 @@ export default {
                 backgroundColor: '#408e2f'
               }
             }
-          ]
+          ],
+          style: {
+            background:
+              'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjRweCIgaGVpZ2h0PSI0cHgiIHZpZXdCb3g9IjAgMCA0IDQiPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0FBNTUwMCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHgxPSIwIiB5MT0iMCIgeDI9IjQiIHkyPSI0Ii8+PC9zdmc+")',
+            backgroundRepeat: 'repeat',
+            backgroundPosition: '0 0',
+            backgroundSize: '4px 4px',
+            borderTop: '1px solid #aa5500',
+            borderBottom: '1px solid #aa5500'
+          }
         },
         {
           label:
