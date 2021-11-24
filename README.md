@@ -1,6 +1,6 @@
 # vue-ganttastic
 
-<img src="https://user-images.githubusercontent.com/28678851/77186503-45358300-6ad3-11ea-9392-7f670eb1ca8c.png" width="600"/>
+![screenshot](https://user-images.githubusercontent.com/4740535/143231164-88cd538f-f4ff-4fc6-8cb0-a25f4bab465c.png)
 
 A simple and easy-to-use Gantt chart component for Vue.js
 
@@ -42,6 +42,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
   <g-gantt-chart
     :chart-start="myChartStart"
     :chart-end="myChartEnd"
+    day-format="dddd, DD. MMMM"
     precision="day"
     :is-magnetic="true"
     locale="en"
@@ -116,7 +117,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
 
   /* Custom */
   .g-grid-line-highlighted {
-    background: #ffb0b0;
+    background: #ffb0b0 !important;
   }
 </style>
 ```

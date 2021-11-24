@@ -7,12 +7,14 @@
       :chart-end="chart1.chartEnd"
       :grid="chart1.grid"
       :grid-size="chart1.gridSize"
+      day-format="dddd, DD. MMMM"
       :hide-timeaxis="chart1.hideTimeaxis"
       :push-on-overlap="chart1.pushOnOverlap"
       snap-back-on-overlap
       :precision="chart1.precision"
       :is-magnetic="chart1.isMagnetic"
       :highlighted-hours="chart1.highlightedHours"
+      :highlighted-days="chart1.highlightedDays"
       :row-label-width="chart1.rowLabelWidth"
       :row-height="chart1.rowHeight"
       :theme="chart1.theme"
@@ -26,6 +28,7 @@
         :key="row.label"
         :label="row.label"
         :label-style="row.labelStyle"
+        :row-style="row.style"
         :bars="row.bars"
         :highlight-on-hover="chart1.highlightOnHover"
       >
@@ -86,6 +89,7 @@ export default {
       rowLabelWidth: 200,
       hideTimeaxis: false,
       highlightOnHover: true,
+      highlightedDays: ['2020-03-08'],
       highlightedHours: [10, 12],
       theme: 'default', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       rows: [
@@ -121,6 +125,9 @@ export default {
           label: 'Row #2',
           labelStyle: {
             justifyContent: 'end'
+          },
+          style: {
+            background: '#ffb0b07f'
           },
           bars: [
             {
@@ -199,7 +206,7 @@ export default {
               config: {
                 color: 'white',
                 background:
-                  'repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)'
+                  'repeating-linear-gradient(45deg, #de7359, #de7359 10px, #ffc803 10px, #ffc803 20px)'
               }
             }
           ]
@@ -315,12 +322,8 @@ export default {
           ],
           style: {
             background:
-              'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjRweCIgaGVpZ2h0PSI0cHgiIHZpZXdCb3g9IjAgMCA0IDQiPjxsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0FBNTUwMCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHgxPSIwIiB5MT0iMCIgeDI9IjQiIHkyPSI0Ii8+PC9zdmc+")',
-            backgroundRepeat: 'repeat',
-            backgroundPosition: '0 0',
-            backgroundSize: '4px 4px',
-            borderTop: '1px solid #aa5500',
-            borderBottom: '1px solid #aa5500'
+              'linear-gradient(-45deg, rgba(0, 0, 0, 0) 48%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 52%)',
+            backgroundSize: '1em 1em'
           }
         },
         {
