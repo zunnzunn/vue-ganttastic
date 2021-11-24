@@ -1,0 +1,14 @@
+class MouvementService {
+
+    async updateMouvements(vehicules) {
+        const response = await fetch("http://localhost:8080/mouvements")
+        const mouvements = await response.json()
+
+        vehicules.splice(0, vehicules.length)
+
+        mouvements.forEach(e => {
+            vehicules.push(e)
+        })
+    }
+}
+export default new MouvementService()
