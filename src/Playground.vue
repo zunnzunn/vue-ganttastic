@@ -77,21 +77,10 @@ export default {
   },
   created : function() {
     mouvementService.updateMouvements(this.vehicules)
-    this.onUpdate()
   },
   methods: {
     onDragend(e){
       console.log(e)
-    },
-    onUpdate: function () {
-      this.vehicules.forEach(v => {
-        v.mouvements.forEach(m => {
-            m.ganttBarConfig = function () {
-              return {color: "white", backgroundColor: "blue", pushOnOverlap: true, handles: true}
-            }
-        })
-      })
-      console.log(this.vehicules)
     }
   }
 }

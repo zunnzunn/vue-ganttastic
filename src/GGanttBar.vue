@@ -108,14 +108,7 @@ export default {
     },
 
     barConfig(){
-      if(this.bar.ganttBarConfig) {
-        return {
-          ...this.bar.ganttBarConfig,
-          background: this.bar.ganttBarConfig.isShadow ? "grey" : this.bar.ganttBarConfig.background || this.bar.ganttBarConfig.backgroundColor,
-          opacity: this.bar.ganttBarConfig.isShadow ? "0.3" : this.bar.ganttBarConfig.opacity
-        }
-      }
-      return {}
+      return {color: "white", backgroundColor: "blue", pushOnOverlap: true, handles: true}
     },
 
     barStyle(){ 
