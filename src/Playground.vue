@@ -47,7 +47,6 @@ export default {
     return {
       chartStart: "2020-03-02 00:00",
       chartEnd: "2020-03-04 00:00",
-      pushOnOverlap: true,
       grid: true,
       rowHeight: 40,
       rowLabelWidth: 15,

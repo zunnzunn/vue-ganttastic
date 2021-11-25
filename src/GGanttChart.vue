@@ -56,7 +56,6 @@ export default {
     grid: {type: Boolean},
     highlightedHours: {type: Array, default: () => []},
     width: {type: String, default: "100%"},   // the total width of the entire ganttastic component in %
-    pushOnOverlap: {type: Boolean},
     snapBackOnOverlap: {type: Boolean},
     minGapBetweenBars: {
       type: Number,
@@ -132,7 +131,7 @@ export default {
     },
 
     shouldSnapBackBar(ganttBar){
-      if(this.snapBackOnOverlap && ganttBar.barConfig.pushOnOverlap !== false){
+      if(this.snapBackOnOverlap){
         let {overlapBar} = ganttBar.getOverlapBarAndType(ganttBar.bar)
         return !!overlapBar
       }
@@ -168,9 +167,6 @@ export default {
     // note that if a bar from the same row belongs to a bundle
     // other rows might need to be taken into consideration, too
     setDragLimitsOfGanttBar(bar){
-      if(!this.pushOnOverlap || bar.barConfig.pushOnOverlap === false){
-        return
-      }
       for(let side of ["left", "right"]){
         let [totalGapDistance, bundleBarsOnPath] = this.countGapDistanceToNextImmobileBar(bar, null, side, false)
         for(let i=0; i< bundleBarsOnPath.length; i++){
@@ -248,7 +244,6 @@ export default {
                   && gBar.$parent === bar.$parent 
                   && gBar.$refs['g-gantt-bar']
                   && gBar.$refs['g-gantt-bar'].offsetLeft < bar.$refs['g-gantt-bar'].offsetLeft
-                  && gBar.barConfig.pushOnOverlap !== false
         })
       } else {
         allBarsLeftOrRight = bar.$parent.$children.filter(gBar => {
@@ -256,7 +251,6 @@ export default {
                   && gBar.$parent === bar.$parent 
                   && gBar.$refs['g-gantt-bar']
                   && gBar.$refs['g-gantt-bar'].offsetLeft > bar.$refs['g-gantt-bar'].offsetLeft
-                  && gBar.barConfig.pushOnOverlap !== false
         })
       }
       if(allBarsLeftOrRight.length > 0){

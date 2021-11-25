@@ -118,7 +118,7 @@ export default {
     },
 
     barConfig(){
-      let config = {color: "white", backgroundColor: "black", pushOnOverlap: true, handles: true}
+      let config = {color: "white", backgroundColor: "black", handles: true}
 
       if (this.barMouvementType === 'COURTE_DUREE') {
         config.backgroundColor = "blue"
@@ -278,9 +278,6 @@ export default {
     },
 
     isPosOutOfDragRange(xStart, xEnd){
-      if(!this.ganttChartProps.pushOnOverlap) {
-        return false
-      }
       if(xStart && this.dragLimitLeft !== null && xStart < this.dragLimitLeft + this.getMinGapBetweenBars()){
         return true
       }
@@ -309,9 +306,6 @@ export default {
     },
 
     manageOverlapping(){
-      if(!this.ganttChartProps.pushOnOverlap || this.barConfig.pushOnOverlap === false){
-        return
-      }
       let currentBar = this.bar
       let {overlapBar, overlapType} = this.getOverlapBarAndType(currentBar)
       while(overlapBar){
@@ -347,7 +341,7 @@ export default {
       let barEndMoment = moment(bar[this.barEnd])
       let overlapLeft, overlapRight, overlapInBetween
       let overlapBar = this.allBarsInRow.find(otherBar => {
-        if(otherBar === bar || otherBar.ganttBarConfig.pushOnOverlap === false){
+        if(otherBar === bar){
           return false
         }
         let otherBarStart = moment(otherBar[this.barStart])
