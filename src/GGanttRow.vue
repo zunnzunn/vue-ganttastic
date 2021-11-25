@@ -30,6 +30,7 @@
         ref="ganttBar"
         :bar-start="barStart"
         :bar-end="barEnd"
+        :mouvement-type="mouvementType"
         :bar-container="barContainer"
         :all-bars-in-row="bars"
       >
@@ -61,6 +62,7 @@ export default {
     bars: {type: Array, default: () => []},
     barStart: {type: String, required: true}, // property name of the bar objects that represents the start datetime
     barEnd: {type: String, required: true},  // property name of the bar objects that represents the end datetime,
+    mouvementType: {type: String, required: true},
     highlightOnHover: Boolean,
   },
 

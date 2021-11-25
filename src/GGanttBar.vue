@@ -54,6 +54,7 @@ export default {
     bar: {type: Object},
     barStart: {type: String}, // property name of the bar objects that represents the start datetime
     barEnd: {type: String}, // property name of the bar objects that represents the end datetime,
+    mouvementType: {type: String},
     barContainer: [Object, DOMRect],
     allBarsInRow: {type: Array}
   },
@@ -107,8 +108,30 @@ export default {
       }
     },
 
+    barMouvementType: {
+      get(){
+        return this.bar[this.mouvementType]
+      },
+      set(value){
+        this.bar[this.mouvementType] = value
+      }
+    },
+
     barConfig(){
-      return {color: "white", backgroundColor: "blue", pushOnOverlap: true, handles: true}
+      let config = {color: "white", backgroundColor: "black", pushOnOverlap: true, handles: true}
+
+      if (this.barMouvementType === 'COURTE_DUREE') {
+        config.backgroundColor = "blue"
+      }
+
+      if (this.barMouvementType === 'LONGUE_DUREE') {
+        config.backgroundColor = "grey"
+      }
+
+      if (this.barMouvementType === 'MAINTENANCE') {
+        config.background = "repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)"
+      }
+      return config
     },
 
     barStyle(){ 

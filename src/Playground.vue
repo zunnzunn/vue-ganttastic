@@ -22,6 +22,7 @@
             :highlight-on-hover="highlightOnHover"
             bar-start="mouvementDebut"
             bar-end="mouvementFin"
+            mouvement-type="mouvementType"
           >
             <template #bar-label="{bar}">
               <span>{{bar.label}}</span>
