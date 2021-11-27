@@ -17,6 +17,7 @@ const INJECTION_KEYS = {
     barStart: Ref<string>
     barEnd: Ref<string>
     width: Ref<string>
+    rowHeight: Ref<number>
     hideTimeaxis: Ref<boolean>
     colorScheme: Ref<string>
     grid: Ref<boolean>

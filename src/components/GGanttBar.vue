@@ -48,6 +48,7 @@ if (!allRowsInChart || !gGanttChartPropsRefs) {
 }
 
 const { bar } = toRefs(props)
+const { precision, rowHeight } = gGanttChartPropsRefs
 const { mapTimeToPosition } = useTimePositionMapping(gGanttChartPropsRefs)
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs)
 const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
@@ -72,9 +73,15 @@ const onMousedown = (e: MouseEvent) => {
 }
 
 const { barStart, barEnd } = gGanttChartPropsRefs
+const tooltipFormats = {
+  hour: "HH:mm",
+  day: "DD. MMM HH:mm",
+  month: "DD. MMMM YYYY"
+}
 const tooltipContent = computed(() => {
-  const barStartFormatted = dayjs(bar.value[barStart.value]).format("HH:mm")
-  const barEndFormatted = dayjs(bar.value[barEnd.value]).format("HH:mm")
+  const format = tooltipFormats[precision.value]
+  const barStartFormatted = dayjs(bar.value[barStart.value]).format(format)
+  const barEndFormatted = dayjs(bar.value[barEnd.value]).format(format)
   return `${barStartFormatted} - ${barEndFormatted}`
 })
 
@@ -84,10 +91,10 @@ const barStyle = computed(() => {
   return {
     ...bar.value.ganttBarConfig.style,
     position: "absolute",
-    top: "5px",
+    top: `${rowHeight.value * 0.1}px`,
     left: `${xStart}px`,
     width: `${xEnd - xStart}px`,
-    height: "30px",
+    height: `${rowHeight.value * 0.8}px`,
     zIndex: 2
   }
 })

@@ -17,12 +17,14 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="{ label } in timeaxisUnits.lowerUnits"
+        v-for="({ label }, index) in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
-          background: colors.ternary,
-          color: colors.text
+          background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+          color: colors.text,
+          flexDirection: precision === 'hour' ? 'column' : 'row',
+          alignItems: precision === 'hour' ? '' : 'center'
         }"
       >
         {{ label }}
@@ -52,6 +54,7 @@ const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
 if (!gGanttChartPropsRefs) {
   throw new Error("GGanttBar: Provide/Inject of values from GGanttChart failed!")
 }
+const { precision } = gGanttChartPropsRefs
 const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
 </script>
 
@@ -71,15 +74,17 @@ const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
 
   .g-timeunits-container {
     display:flex;
-    background: salmon;
     width: 100%;
     height: 50%;
   }
 
-  .g-timeunit{
+  .g-timeunit {
     flex: 1;
     height: 100%;
-    font-size: 0.4em;
+    font-size: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .g-high-timeunit {
@@ -91,7 +96,7 @@ const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
 
   .g-timeaxis-hour-pin {
     width: 1px;
-    height: 8px;
+    height: 10px;
   }
   #g-timeaxis-marker {
     position: absolute;

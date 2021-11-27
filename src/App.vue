@@ -1,8 +1,10 @@
 <template>
   <g-gantt-chart
-    chart-start="2021-07-25 02:00"
+    chart-start="2021-07-13 02:00"
     chart-end="2021-07-27 23:59"
-    precision="hour"
+    precision="day"
+    color-scheme="vue"
+    :row-height="40"
     width="1200px"
     bar-start="beginDate"
     bar-end="endDate"

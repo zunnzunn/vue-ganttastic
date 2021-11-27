@@ -2,9 +2,12 @@
   <div
     ref="g-gantt-row"
     class="g-gantt-row"
-    :style="{height: `40px`}"
+    :style="{height: `${rowHeight}px`, background: colors.background}"
   >
-    <div class="g-gantt-row-label">
+    <div
+      class="g-gantt-row-label"
+      :style="{background: colors.primary, color: colors.text}"
+    >
       <slot name="label">
         {{ label }}
       </slot>
@@ -29,16 +32,24 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue"
+import useColorScheme from "@/composables/useColorScheme"
+import INJECTION_KEYS from "@/models/symbols"
+import { defineProps, inject } from "vue"
 import { GanttBarObject } from "../models/GanttBarObject"
 import GGanttBar from "./GGanttBar.vue"
 
-const props = defineProps<{
+defineProps<{
   label: string
   bars: GanttBarObject[]
   highlightOnHover: boolean
 }>()
 
+const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
+if (!gGanttChartPropsRefs) {
+  throw Error("GGanttRow: Failed to inject GGanttChart props!")
+}
+const { colors } = useColorScheme(gGanttChartPropsRefs)
+const { rowHeight } = gGanttChartPropsRefs
 const onDragover = () => 0
 const onDragleave = () => 0
 const onDrop = () => 0
@@ -49,7 +60,6 @@ const onMouseleave = () => 0
 <style scoped>
   .g-gantt-row {
     width: 100%;
-    height: 40px;
     transition: background-color 0.2s;
     position: relative;
   }

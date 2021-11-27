@@ -65,7 +65,8 @@ const tooltipY = ref("0px")
 
 const setTooltipPosition = () => {
   const barElement = document.getElementById(barId.value)
-  const { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
+  let { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
+  left = Math.max(left, 10)
   tooltipX.value = `${left}px`
   tooltipY.value = `${top + 30}px`
 }
@@ -79,12 +80,13 @@ watch(barStyle, () => setTooltipPosition(), { deep: true })
   background: black;
   color: white;
   z-index: 4;
-  font-size: 0.75em;
+  font-size: 0.85em;
   padding: 5px;
   border-radius: 3px;
   transition: opacity 0.2s;
   display: flex;
   align-items: center;
+  font-family: Rubik;
 }
 .g-gantt-tooltip:before {
   content: '';

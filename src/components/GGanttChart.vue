@@ -39,6 +39,7 @@ const props = defineProps<{
   colorScheme: string
   grid: boolean
   pushOnOverlap: boolean
+  rowHeight: number
 }>()
 
 const { chartStart, chartEnd, barStart, barEnd, precision, width, pushOnOverlap } = toRefs(props)
@@ -74,6 +75,7 @@ provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
 </script>
 
 <style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
   #g-gantt-chart{
     position: relative;
     display: flex;
@@ -86,7 +88,8 @@ provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
     -ms-user-select: none;
     user-select: none;
     padding-bottom: 23px;
-    font-family: Helvetica;
+    font-family: Rubik;
+    border-radius: 5px;
   }
 
   #g-gantt-rows-container{
