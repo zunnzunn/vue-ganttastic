@@ -50,7 +50,6 @@ export default function useBarDragLimit (
           })
         }
         const barElem = document.getElementById(bar.ganttBarConfig.id) as HTMLElement
-        console.log("whoah, to", totalGapDistance, side)
         if (totalGapDistance != null && side === "left") {
           bar.ganttBarConfig.dragLimitLeft = barElem.offsetLeft - totalGapDistance
         } else if (totalGapDistance != null && side === "right") {
