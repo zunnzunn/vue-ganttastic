@@ -1,8 +1,8 @@
 <template>
   <g-gantt-chart
-    chart-start="2021-07-13 02:00"
+    chart-start="2021-01-01 02:00"
     chart-end="2021-07-27 23:59"
-    precision="day"
+    precision="month"
     color-scheme="vue"
     :row-height="40"
     width="1200px"
@@ -28,8 +28,8 @@ import GGanttChart from "./components/GGanttChart.vue"
 
 const bars1 = ref([
   {
-    beginDate: "2021-07-26 00:00",
-    endDate: "2021-07-27 02:00",
+    beginDate: "2021-02-26 00:00",
+    endDate: "2021-03-27 02:00",
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,
@@ -42,8 +42,8 @@ const bars1 = ref([
     }
   },
   {
-    beginDate: "2021-07-27 13:00",
-    endDate: "2021-07-27 19:00",
+    beginDate: "2021-04-27 13:00",
+    endDate: "2021-05-27 19:00",
     ganttBarConfig: {
       id: "test2",
       label: "Lorem ipsum dolor",
@@ -54,8 +54,8 @@ const bars1 = ref([
 
 const bars2 = ref([
   {
-    beginDate: "2021-07-26 00:00",
-    endDate: "2021-07-27 02:00",
+    beginDate: "2021-01-26 00:00",
+    endDate: "2021-04-27 02:00",
     ganttBarConfig: {
       id: "test3",
       hasHandles: true,
@@ -68,7 +68,7 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "2021-07-27 13:00",
+    beginDate: "2021-05-27 13:00",
     endDate: "2021-07-27 19:00",
     ganttBarConfig: {
       id: "test4",
@@ -77,19 +77,6 @@ const bars2 = ref([
       style: {
         background: "cyan",
         borderRadius: "20px"
-      }
-    }
-  },
-  {
-    beginDate: "2021-07-27 20:00",
-    endDate: "2021-07-27 23:00",
-    ganttBarConfig: {
-      id: "immobile",
-      label: "Immobile",
-      immobile: true,
-      style: {
-        background: "gray",
-        borderRadius: "10px"
       }
     }
   }
