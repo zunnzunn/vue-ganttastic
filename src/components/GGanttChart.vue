@@ -25,30 +25,38 @@ import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { computed, provide, toRefs, ref, defineProps, useSlots } from "vue"
-import { GanttBarObject } from "@/models/GanttBarObject"
+import { computed, provide, toRefs, defineProps, withDefaults, useSlots } from "vue"
+import { GanttBarObject } from "@/models/models"
 
-const props = defineProps<{
+interface GGanttChartProps {
   chartStart: string
   chartEnd: string
-  precision: "hour" | "day" | "month"
+  precision?: "hour" | "day" | "month"
   barStart: string
   barEnd: string
-  width: string
-  hideTimeaxis: boolean
-  colorScheme: string
-  grid: boolean
-  pushOnOverlap: boolean
-  rowHeight: number
-}>()
+  width?: string
+  hideTimeaxis?: boolean
+  colorScheme?: string
+  grid?: boolean
+  pushOnOverlap?: boolean
+  rowHeight?: number
+}
 
-const { chartStart, chartEnd, barStart, barEnd, precision, width, pushOnOverlap } = toRefs(props)
+const props = withDefaults(defineProps<GGanttChartProps>(), {
+  precision: "day",
+  width: "1200px",
+  hideTimeaxis: false,
+  colorScheme: "default",
+  grid: false,
+  pushOnOverlap: false,
+  rowHeight: 40
+})
+const { chartStart, chartEnd, precision, width } = toRefs(props)
 const slots = useSlots()
-
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
 })
-const allRowsInChart = computed(() => {
+const allBarsInChartByRow = computed(() => {
   const defaultSlot = slots.default?.()
   const allBars: GanttBarObject[][] = []
   if (defaultSlot) {
@@ -61,21 +69,14 @@ const allRowsInChart = computed(() => {
   }
   return allBars
 })
-
-provide(INJECTION_KEYS.chartStartKey, chartStart)
-provide(INJECTION_KEYS.chartEndKey, chartEnd)
-provide(INJECTION_KEYS.barStartKey, barStart)
-provide(INJECTION_KEYS.barEndKey, barEnd)
-provide(INJECTION_KEYS.widthKey, ref(Number(width.value.replace("px", ""))))
-provide(INJECTION_KEYS.precisionKey, precision)
-provide(INJECTION_KEYS.pushOnOverlapKey, pushOnOverlap)
-provide(INJECTION_KEYS.allBarsInChartKey, allRowsInChart)
+provide(INJECTION_KEYS.allBarsInChartKey, allBarsInChartByRow)
 provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
 
 </script>
 
 <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
   #g-gantt-chart{
     position: relative;
     display: flex;

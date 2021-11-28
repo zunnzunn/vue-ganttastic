@@ -1,4 +1,4 @@
-import { GanttBarObject, GGanttChartPropsRefs } from "@/models/GanttBarObject"
+import { GanttBarObject, GGanttChartPropsRefs } from "@/models/models"
 import { ComputedRef, ref } from "vue"
 import dayjs from "dayjs"
 import useBarDrag from "./useBarDrag"

@@ -1,6 +1,6 @@
 import { colorSchemes } from "@/components/color-schemes"
 import { computed } from "vue"
-import { GGanttChartPropsRefs } from "./../models/GanttBarObject"
+import { GGanttChartPropsRefs } from "../models/models"
 
 export default function useColorScheme (
   gGanttChartPropsRefs: GGanttChartPropsRefs

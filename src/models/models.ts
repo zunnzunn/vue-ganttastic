@@ -19,19 +19,6 @@ export type GanttBarObject = {
   }
 }
 
-export type GGanttChartProps = {
-  chartStart: string
-  chartEnd: string
-  precision: "hour" | "day" | "month"
-  barStart: string
-  barEnd: string
-  width: string
-  hideTimeaxis: boolean
-  colorScheme: string
-  grid: boolean
-  pushOnOverlap: boolean
-}
-
 export type GGanttChartPropsRefs = {
   chartStart: Ref<string>
   chartEnd: Ref<string>

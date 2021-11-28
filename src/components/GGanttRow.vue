@@ -35,7 +35,7 @@
 import useColorScheme from "@/composables/useColorScheme"
 import INJECTION_KEYS from "@/models/symbols"
 import { defineProps, inject } from "vue"
-import { GanttBarObject } from "../models/GanttBarObject"
+import { GanttBarObject } from "../models/models"
 import GGanttBar from "./GGanttBar.vue"
 
 defineProps<{

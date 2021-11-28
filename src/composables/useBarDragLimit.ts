@@ -1,5 +1,5 @@
 import { ComputedRef } from "vue"
-import { GanttBarObject, GGanttChartPropsRefs } from "@/models/GanttBarObject"
+import { GanttBarObject, GGanttChartPropsRefs } from "@/models/models"
 
 export default function useBarDragLimit (
   allRowsInChart : ComputedRef<GanttBarObject[][]>,

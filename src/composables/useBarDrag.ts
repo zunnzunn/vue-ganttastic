@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { GanttBarObject, GGanttChartPropsRefs } from "@/models/GanttBarObject"
+import { GanttBarObject, GGanttChartPropsRefs } from "@/models/models"
 import useTimePositionMapping from "./useTimePositionMapping"
 import { Ref, ref } from "vue"
 
