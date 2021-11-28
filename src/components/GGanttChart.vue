@@ -1,7 +1,7 @@
 <template>
   <div
     id="g-gantt-chart"
-    :style="{width: width, background: colors.background}"
+    :style="{width, background: colors.background}"
   >
     <g-gantt-timeaxis
       v-if="!hideTimeaxis"
@@ -9,7 +9,22 @@
       :chart-end="chartEnd"
       :precision="precision"
       :colors="colors"
-    />
+    >
+      <template #upper-timeunit="{label, value}">
+        <slot
+          name="upper-timeunit"
+          :label="label"
+          :value="value"
+        />
+      </template>
+      <template #timeunit="{label, value}">
+        <slot
+          name="timeunit"
+          :label="label"
+          :value="value"
+        />
+      </template>
+    </g-gantt-timeaxis>
 
     <g-gantt-grid
       v-if="grid"

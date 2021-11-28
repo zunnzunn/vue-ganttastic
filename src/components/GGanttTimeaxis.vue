@@ -2,22 +2,28 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, width }, index) in timeaxisUnits.upperUnits"
+        v-for="({ label, value, width }, index) in timeaxisUnits.upperUnits"
         :key="label"
-        class="g-high-timeunit"
+        class="g-upper-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.primary : colors.secondary,
           color: colors.text,
           width
         }"
       >
-        {{ label }}
+        <slot
+          name="upper-timeunit"
+          :label="label"
+          :value="value"
+        >
+          {{ label }}
+        </slot>
       </div>
     </div>
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ label }, index) in timeaxisUnits.lowerUnits"
+        v-for="({ label, value }, index) in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
@@ -27,7 +33,13 @@
           alignItems: precision === 'hour' ? '' : 'center'
         }"
       >
-        {{ label }}
+        <slot
+          name="timeunit"
+          :label="label"
+          :value="value"
+        >
+          {{ label }}
+        </slot>
         <div
           v-if="precision === 'hour'"
           class="g-timeaxis-hour-pin"
@@ -87,7 +99,7 @@ const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
     justify-content: center;
   }
 
-  .g-high-timeunit {
+  .g-upper-timeunit {
     display: flex;
     height: 100%;
     justify-content: center;
