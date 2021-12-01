@@ -10,20 +10,20 @@
   padding-bottom: 34px;
   border: 1px solid #eaeaea;
   box-sizing: border-box;
+
+  & >>> * {
+    font-family: Roboto, Verdana;
+  }
 }
 
-.g-gantt-chart >>> * {
-  font-family: Roboto, Verdana;
-}
-
-.g-timeaxis,
-.g-timeaxis-days,
-.g-timeaxis-day,
-.g-timeaxis-day > div {
+.g-gantt-timeaxis,
+.g-gantt-timeaxis__days,
+.g-gantt-timeaxis__day,
+.g-gantt-timeaxis__day > div {
   display: flex;
 }
 
-.g-timeaxis {
+.g-gantt-timeaxis {
   position: sticky;
   top: 0;
   background: white;
@@ -31,7 +31,7 @@
   box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
 }
 
-.g-timeaxis > .g-timeaxis-empty-space {
+.g-gantt-timeaxis__empty-space {
   min-height: 100%;
   background: #f5f5f5;
   z-index: 5;
@@ -39,40 +39,40 @@
   position: sticky;
 }
 
-.g-timeaxis > .g-timeaxis-days {
+.g-gantt-timeaxis__days {
   position: relative;
   height: 100%;
 }
 
-.g-timeaxis-day {
+.g-gantt-timeaxis__day {
   height: 100%;
   flex-direction: column;
   background: #e0e0e0;
+
+  &:nth-child(odd) {
+    background: #e8e8e8;
+  }
+
+  & > div:nth-child(1) {
+    /* day text */
+    height: 50%;
+    justify-content: space-around;
+    font-weight: bold;
+    align-items: center;
+  }
+
+  & > div:nth-child(2) {
+    /* hours of a day */
+    align-items: flex-end;
+    height: 50%;
+    justify-content: space-between;
+    background: #f5f5f5;
+    padding-top: 2px;
+    color: #212121;
+  }
 }
 
-.g-timeaxis-day:nth-child(odd) {
-  background: #e8e8e8;
-}
-
-.g-timeaxis-day > div:nth-child(1) {
-  /* day text */
-  height: 50%;
-  justify-content: space-around;
-  font-weight: bold;
-  align-items: center;
-}
-
-.g-timeaxis-day > div:nth-child(2) {
-  /* hours of a day */
-  align-items: flex-end;
-  height: 50%;
-  justify-content: space-between;
-  background: #f5f5f5;
-  padding-top: 2px;
-  color: #212121;
-}
-
-.g-timeaxis-hour {
+.g-gantt-timeaxis__hour {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -80,12 +80,12 @@
   opacity: 0.5;
 }
 
-.g-timeaxis-hour-pin {
+.g-gantt-timeaxis__hour-pin {
   width: 1px;
   height: 8px;
 }
 
-.g-timeaxis-marker {
+.g-gantt-timeaxis__marker {
   position: absolute;
   top: 0;
   left: 0;
@@ -98,14 +98,14 @@
   position: relative;
 }
 
-.g-grid-container {
+.g-gantt-grid {
   position: absolute;
   top: 0;
   bottom: 0;
   overflow: hidden;
 }
 
-.g-grid-line {
+.g-gantt-grid__line {
   height: 100%;
   border: 1px solid transparent;
   border-left: 1px solid #eaeaea;
@@ -113,11 +113,11 @@
   display: inline-block;
 }
 
-.g-grid-line-last {
+.g-gantt-grid-line-last {
   border-right: 1px solid #eaeaea;
 }
 
-.g-grid-line-highlighted {
+.g-gantt-line-highlighted {
   background: #dcefff;
 }
 
@@ -129,7 +129,7 @@
   position: relative;
 }
 
-.g-gantt-row > .g-gantt-row-label {
+.g-gantt-row__label {
   display: flex;
   align-items: center;
   background: #e8e8e8;
@@ -143,15 +143,15 @@
   box-sizing: border-box;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
+
+  & > * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
-.g-gantt-row > .g-gantt-row-label > * {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.g-gantt-row > .g-gantt-row-bars-container {
+.g-gantt-row__bars-container {
   position: relative;
   border-top: 1px solid #eaeaea;
   border-bottom: 1px solid #eaeaea;
@@ -178,24 +178,32 @@
   cursor: unset;
 }
 
-.g-gantt-bar-label {
+.g-gantt-bar__label {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 0 14px 0 14px; /* 14px is the width of the handle */
+  padding: 0 4px 0 4px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  img {
+    pointer-events: none;
+  }
+
+  & > * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
-.g-gantt-bar-label > * {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.g-gantt-bar-resizable .g-gantt-bar__label {
+  padding: 0 14px 0 14px; /* 14px is the width of the handle */
 }
 
-.g-gantt-bar > .g-gantt-bar-handle-left,
-.g-gantt-bar > .g-gantt-bar-handle-right {
+.g-gantt-bar__handle-left,
+.g-gantt-bar__handle-right {
   position: absolute;
   width: 10px;
   height: 100%;
@@ -204,21 +212,17 @@
   border-radius: 40px;
 }
 
-.g-gantt-bar-handle-left {
+.g-gantt-bar__handle-left {
   left: 0;
   cursor: w-resize;
 }
 
-.g-gantt-bar-handle-right {
+.g-gantt-bar__handle-right {
   right: 0;
   cursor: e-resize;
 }
 
-.g-gantt-bar-label img {
-  pointer-events: none;
-}
-
-.g-gantt-tooltip {
+.g-gantt-bar__tooltip {
   position: absolute;
   background: black;
   color: white;
@@ -229,27 +233,27 @@
   transition: opacity 0.2s;
   display: flex;
   align-items: center;
-}
 
-.g-gantt-tooltip:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 10%;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-bottom-color: black;
-  border-top: 0;
-  margin-left: -5px;
-  margin-top: -5px;
-}
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom-color: black;
+    border-top: 0;
+    margin-left: -5px;
+    margin-top: -5px;
+  }
 
-.g-gantt-tooltip > .color-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 100%;
-  margin-right: 4px;
+  & > .color-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    margin-right: 4px;
+  }
 }
 
 .fade-enter-active {

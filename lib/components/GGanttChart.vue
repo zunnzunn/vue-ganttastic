@@ -334,12 +334,11 @@ export default {
           })
         }
         if (totalGapDistance != null && side === 'left') {
-          bar.dragLimitLeft =
-            bar.$refs['g-gantt-bar'].offsetLeft - totalGapDistance
+          bar.dragLimitLeft = bar.$refs['g-bar'].offsetLeft - totalGapDistance
         } else if (totalGapDistance != null && side === 'right') {
           bar.dragLimitRight =
-            bar.$refs['g-gantt-bar'].offsetLeft +
-            bar.$refs['g-gantt-bar'].offsetWidth +
+            bar.$refs['g-bar'].offsetLeft +
+            bar.$refs['g-bar'].offsetWidth +
             totalGapDistance
         }
       }
@@ -371,10 +370,10 @@ export default {
       if (side === 'left') {
         while (nextBar) {
           let nextBarOffsetRight =
-            nextBar.$refs['g-gantt-bar'].offsetLeft +
-            nextBar.$refs['g-gantt-bar'].offsetWidth
+            nextBar.$refs['g-bar'].offsetLeft +
+            nextBar.$refs['g-bar'].offsetWidth
           gapDistanceSoFar +=
-            currentBar.$refs['g-gantt-bar'].offsetLeft - nextBarOffsetRight
+            currentBar.$refs['g-bar'].offsetLeft - nextBarOffsetRight
           if (
             nextBar.barConfig.immobile ||
             (nextBar.barConfig.isShadow && !ignoreShadows)
@@ -393,10 +392,10 @@ export default {
       if (side === 'right') {
         while (nextBar) {
           let currentBarOffsetRight =
-            currentBar.$refs['g-gantt-bar'].offsetLeft +
-            currentBar.$refs['g-gantt-bar'].offsetWidth
+            currentBar.$refs['g-bar'].offsetLeft +
+            currentBar.$refs['g-bar'].offsetWidth
           gapDistanceSoFar +=
-            nextBar.$refs['g-gantt-bar'].offsetLeft - currentBarOffsetRight
+            nextBar.$refs['g-bar'].offsetLeft - currentBarOffsetRight
           if (
             nextBar.barConfig.immobile ||
             (nextBar.barConfig.isShadow && !ignoreShadows)
@@ -422,9 +421,8 @@ export default {
           return (
             gBar.$options.name === GGanttBar.name &&
             gBar.$parent === bar.$parent &&
-            gBar.$refs['g-gantt-bar'] &&
-            gBar.$refs['g-gantt-bar'].offsetLeft <
-              bar.$refs['g-gantt-bar'].offsetLeft &&
+            gBar.$refs['g-bar'] &&
+            gBar.$refs['g-bar'].offsetLeft < bar.$refs['g-bar'].offsetLeft &&
             gBar.barConfig.pushOnOverlap !== false
           )
         })
@@ -433,9 +431,8 @@ export default {
           return (
             gBar.$options.name === GGanttBar.name &&
             gBar.$parent === bar.$parent &&
-            gBar.$refs['g-gantt-bar'] &&
-            gBar.$refs['g-gantt-bar'].offsetLeft >
-              bar.$refs['g-gantt-bar'].offsetLeft &&
+            gBar.$refs['g-bar'] &&
+            gBar.$refs['g-bar'].offsetLeft > bar.$refs['g-bar'].offsetLeft &&
             gBar.barConfig.pushOnOverlap !== false
           )
         })
@@ -443,12 +440,10 @@ export default {
       if (allBarsLeftOrRight.length > 0) {
         return allBarsLeftOrRight.reduce((bar1, bar2) => {
           let bar1Dist = Math.abs(
-            bar1.$refs['g-gantt-bar'].offsetLeft -
-              bar.$refs['g-gantt-bar'].offsetLeft
+            bar1.$refs['g-bar'].offsetLeft - bar.$refs['g-bar'].offsetLeft
           )
           let bar2Dist = Math.abs(
-            bar2.$refs['g-gantt-bar'].offsetLeft -
-              bar.$refs['g-gantt-bar'].offsetLeft
+            bar2.$refs['g-bar'].offsetLeft - bar.$refs['g-bar'].offsetLeft
           )
           return bar1Dist < bar2Dist ? bar1 : bar2
         }, allBarsLeftOrRight[0])

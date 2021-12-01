@@ -1,8 +1,12 @@
 <template>
   <div>
     <div
-      ref="g-gantt-bar"
-      :class="['g-gantt-bar', { 'g-gantt-bar-immobile': barConfig.immobile }]"
+      ref="g-bar"
+      :class="[
+        'g-gantt-bar',
+        { 'g-gantt-bar-immobile': barConfig.immobile },
+        { 'g-gantt-bar-resizable': barConfig.handles }
+      ]"
       :style="barStyle"
       @mouseenter.stop="onMouseenter($event)"
       @mouseleave.stop="onMouseleave($event)"
@@ -11,21 +15,21 @@
       @dblclick="onDblclick($event)"
       @contextmenu="onContextmenu($event)"
     >
-      <div class="g-gantt-bar-label">
+      <div class="g-gantt-bar__label">
         <slot name="bar-label" :bar="localBar">
           {{ barConfig.label || '' }}
         </slot>
       </div>
       <template v-if="barConfig.handles">
-        <div class="g-gantt-bar-handle-left" />
-        <div class="g-gantt-bar-handle-right" />
+        <div class="g-gantt-bar__handle-left" />
+        <div class="g-gantt-bar__handle-right" />
       </template>
     </div>
 
     <transition name="fade" mode="out-in">
       <div
         v-if="!barConfig.noTooltip && (showTooltip || isDragging)"
-        class="g-gantt-tooltip"
+        class="g-gantt-bar__tooltip"
         :style="tooltipStyle"
       >
         <div
@@ -287,15 +291,15 @@ export default {
       this.barStartBeforeDrag = this.localBar[this.barStartKey]
       this.barEndBeforeDrag = this.localBar[this.barEndKey]
 
-      let barX = this.$refs['g-gantt-bar'].getBoundingClientRect().left
+      let barX = this.$refs['g-bar'].getBoundingClientRect().left
       this.cursorOffsetX = e.clientX - barX
       let mousedownType = e.target.className
       switch (mousedownType) {
-        case 'g-gantt-bar-handle-left':
+        case 'g-gantt-bar__handle-left':
           document.body.style.cursor = 'w-resize'
           this.mousemoveCallback = this.dragByHandleLeft
           break
-        case 'g-gantt-bar-handle-right':
+        case 'g-gantt-bar__handle-right':
           document.body.style.cursor = 'e-resize'
           this.mousemoveCallback = this.dragByHandleRight
           break
@@ -315,7 +319,7 @@ export default {
     drag(e) {
       const chart = e.target.closest('.g-gantt-chart')
       if (!chart) return
-      let barWidth = this.$refs['g-gantt-bar'].getBoundingClientRect().width
+      let barWidth = this.$refs['g-bar'].getBoundingClientRect().width
       let newXStart =
         chart.scrollLeft +
         e.clientX -

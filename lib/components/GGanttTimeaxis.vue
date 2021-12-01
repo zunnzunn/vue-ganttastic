@@ -1,21 +1,21 @@
 <template>
   <div
     ref="g-timeaxis"
-    class="g-timeaxis"
+    class="g-gantt-timeaxis"
     :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
   >
     <div
-      class="g-timeaxis-empty-space"
+      class="g-gantt-timeaxis__empty-space"
       :style="{
         minWidth: `${rowLabelWidth}px`,
         background: themeColors.secondary
       }"
     />
-    <div class="g-timeaxis-days">
+    <div class="g-gantt-timeaxis__days">
       <div
         v-for="(point, index) in axisPoints"
         :key="point.text"
-        class="g-timeaxis-day"
+        class="g-gantt-timeaxis__day"
         :style="{
           background:
             index % 2 === 0 ? themeColors.primary : themeColors.secondary,
@@ -29,7 +29,7 @@
           <div
             v-for="(childPoint, index) in point.childPoints"
             :key="childPoint.fullDatetime"
-            class="g-timeaxis-hour"
+            class="g-gantt-timeaxis__hour"
             :style="{
               width: `${gridSize}px`,
               background:
@@ -41,14 +41,14 @@
               childPoint.text
             }}</span>
             <div
-              class="g-timeaxis-hour-pin"
+              class="g-gantt-timeaxis__hour-pin"
               :style="{ background: themeColors.text }"
             />
           </div>
         </div>
       </div>
     </div>
-    <div ref="g-timeaxis-marker" class="g-timeaxis-marker" />
+    <div ref="g-timeaxis-marker" class="g-gantt-timeaxis__marker" />
   </div>
 </template>
 
@@ -110,7 +110,9 @@ export default {
 
   methods: {
     initAxis() {
-     this.precision ===  'day'? this.initAxisDaysAndHours() : this.initAxisMonthsAndDays()
+      this.precision === 'day'
+        ? this.initAxisDaysAndHours()
+        : this.initAxisMonthsAndDays()
     },
 
     initAxisMonthsAndDays() {

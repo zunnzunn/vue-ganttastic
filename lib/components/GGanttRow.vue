@@ -1,17 +1,17 @@
 <template>
   <div
+    ref="g-row"
     class="g-gantt-row"
-    ref="g-gantt-row"
     :style="{ height: `${chartProps.rowHeight}px` }"
     v-on="$listeners"
   >
-    <div class="g-gantt-row-label" :style="rowLabelStyle">
+    <div class="g-gantt-row__label" :style="rowLabelStyle">
       <span :title="label">
         <slot name="label">{{ label }}</slot>
       </span>
     </div>
     <div
-      class="g-gantt-row-bars-container"
+      class="g-gantt-row__bars-container"
       ref="barContainer"
       :style="rowStyle"
       @dragover="onDragover($event)"
@@ -151,13 +151,13 @@ export default {
     onDragover(e) {
       e.preventDefault() // enables dropping content on row
       if (this.highlightOnHover) {
-        this.$refs['g-gantt-row'].style.backgroundColor =
+        this.$refs['g-row'].style.backgroundColor =
           this.themeColors.hoverHighlight
       }
     },
 
     onDragleave() {
-      this.$refs['g-gantt-row'].style.backgroundColor = null
+      this.$refs['g-row'].style.backgroundColor = null
     },
 
     onDrop(e) {
@@ -199,13 +199,13 @@ export default {
 
     onMouseover() {
       if (this.highlightOnHover) {
-        this.$refs['g-gantt-row'].style.backgroundColor =
+        this.$refs['g-row'].style.backgroundColor =
           this.themeColors.hoverHighlight
       }
     },
 
     onMouseleave() {
-      this.$refs['g-gantt-row'].style.backgroundColor = null
+      this.$refs['g-row'].style.backgroundColor = null
     },
 
     onWindowResize() {

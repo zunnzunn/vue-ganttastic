@@ -1,16 +1,15 @@
 <template>
   <div
-    ref="g-grid-container"
-    class="g-grid-container"
+    class="g-gantt-grid"
     :style="{ left: `${rowLabelWidth}px`, width: `${timeCount * gridSize}px` }"
   >
     <div
       v-for="(childPoint, index) in allChildPoints"
       :key="index"
       :class="[
-        'g-grid-line',
-        { 'g-grid-line-last': index === allChildPoints.length - 1 },
-        { 'g-grid-line-highlighted': isHighlighted(childPoint) }
+        'g-gantt-grid__line',
+        { 'g-gantt-grid-line-last': index === allChildPoints.length - 1 },
+        { 'g-gantt-line-highlighted': isHighlighted(childPoint) }
       ]"
       :style="{ width: `${gridSize}px` }"
     />

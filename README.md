@@ -116,7 +116,7 @@ The following code showcases a simple usage example in a .vue SFC (Single File C
   @import '~@tenrok/vue-ganttastic/dist/vue-ganttastic.css';
 
   /* Custom */
-  .g-grid-line-highlighted {
+  .g-gantt-line-highlighted {
     background: #ffb0b0 !important;
   }
 </style>
