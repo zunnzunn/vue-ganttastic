@@ -56,13 +56,7 @@ export default {
     highlightOnHover: { type: Boolean }
   },
 
-  inject: [
-    'getChartProps',
-    'getThemeColors',
-    'getTimeCount',
-    'getTimeUnit',
-    'getTimeFormat'
-  ],
+  inject: ['getChartProps', 'getTimeCount', 'getTimeUnit', 'getTimeFormat'],
 
   data() {
     return {
@@ -72,10 +66,6 @@ export default {
   },
 
   computed: {
-    themeColors() {
-      return this.getThemeColors()
-    },
-
     defaultBarLength() {
       return this.chartProps.defaultBarLength
     },
@@ -107,10 +97,6 @@ export default {
     rowLabelStyle() {
       return {
         width: `${this.chartProps.rowLabelWidth}px`,
-        background: this.themeColors.ternary,
-        color: this.themeColors.text,
-        borderTop: `1px solid ${this.themeColors.rowLabelBorder}`,
-        borderBottom: `1px solid ${this.themeColors.rowLabelBorder}`,
         ...this.labelStyle
       }
     }
@@ -151,13 +137,12 @@ export default {
     onDragover(e) {
       e.preventDefault() // enables dropping content on row
       if (this.highlightOnHover) {
-        this.$refs['g-row'].style.backgroundColor =
-          this.themeColors.hoverHighlight
+        this.$refs['g-row'].classList.add('g-gantt-row-highlighted')
       }
     },
 
     onDragleave() {
-      this.$refs['g-row'].style.backgroundColor = null
+      this.$refs['g-row'].classList.remove('g-gantt-row-highlighted')
     },
 
     onDrop(e) {
@@ -199,13 +184,12 @@ export default {
 
     onMouseover() {
       if (this.highlightOnHover) {
-        this.$refs['g-row'].style.backgroundColor =
-          this.themeColors.hoverHighlight
+        this.$refs['g-row'].classList.add('g-gantt-row-highlighted')
       }
     },
 
     onMouseleave() {
-      this.$refs['g-row'].style.backgroundColor = null
+      this.$refs['g-row'].classList.remove('g-gantt-row-highlighted')
     },
 
     onWindowResize() {

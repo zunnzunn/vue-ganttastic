@@ -8,8 +8,10 @@
   -ms-user-select: none;
   user-select: none;
   padding-bottom: 34px;
-  border: 1px solid #eaeaea;
+  border: 1px solid $border-color;
   box-sizing: border-box;
+  background: $background;
+  flex: 1;
 
   & >>> * {
     font-family: Roboto, Verdana;
@@ -26,14 +28,14 @@
 .g-gantt-timeaxis {
   position: sticky;
   top: 0;
-  background: white;
+  background: $timeaxis-background;
   z-index: 4;
   box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
 }
 
 .g-gantt-timeaxis__empty-space {
   min-height: 100%;
-  background: #f5f5f5;
+  background: $secondary;
   z-index: 5;
   left: 0;
   position: sticky;
@@ -47,29 +49,29 @@
 .g-gantt-timeaxis__day {
   height: 100%;
   flex-direction: column;
-  background: #e0e0e0;
+  color: $text;
+
+  &:nth-child(even) {
+    background: $secondary;
+  }
 
   &:nth-child(odd) {
-    background: #e8e8e8;
+    background: $primary;
   }
 
   & > div:nth-child(1) {
     /* day text */
-    height: 50%;
     justify-content: space-around;
     font-weight: bold;
     align-items: center;
   }
+}
 
-  & > div:nth-child(2) {
-    /* hours of a day */
-    align-items: flex-end;
-    height: 50%;
-    justify-content: space-between;
-    background: #f5f5f5;
-    padding-top: 2px;
-    color: #212121;
-  }
+.g-gantt-timeaxis__days {
+  align-items: flex-end;
+  justify-content: space-between;
+  background: $ternary;
+  color: $text;
 }
 
 .g-gantt-timeaxis__hour {
@@ -78,20 +80,30 @@
   align-items: flex-start;
   flex-direction: column;
   opacity: 0.5;
+  color: $text;
+
+  &:nth-child(even) {
+    background: $secondary;
+  }
+
+  &:nth-child(odd) {
+    background: $primary;
+  }
 }
 
 .g-gantt-timeaxis__hour-pin {
   width: 1px;
-  height: 8px;
+  height: 5px;
+  background: $text;
 }
 
 .g-gantt-timeaxis__marker {
   position: absolute;
-  top: 0;
   left: 0;
-  height: 100%;
+  bottom: 0;
+  height: 5px;
   width: 3px;
-  background: black;
+  background: $marker-background;
 }
 
 .g-gantt-rows-container {
@@ -108,17 +120,17 @@
 .g-gantt-grid__line {
   height: 100%;
   border: 1px solid transparent;
-  border-left: 1px solid #eaeaea;
+  border-left: 1px solid $border-color;
   box-sizing: border-box;
   display: inline-block;
 }
 
 .g-gantt-grid-line-last {
-  border-right: 1px solid #eaeaea;
+  border-right: 1px solid $border-color;
 }
 
-.g-gantt-line-highlighted {
-  background: #dcefff;
+.g-gantt-grid-line-highlighted {
+  background: $highlighted;
 }
 
 .g-gantt-row {
@@ -129,11 +141,15 @@
   position: relative;
 }
 
+.g-gantt-row-highlighted {
+  background-color: $hover-highlight;
+}
+
 .g-gantt-row__label {
   display: flex;
   align-items: center;
-  background: #e8e8e8;
-  color: #424242;
+  background: $ternary;
+  color: $text;
   font-size: 0.9em;
   z-index: 3;
   font-weight: bold;
@@ -141,8 +157,8 @@
   position: sticky;
   padding: 0 10px;
   box-sizing: border-box;
-  border-top: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
+  border-top: 1px solid $row-label-border-color;
+  border-bottom: 1px solid $row-label-border-color;
 
   & > * {
     overflow: hidden;
@@ -153,8 +169,8 @@
 
 .g-gantt-row__bars-container {
   position: relative;
-  border-top: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
   flex: 1;
 }
 
@@ -224,8 +240,8 @@
 
 .g-gantt-bar__tooltip {
   position: absolute;
-  background: black;
-  color: white;
+  background: $tooltip-background;
+  color: $tooltip-color;
   z-index: 3;
   font-size: 0.7em;
   padding: 3px;
@@ -242,7 +258,7 @@
     width: 0;
     height: 0;
     border: 10px solid transparent;
-    border-bottom-color: black;
+    border-bottom-color: $tooltip-background;
     border-top: 0;
     margin-left: -5px;
     margin-top: -5px;
@@ -253,22 +269,5 @@
     height: 8px;
     border-radius: 100%;
     margin-right: 4px;
-  }
-}
-
-.fade-enter-active {
-  animation: fade-in 0.3s;
-}
-
-.fade-leave-active {
-  animation: fade-in 0.3s reverse;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }

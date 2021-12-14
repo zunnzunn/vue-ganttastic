@@ -7,43 +7,27 @@
     <div
       class="g-gantt-timeaxis__empty-space"
       :style="{
-        minWidth: `${rowLabelWidth}px`,
-        background: themeColors.secondary
+        minWidth: `${rowLabelWidth}px`
       }"
     />
     <div class="g-gantt-timeaxis__days">
       <div
-        v-for="(point, index) in axisPoints"
+        v-for="point in axisPoints"
         :key="point.text"
         class="g-gantt-timeaxis__day"
-        :style="{
-          background:
-            index % 2 === 0 ? themeColors.primary : themeColors.secondary,
-          color: themeColors.text
-        }"
       >
         <div v-html="pointFormatted(point) || '&nbsp;'"></div>
-        <div
-          :style="{ background: themeColors.ternary, color: themeColors.text }"
-        >
+        <div class="g-gantt-timeaxis__hours">
           <div
-            v-for="(childPoint, index) in point.childPoints"
+            v-for="childPoint in point.childPoints"
             :key="childPoint.fullDatetime"
             class="g-gantt-timeaxis__hour"
-            :style="{
-              width: `${gridSize}px`,
-              background:
-                index % 2 === 0 ? themeColors.primary : themeColors.secondary,
-              color: themeColors.text
-            }"
+            :style="{ width: `${gridSize}px` }"
           >
             <span :style="{ fontSize: hourFontSize }">{{
               childPoint.text
             }}</span>
-            <div
-              class="g-gantt-timeaxis__hour-pin"
-              :style="{ background: themeColors.text }"
-            />
+            <div class="g-gantt-timeaxis__hour-pin" />
           </div>
         </div>
       </div>
@@ -64,7 +48,6 @@ export default {
     rowLabelWidth: { type: Number },
     timemarkerOffset: { type: Number, default: 0 },
     locale: { type: String },
-    themeColors: { type: Object },
     precision: { type: String },
     timeFormat: { type: String },
     timeCount: { type: Number },

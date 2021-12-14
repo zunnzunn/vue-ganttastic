@@ -4,7 +4,14 @@ const isBuildLib =
 module.exports = {
   publicPath: '',
   outputDir: isBuildLib ? 'dist' : 'demo',
-  css: { extract: true },
+  css: {
+    loaderOptions: {
+      sass: {
+        implementation: require('sass')
+      }
+    },
+    extract: true
+  },
   productionSourceMap: false,
   chainWebpack: config => {
     if (process.env.VUE_CLI_BUILD_TARGET === 'lib') {

@@ -1,5 +1,11 @@
 <template>
   <div>
+    <select v-model="theme">
+      <option v-for="option in themes" :key="option" :value="option">
+        {{ option }}
+      </option>
+    </select>
+
     <h2>Chart #1</h2>
 
     <g-gantt-chart
@@ -17,7 +23,7 @@
       :highlighted-days="chart1.highlightedDays"
       :row-label-width="chart1.rowLabelWidth"
       :row-height="chart1.rowHeight"
-      :theme="chart1.theme"
+      :theme="theme"
       bar-config-key="config"
       bar-start-key="myStart"
       bar-end-key="myEnd"
@@ -53,7 +59,7 @@
       :highlighted-days="chart2.highlightedDays"
       :row-label-width="chart2.rowLabelWidth"
       :row-height="chart2.rowHeight"
-      :theme="chart2.theme"
+      :theme="theme"
       :width="chart2.width"
       :height="chart2.height"
       :allow-add="chart2.allowAdd"
@@ -77,6 +83,20 @@
 <script>
 export default {
   data: () => ({
+    theme: 'default',
+    themes: [
+      'creamy',
+      'crimson',
+      'dark',
+      'default',
+      'flare',
+      'fuchsia',
+      'grove',
+      'material-blue',
+      'sky',
+      'slumber',
+      'vue'
+    ],
     chart1: {
       chartStart: '2020-03-02 00:00',
       chartEnd: '2020-03-10 10:00',
@@ -91,7 +111,6 @@ export default {
       highlightOnHover: true,
       highlightedDays: ['2020-03-08'],
       highlightedHours: [10, 12],
-      theme: 'default', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       rows: [
         {
           label: 'Row #1',
@@ -259,7 +278,6 @@ export default {
         '2020-03-22',
         '2020-03-29'
       ],
-      theme: 'vue', // 'default', 'vue', 'dark', 'material-blue', 'creamy', 'slumber', 'sky', 'crimson', 'grove', 'fuchsia', 'flare'
       width: '90vw',
       height: '250px',
       allowAdd: false,
@@ -353,11 +371,12 @@ export default {
 
   methods: {
     onDragend(e) {
-      let { event, bar, movedBars } = e
+      const { event, bar, movedBars } = e
+      // eslint-disable-next-line
       console.log('onDragend', { event: event.type, bar, movedBars })
     }
   }
 }
 </script>
 
-<style lang="scss" src="../lib/scss/vue-ganttastic.scss"></style>
+<style lang="scss" src="../lib/scss/index.scss"></style>

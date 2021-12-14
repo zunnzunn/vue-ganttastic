@@ -1,0 +1,36 @@
+@use "sass:meta";
+
+// default
+@import './variables';
+@import './ganttastic';
+
+[data-theme] {
+  display: flex;
+  flex-direction: column;
+}
+
+$themes: 'creamy', 'crimson', 'dark', 'flare', 'fuchsia', 'grove',
+  'material-blue', 'sky', 'slumber', 'vue';
+
+@each $theme in $themes {
+  [data-theme='#{$theme}'] {
+    @include meta.load-css('./themes/#{$theme}');
+  }
+}
+
+.fade-enter-active {
+  animation: fade-in 0.3s;
+}
+
+.fade-leave-active {
+  animation: fade-in 0.3s reverse;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

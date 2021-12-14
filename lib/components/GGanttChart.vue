@@ -1,47 +1,48 @@
 <template>
   <div
-    class="g-gantt-chart"
-    :style="{ width, height, background: themeColors.background }"
+    class="g-gantt-chart-container"
+    :data-theme="theme"
+    :style="{ width, height }"
   >
-    <g-gantt-timeaxis
-      v-if="!hideTimeaxis"
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :row-label-width="rowLabelWidth"
-      :timemarker-offset="timemarkerOffset"
-      :theme-colors="themeColors"
-      :locale="locale"
-      :precision="precision"
-      :time-format="timeFormat"
-      :time-count="timeCount"
-      :grid-size="gridSize"
-      :day-format="dayFormat"
-      :month-format="monthFormat"
-    />
-
-    <div
-      class="g-gantt-rows-container"
-      :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
-    >
-      <g-gantt-grid
-        v-if="grid"
+    <div class="g-gantt-chart">
+      <g-gantt-timeaxis
+        v-if="!hideTimeaxis"
         :chart-start="chartStart"
         :chart-end="chartEnd"
         :row-label-width="rowLabelWidth"
-        :highlighted-hours="highlightedHours"
-        :highlighted-days="highlightedDays"
+        :timemarker-offset="timemarkerOffset"
+        :locale="locale"
         :precision="precision"
+        :time-format="timeFormat"
         :time-count="timeCount"
         :grid-size="gridSize"
+        :day-format="dayFormat"
+        :month-format="monthFormat"
       />
-      <slot />
+
+      <div
+        class="g-gantt-rows-container"
+        :style="{ width: `${timeCount * gridSize + rowLabelWidth}px` }"
+      >
+        <g-gantt-grid
+          v-if="grid"
+          :chart-start="chartStart"
+          :chart-end="chartEnd"
+          :row-label-width="rowLabelWidth"
+          :highlighted-hours="highlightedHours"
+          :highlighted-days="highlightedDays"
+          :precision="precision"
+          :time-count="timeCount"
+          :grid-size="gridSize"
+        />
+        <slot />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import GanttasticThemeColors from './GanttasticThemeColors.js'
 import GGanttTimeaxis from './GGanttTimeaxis.vue'
 import GGanttGrid from './GGanttGrid.vue'
 import GGanttRow from './GGanttRow.vue'
@@ -109,10 +110,6 @@ export default {
       return Math.floor(
         momentChartEnd.diff(momentChartStart, this.timeUnit, true)
       )
-    },
-
-    themeColors() {
-      return GanttasticThemeColors[this.theme] || GanttasticThemeColors.default
     }
   },
 
@@ -467,7 +464,6 @@ export default {
     return {
       getTimeCount: () => this.timeCount,
       getChartProps: () => this.$props,
-      getThemeColors: () => this.themeColors,
       initDragOfBarsFromBundle: (bundleId, e) =>
         this.initDragOfBarsFromBundle(bundleId, e),
       moveBarsFromBundleOfPushedBar: (bar, minuteDiff, overlapType) =>
