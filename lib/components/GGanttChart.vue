@@ -80,7 +80,11 @@ export default {
     barEndKey: { type: String, default: 'end' }, // property name of the bar objects that represents the end datetime
     allowAdd: { type: Boolean, default: true },
     dayFormat: { type: String, default: 'ddd DD MMMM' },
-    monthFormat: { type: String, default: 'MMMM YYYY' }
+    monthFormat: { type: String, default: 'MMMM YYYY' },
+    tooltipFormat: {
+      type: String,
+      default: '{start} - {end} duration: {duration}'
+    }
   },
 
   data() {

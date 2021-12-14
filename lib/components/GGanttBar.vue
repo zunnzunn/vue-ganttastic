@@ -17,7 +17,7 @@
     >
       <div class="g-gantt-bar__label">
         <slot name="bar-label" :bar="localBar">
-          {{ barConfig.label || '' }}
+          {{ barConfig.label }}
         </slot>
       </div>
       <template v-if="barConfig.handles">
@@ -41,7 +41,7 @@
         />
         <div>
           <div>{{ localBar.tooltip }}</div>
-          <div>{{ barStartText }} - {{ barEndText }}</div>
+          <div>{{ tooltipContent }}</div>
         </div>
       </div>
     </transition>
@@ -50,6 +50,27 @@
 
 <script>
 import moment from 'moment'
+
+String.prototype.formatUnicorn =
+  String.prototype.formatUnicorn ||
+  function () {
+    'use strict'
+    let str = this /*.toString()*/
+    if (arguments.length) {
+      const notSeenInNature = '#$%#$%' // or whatever
+      const t = typeof arguments[0]
+      let args =
+        'string' === t || 'number' === t
+          ? Array.prototype.slice.call(arguments)
+          : arguments[0]
+      for (let key in args) {
+        let rv = String(args[key]).replace('{', notSeenInNature)
+        str = str.replace(new RegExp('\\{' + key + '\\}', 'gi'), rv)
+      }
+      str = str.replace(notSeenInNature, '{')
+    }
+    return str
+  }
 
 export default {
   name: 'GGanttBar',
@@ -162,6 +183,15 @@ export default {
       }
     },
 
+    barDurationText() {
+      const duration = moment.duration(
+        this.barEndMoment.diff(this.barStartMoment)
+      )
+      return `${Math.floor(duration.as('d'))} ${moment
+        .utc(duration.as('ms'))
+        .format('HH:mm')}`
+    },
+
     barConfig() {
       if (this.localBar[this.barConfigKey]) {
         return {
@@ -190,6 +220,14 @@ export default {
         height: `${this.chartProps.rowHeight - 6}px`,
         zIndex: this.barConfig.zIndex || (this.isDragging ? 2 : 1)
       }
+    },
+
+    tooltipContent() {
+      return this.chartProps.tooltipFormat.formatUnicorn({
+        start: this.barStartText,
+        end: this.barEndText,
+        duration: this.barDurationText
+      })
     },
 
     tooltipStyle() {
