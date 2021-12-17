@@ -4,6 +4,7 @@
     class="g-gantt-bar"
     :style="barStyle"
     @mousedown="onMousedown"
+    @contextmenu="onContextmenu"
   >
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
@@ -43,13 +44,14 @@ const props = defineProps<{
 
 const allRowsInChart = inject(INJECTION_KEYS.allBarsInChartKey)
 const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
-if (!allRowsInChart || !gGanttChartPropsRefs) {
-  throw Error("GGanttBar: Failed to inject GGanttChart props!")
+const emitBarEvent = inject(INJECTION_KEYS.emitBarEventKey)
+if (!allRowsInChart || !gGanttChartPropsRefs || !emitBarEvent) {
+  throw Error("GGanttBar: Failed to inject values from GGanttChart!")
 }
 
 const { bar } = toRefs(props)
 const { precision, rowHeight } = gGanttChartPropsRefs
-const { mapTimeToPosition } = useTimePositionMapping(gGanttChartPropsRefs)
+const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs)
 const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
 
@@ -81,6 +83,18 @@ const onMousedown = (e: MouseEvent) => {
       { once: true }
     )
   }
+  emitBarEvent(e, bar.value)
+}
+
+const onContextmenu = (e: MouseEvent) => {
+  e.preventDefault()
+  const barElement = document.getElementById(bar.value.ganttBarConfig.id)
+  const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+  let datetime
+  if (barContainer) {
+    datetime = mapPositionToTime(e.clientX - barContainer.left)
+  }
+  emitBarEvent(e, bar.value, datetime)
 }
 
 const { barStart, barEnd } = gGanttChartPropsRefs

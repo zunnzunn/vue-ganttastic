@@ -9,6 +9,15 @@
     bar-start="beginDate"
     bar-end="endDate"
     push-on-overlap
+    @mousedown-bar="onBarEvent('mousedown-bar', $event.bar, $event.e)"
+    @click-bar="onBarEvent('click-bar', $event.bar, $event.e)"
+    @dblclick-bar="onBarEvent('dblclick-bar', $event.bar, $event.e)"
+    @mouseenter-bar="onBarEvent('mouseenter-bar', $event.bar, $event.e)"
+    @mouseleave-bar="onBarEvent('mouseleave-bar', $event.bar, $event.e)"
+    @dragstart-bar="onBarEvent('dragstart-bar', $event.bar, $event.e)"
+    @drag-bar="onBarEvent('drag-bar', $event.bar, $event.e)"
+    @dragend-bar="onBarEvent('dragend-bar', $event.bar, $event.e)"
+    @contextmenu-bar="onBarEvent('click-bar', $event.bar, $event.e)"
   >
     <g-gantt-row
       label="My row 1"
@@ -25,6 +34,7 @@
 import { ref } from "vue"
 import GGanttRow from "./components/GGanttRow.vue"
 import GGanttChart from "./components/GGanttChart.vue"
+import { GanttBarObject } from "./models/models"
 
 const bars1 = ref([
   {
@@ -81,5 +91,9 @@ const bars2 = ref([
     }
   }
 ])
+
+const onBarEvent = (eName: string, bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log(eName, bar, e, datetime)
+}
 
 </script>
