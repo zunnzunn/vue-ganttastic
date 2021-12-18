@@ -71,14 +71,14 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
 
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  (e: "mousedown-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
-  (e: "click-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
-  (e: "dblclick-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
+  (e: "mousedown-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
+  (e: "mouseup-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
+  (e: "dblclick-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
   (e: "mouseenter-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
   (e: "mouseleave-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
   (e: "dragstart-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
   (e: "drag-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
-  (e: "dragend-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
+  (e: "dragend-bar", value: {bar: GanttBarObject, e: MouseEvent, movedBars?: Set<GanttBarObject>}) : void
   (e: "contextmenu-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string }) : void
 }>()
 
@@ -101,16 +101,16 @@ const allBarsInChartByRow = computed(() => {
   return allBars
 })
 
-const emitBarEvent = (e: MouseEvent, bar: GanttBarObject, datetime?: string) => {
+const emitBarEvent = (e: MouseEvent, bar: GanttBarObject, datetime?: string, movedBars?: Set<GanttBarObject>) => {
   switch (e.type) {
-    case "mousedown": emit("mousedown-bar", { bar, e }); break
-    case "click": emit("click-bar", { bar, e }); break
-    case "dblclick": emit("dblclick-bar", { bar, e }); break
+    case "mousedown": emit("mousedown-bar", { bar, e, datetime }); break
+    case "mouseup": emit("mouseup-bar", { bar, e, datetime }); break
+    case "dblclick": emit("dblclick-bar", { bar, e, datetime }); break
     case "mouseenter": emit("mouseenter-bar", { bar, e }); break
     case "mouseleave": emit("mouseleave-bar", { bar, e }); break
     case "dragstart": emit("dragstart-bar", { bar, e }); break
     case "drag": emit("drag-bar", { bar, e }); break
-    case "dragend": emit("dragend-bar", { bar, e }); break
+    case "dragend": emit("dragend-bar", { bar, e, movedBars }); break
     case "contextmenu": emit("contextmenu-bar", { bar, e, datetime }); break
   }
 }

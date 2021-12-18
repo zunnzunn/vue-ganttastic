@@ -17,7 +17,7 @@ const INJECTION_KEYS = {
     pushOnOverlap: Ref<boolean>
   }>,
   emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<
-    (e: MouseEvent, bar: GanttBarObject, datetime?: string, nativeEvent?: MouseEvent) => void
+    (e: MouseEvent, bar: GanttBarObject, datetime?: string) => void
   >
 }
 

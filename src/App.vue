@@ -9,15 +9,14 @@
     bar-start="beginDate"
     bar-end="endDate"
     push-on-overlap
-    @mousedown-bar="onBarEvent('mousedown-bar', $event.bar, $event.e)"
-    @click-bar="onBarEvent('click-bar', $event.bar, $event.e)"
-    @dblclick-bar="onBarEvent('dblclick-bar', $event.bar, $event.e)"
-    @mouseenter-bar="onBarEvent('mouseenter-bar', $event.bar, $event.e)"
-    @mouseleave-bar="onBarEvent('mouseleave-bar', $event.bar, $event.e)"
-    @dragstart-bar="onBarEvent('dragstart-bar', $event.bar, $event.e)"
-    @drag-bar="onBarEvent('drag-bar', $event.bar, $event.e)"
-    @dragend-bar="onBarEvent('dragend-bar', $event.bar, $event.e)"
-    @contextmenu-bar="onBarEvent('click-bar', $event.bar, $event.e)"
+    @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
+    @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
+    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
+    @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
+    @dragstart-bar="onDragstartBar($event.bar, $event.e)"
+    @drag-bar="onDragBar($event.bar, $event.e)"
+    @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
+    @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
   >
     <g-gantt-row
       label="My row 1"
@@ -92,8 +91,36 @@ const bars2 = ref([
   }
 ])
 
-const onBarEvent = (eName: string, bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
-  console.log(eName, bar, e, datetime)
+const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("mousedown-bar", bar, e, datetime)
+}
+
+const onMouseupBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("mouseup-bar", bar, e, datetime)
+}
+
+const onMouseenterBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("mouseenter-bar", bar, e)
+}
+
+const onMouseleaveBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("mouseleave-bar", bar, e)
+}
+
+const onDragstartBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("dragstart-bar", bar, e)
+}
+
+const onDragBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("drag-bar", bar, e)
+}
+
+const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Set<GanttBarObject>) => {
+  console.log("dragend-bar", bar, e, movedBars)
+}
+
+const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("contextmenu-bar", bar, e, datetime)
 }
 
 </script>

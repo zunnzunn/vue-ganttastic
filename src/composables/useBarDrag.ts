@@ -6,7 +6,8 @@ import { Ref, ref } from "vue"
 export default function useBarDrag (
   bar: Ref<GanttBarObject>,
   gGanttChartPropsRefs: GGanttChartPropsRefs,
-  onDrag: (bar: GanttBarObject) => void = () => null
+  onDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null,
+  onEndDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null
 ) {
   const { barStart, barEnd, pushOnOverlap } = gGanttChartPropsRefs
 
@@ -49,7 +50,7 @@ export default function useBarDrag (
       }
       bar.value[barStart.value] = mapPositionToTime(xStart)
       bar.value[barEnd.value] = mapPositionToTime(xEnd)
-      onDrag(bar.value)
+      onDrag(e, bar.value)
     }
   }
 
@@ -63,7 +64,7 @@ export default function useBarDrag (
         return
       }
       bar.value[barStart.value] = newBarStart
-      onDrag(bar.value)
+      onDrag(e, bar.value)
     }
   }
 
@@ -77,7 +78,7 @@ export default function useBarDrag (
         return
       }
       bar.value[barEnd.value] = newBarEnd
-      onDrag(bar.value)
+      onDrag(e, bar.value)
     }
   }
 
@@ -101,6 +102,7 @@ export default function useBarDrag (
     document.body.style.cursor = "auto"
     window.removeEventListener("mousemove", dragCallBack)
     window.removeEventListener("mouseup", endDrag)
+    onEndDrag(e, bar.value)
   }
 
   return {

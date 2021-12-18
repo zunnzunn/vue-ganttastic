@@ -5,30 +5,50 @@ import useBarDrag from "./useBarDrag"
 
 export default function useBarDragManagement (
   allRowsInChart : ComputedRef<GanttBarObject[][]>,
-  gGanttChartPropsRefs: GGanttChartPropsRefs
+  gGanttChartPropsRefs: GGanttChartPropsRefs,
+  emitBarEvent: (e: MouseEvent, bar: GanttBarObject, datetime?: string, movedBars?: Set<GanttBarObject>) => void
 ) {
   const movedBarsInDrag = new Set<GanttBarObject>()
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
-    const onDrag = (bar: GanttBarObject) => fixOverlaps(bar)
     const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag)
+    const ev = {
+      ...e,
+      type: "dragstart"
+    }
+    emitBarEvent(ev, bar)
     initDrag(e)
     movedBarsInDrag.add(bar)
   }
 
-  const initDragOfBundle = (bundle: string, e: MouseEvent) => {
+  const initDragOfBundle = (mainBar: GanttBarObject, e: MouseEvent) => {
+    const bundle = mainBar.ganttBarConfig.bundle
     if (bundle != null) {
       allRowsInChart.value.forEach(row => {
         row.forEach(bar => {
           if (bar.ganttBarConfig.bundle === bundle) {
-            const onDrag = (bar: GanttBarObject) => fixOverlaps(bar)
-            const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag)
+            const dragEndHandler = bar === mainBar ? onEndDrag : () => null
+            const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag, dragEndHandler)
             initDrag(e)
             movedBarsInDrag.add(bar)
           }
         })
       })
+      const ev = {
+        ...e,
+        type: "dragstart"
+      }
+      emitBarEvent(ev, mainBar)
     }
+  }
+
+  const onDrag = (e: MouseEvent, bar: GanttBarObject) => {
+    const ev = {
+      ...e,
+      type: "drag"
+    }
+    emitBarEvent(ev, bar)
+    fixOverlaps(bar)
   }
 
   const { pushOnOverlap, barStart, barEnd } = gGanttChartPropsRefs
@@ -40,6 +60,7 @@ export default function useBarDragManagement (
     let currentBar = ganttBar
     let { overlapBar, overlapType } = getOverlapBarAndType(currentBar)
     while (overlapBar) {
+      movedBarsInDrag.add(overlapBar)
       const currentBarStart = dayjs(currentBar[barStart.value])
       const currentBarEnd = dayjs(currentBar[barEnd.value])
       const overlapBarStart = dayjs(overlapBar[barStart.value])
@@ -111,6 +132,15 @@ export default function useBarDragManagement (
         bar[barEnd.value] = dayjs(bar[barEnd.value]).add(minutes, "minutes").format("YYYY-MM-DD HH:mm:ss")
     }
     fixOverlaps(bar)
+  }
+
+  const onEndDrag = (e: MouseEvent, bar: GanttBarObject) => {
+    const ev = {
+      ...e,
+      type: "dragend"
+    }
+    emitBarEvent(ev, bar, undefined, movedBarsInDrag)
+    movedBarsInDrag.clear()
   }
 
   return {

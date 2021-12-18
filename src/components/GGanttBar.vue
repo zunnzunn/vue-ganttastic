@@ -3,8 +3,12 @@
     :id="bar.ganttBarConfig.id"
     class="g-gantt-bar"
     :style="barStyle"
-    @mousedown="onMousedown"
-    @contextmenu="onContextmenu"
+    @mousedown="onMouseEvent"
+    @mouseup="onMouseEvent"
+    @dblclick="onMouseEvent"
+    @mouseenter="onMouseEvent"
+    @mouseleave="onMouseEvent"
+    @contextmenu="onMouseEvent"
   >
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
@@ -52,42 +56,33 @@ if (!allRowsInChart || !gGanttChartPropsRefs || !emitBarEvent) {
 const { bar } = toRefs(props)
 const { precision, rowHeight } = gGanttChartPropsRefs
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
-const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs)
+const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs, emitBarEvent)
 const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
 
 const isDragging = ref(false)
 
-let firstMousemoveCallback : (e: MouseEvent) => void
-if (bar.value.ganttBarConfig.bundle) {
-  firstMousemoveCallback = (e: MouseEvent) => {
-    initDragOfBundle(bar.value.ganttBarConfig.bundle, e)
-    isDragging.value = true
-  }
-} else {
-  firstMousemoveCallback = (e: MouseEvent) => {
-    initDragOfBar(bar.value, e)
-    isDragging.value = true
-  }
-}
-
-const onMousedown = (e: MouseEvent) => {
-  e.preventDefault()
+const prepareForDrag = () => {
   setDragLimitsOfGanttBar(bar.value)
   if (!bar.value.ganttBarConfig.immobile) {
+    const firstMousemoveCallback = (e: MouseEvent) => {
+      bar.value.ganttBarConfig.bundle != null ? initDragOfBundle(bar.value, e) : initDragOfBar(bar.value, e)
+      isDragging.value = true
+    }
     window.addEventListener("mousemove", firstMousemoveCallback, { once: true }) // on first mousemove event
-    window.addEventListener("mouseup", // in case user does not move the mouse after mousedown at all
-      () => {
+    window.addEventListener("mouseup",
+      () => { // in case user does not move the mouse after mousedown at all
         window.removeEventListener("mousemove", firstMousemoveCallback)
         isDragging.value = false
       },
       { once: true }
     )
   }
-  emitBarEvent(e, bar.value)
 }
-
-const onContextmenu = (e: MouseEvent) => {
+const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
+  if (e.type === "mousedown") {
+    prepareForDrag()
+  }
   const barElement = document.getElementById(bar.value.ganttBarConfig.id)
   const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
   let datetime
