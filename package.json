@@ -40,10 +40,10 @@
     "url": "git+https://github.com/tenrok/vue-ganttastic.git"
   },
   "scripts": {
-    "serve": "vue-cli-service serve --open",
-    "demo:build": "vue-cli-service build",
-    "lib:build": "vue-cli-service build --target lib --name vue-ganttastic lib/index.js",
-    "lint": "vue-cli-service lint"
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --open",
+    "demo:build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "lib:build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --target lib --name vue-ganttastic lib/index.js",
+    "lint": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
   },
   "dependencies": {
     "vue": "^2.6.12"
