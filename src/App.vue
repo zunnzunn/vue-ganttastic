@@ -21,9 +21,11 @@
     <g-gantt-row
       label="My row 1"
       :bars="bars1"
+      highlight-on-hover
     />
     <g-gantt-row
       label="My row 2"
+      highlight-on-hover
       :bars="bars2"
     />
   </g-gantt-chart>

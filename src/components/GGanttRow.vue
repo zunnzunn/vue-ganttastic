@@ -2,7 +2,12 @@
   <div
     ref="g-gantt-row"
     class="g-gantt-row"
-    :style="{height: `${rowHeight}px`, background: colors.background}"
+    :style="rowStyle"
+    @dragover="$event.preventDefault(); isHovering = true"
+    @dragleave="isHovering = false"
+    @drop="onDrop($event)"
+    @mouseover="isHovering = true"
+    @mouseleave="isHovering = false"
   >
     <div
       class="g-gantt-row-label"
@@ -15,11 +20,7 @@
     <div
       ref="barContainer"
       class="g-gantt-row-bars-container"
-      @dragover="onDragover()"
-      @dragleave="onDragleave()"
-      @drop="onDrop()"
-      @mouseover="onMouseover()"
-      @mouseleave="onMouseleave()"
+      v-bind="$attrs"
     >
       <transition-group
         name="bar-transition"
@@ -38,15 +39,21 @@
 
 <script setup lang="ts">
 import useColorScheme from "@/composables/useColorScheme"
+import useTimePositionMapping from "@/composables/useTimePositionMapping"
 import INJECTION_KEYS from "@/models/symbols"
-import { defineProps, inject } from "vue"
+import { defineProps, defineEmits, inject, ref, Ref, toRefs, computed } from "vue"
 import { GanttBarObject } from "../models/models"
 import GGanttBar from "./GGanttBar.vue"
 
-defineProps<{
+const props = defineProps<{
   label: string
   bars: GanttBarObject[]
-  highlightOnHover: boolean
+  highlightOnHover?: boolean
+}>()
+
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: "drop", value: { e: MouseEvent, datetime: string}) : void
 }>()
 
 const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
@@ -55,17 +62,36 @@ if (!gGanttChartPropsRefs) {
 }
 const { colors } = useColorScheme(gGanttChartPropsRefs)
 const { rowHeight } = gGanttChartPropsRefs
-const onDragover = () => 0
-const onDragleave = () => 0
-const onDrop = () => 0
-const onMouseover = () => 0
-const onMouseleave = () => 0
+const { highlightOnHover } = toRefs(props)
+const isHovering = ref(false)
+
+const rowStyle = computed(() => {
+  return {
+    height: `${rowHeight.value}px`,
+    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : colors.value.background
+  }
+})
+
+const { mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
+const barContainer: Ref<HTMLElement | null> = ref(null)
+
+const onDrop = (e: MouseEvent) => {
+  const container = barContainer.value?.getBoundingClientRect()
+  if (!container) {
+    console.error("Vue-Ganttastic: failed to find bar container element for row.")
+    return
+  }
+  const xPos = e.clientX - container.left
+  const datetime = mapPositionToTime(xPos)
+  emit("drop", { e, datetime })
+}
+
 </script>
 
 <style scoped>
   .g-gantt-row {
     width: 100%;
-    transition: background-color 0.2s;
+    transition: background 0.3s;
     position: relative;
   }
 
