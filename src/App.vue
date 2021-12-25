@@ -27,8 +27,13 @@
       :bars="bars2"
     />
   </g-gantt-chart>
+  <button @click="addBar()">
+    Add bar
+  </button>
+  <button @click="deleteBar()">
+    Delete bar
+  </button>
 </template>
-
 <script setup lang="ts">
 import { ref } from "vue"
 import GGanttRow from "./components/GGanttRow.vue"
@@ -36,20 +41,6 @@ import GGanttChart from "./components/GGanttChart.vue"
 import { GanttBarObject } from "./models/models"
 
 const bars1 = ref([
-  {
-    beginDate: "2021-02-26 00:00",
-    endDate: "2021-03-27 02:00",
-    ganttBarConfig: {
-      id: "test1",
-      hasHandles: true,
-      label: "I'm in a bundle",
-      bundle: "bundle1",
-      style: {
-        background: "#5484b7",
-        borderRadius: "20px"
-      }
-    }
-  },
   {
     beginDate: "2021-04-27 13:00",
     endDate: "2021-05-27 19:00",
@@ -90,6 +81,31 @@ const bars2 = ref([
     }
   }
 ])
+const addBar = () => {
+  if (bars1.value.some(bar => bar.ganttBarConfig.id === "test1")) {
+    return
+  }
+  const bar = {
+    beginDate: "2021-02-26 00:00",
+    endDate: "2021-03-27 02:00",
+    ganttBarConfig: {
+      id: "test1",
+      hasHandles: true,
+      label: "I'm in a bundle",
+      bundle: "bundle1",
+      style: {
+        background: "#5484b7",
+        borderRadius: "20px"
+      }
+    }
+  }
+  bars1.value.push(bar)
+}
+
+const deleteBar = () => {
+  const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
+  bars1.value.splice(idx, 1)
+}
 
 const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
   console.log("mousedown-bar", bar, e, datetime)
@@ -122,5 +138,4 @@ const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Set<GanttBa
 const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
   console.log("contextmenu-bar", bar, e, datetime)
 }
-
 </script>

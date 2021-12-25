@@ -21,12 +21,17 @@
       @mouseover="onMouseover()"
       @mouseleave="onMouseleave()"
     >
-      <g-gantt-bar
-        v-for="(bar, index) in bars"
-        :key="`ganttastic_bar_${index}`"
-        ref="ganttBar"
-        :bar="bar"
-      />
+      <transition-group
+        name="bar-transition"
+        tag="div"
+      >
+        <g-gantt-bar
+          v-for="bar in bars"
+          :key="bar.ganttBarConfig.id"
+          ref="ganttBar"
+          :bar="bar"
+        />
+      </transition-group>
     </div>
   </div>
 </template>
@@ -87,4 +92,15 @@ const onMouseleave = () => 0
     z-index: 3;
     box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.6);
   }
+
+.bar-transition-leave-active,
+.bar-transition-enter-active {
+  transition: .2s;
+}
+.bar-transition-enter-from {
+  transform: scale(0);
+}
+.bar-transition-leave-to {
+  transform: scale(0);
+}
 </style>
