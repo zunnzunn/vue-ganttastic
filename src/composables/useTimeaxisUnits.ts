@@ -29,35 +29,61 @@ export default function useTimeaxisUnits (
 
   const timeaxisUnits = computed(() => {
     const upperUnits :{label: string, value?: string, width?: string}[] = []
-    const lowerUnits :{label: string, value?: string}[] = []
+    const lowerUnits :{label: string, value?: string, width?: string}[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
-    let unitDayjs = dayjs(chartStart.value).startOf(lowerUnit)
-    const diff = -unitDayjs.diff(chartEnd.value, lowerUnit, true)
-    let lowerUnitCount = 0
-    let currentUpperUnitVal = unitDayjs[upperUnit]()
-    while (unitDayjs.isBefore(chartEnd.value) || unitDayjs.isSame(chartEnd.value)) {
-      if (unitDayjs[upperUnit]() !== currentUpperUnitVal) {
+    let currentUnit = dayjs(chartStart.value).startOf(lowerUnit)
+    const totalMinutes = dayjs(chartEnd.value).diff(chartStart.value, "minutes", true)
+    let upperUnitMinutesCount = 0
+    let currentUpperUnitVal = currentUnit[upperUnit]()
+    while (currentUnit.isBefore(chartEnd.value) || currentUnit.isSame(chartEnd.value)) {
+      if (currentUnit[upperUnit]() !== currentUpperUnitVal) { // when upper unit changes:
+        let width = "0%"
+        if (upperUnits.length === 0) {
+          width = `${currentUnit.startOf(upperUnit).diff(chartStart.value, "minutes", true) / totalMinutes * 100}%`
+        } else if (currentUnit.isSameOrAfter(chartEnd.value)) {
+          width = `${dayjs(chartEnd.value).diff(currentUnit.startOf(upperUnit), "minutes", true) / totalMinutes * 100}%`
+        } else {
+          const end = currentUnit.startOf(upperUnit)
+          const start = currentUnit.subtract(1, upperUnit).startOf(upperUnit)
+          width = `${end.diff(start, "minutes", true) / totalMinutes * 100}%`
+        }
         upperUnits.push({
-          label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
+          label: currentUnit.subtract(1, upperUnit).format(displayFormats[upperUnit]),
           value: String(currentUpperUnitVal),
-          width: `${(lowerUnitCount / diff) * 100}%`
+          width
         })
-        lowerUnitCount = 0
-        currentUpperUnitVal = unitDayjs[upperUnit]()
+        upperUnitMinutesCount = 0
+        currentUpperUnitVal = currentUnit[upperUnit]()
+      }
+      let width = "0%"
+      // create and push lower unit:
+      if (lowerUnits.length === 0) {
+        width = `${currentUnit.endOf(lowerUnit).diff(chartStart.value, "minutes", true) / totalMinutes * 100}%`
+      } else if (currentUnit.add(1, lowerUnit).isSameOrAfter(chartEnd.value)) {
+        width = `${dayjs(chartEnd.value).diff(currentUnit.startOf(lowerUnit), "minutes", true) / totalMinutes * 100}%`
+      } else {
+        width = `${currentUnit.endOf(lowerUnit).diff(currentUnit.startOf(lowerUnit), "minutes", true) / totalMinutes * 100}%`
       }
       lowerUnits.push({
-        label: unitDayjs.format(displayFormats[lowerUnit]),
-        value: String(unitDayjs[lowerUnit]())
+        label: currentUnit.format(displayFormats[lowerUnit]),
+        value: String(currentUnit[lowerUnit]()),
+        width
       })
-      unitDayjs = unitDayjs.add(1, lowerUnit)
-      ++lowerUnitCount
+      const prevUpperUnitUnit = currentUnit
+      currentUnit = currentUnit.add(1, lowerUnit)
+      if (currentUnit.isBefore(chartEnd.value) || currentUnit.isSame(chartEnd.value)) {
+        upperUnitMinutesCount += currentUnit.diff(prevUpperUnitUnit, "minutes", true)
+      }
     }
+
+    // for the very last upper unit :
     if (!upperUnits.some(un => un.value === String(currentUpperUnitVal))) {
+      upperUnitMinutesCount += dayjs(chartEnd.value).diff(currentUnit.subtract(1, lowerUnit), "minutes", true)
       upperUnits.push({
-        label: unitDayjs.subtract(1, upperUnit).format(displayFormats[upperUnit]),
+        label: currentUnit.format(displayFormats[upperUnit]),
         value: String(currentUpperUnitVal),
-        width: `${(lowerUnitCount / diff) * 100}%`
+        width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
     return { upperUnits, lowerUnits }

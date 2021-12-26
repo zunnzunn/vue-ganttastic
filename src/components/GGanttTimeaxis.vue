@@ -23,14 +23,15 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value }, index) in timeaxisUnits.lowerUnits"
+        v-for="({ label, value, width }, index) in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.ternary : colors.quartenary,
           color: colors.text,
           flexDirection: precision === 'hour' ? 'column' : 'row',
-          alignItems: precision === 'hour' ? '' : 'center'
+          alignItems: precision === 'hour' ? '' : 'center',
+          width
         }"
       >
         <slot
@@ -91,7 +92,6 @@ const { timeaxisUnits } = useTimeaxisUnits(gGanttChartPropsRefs)
   }
 
   .g-timeunit {
-    flex: 1;
     height: 100%;
     font-size: 65%;
     display: flex;

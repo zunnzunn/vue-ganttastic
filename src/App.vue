@@ -1,7 +1,7 @@
 <template>
   <g-gantt-chart
-    chart-start="2021-01-01 02:00"
-    chart-end="2021-07-27 23:59"
+    chart-start="2020-12-15 12:00"
+    chart-end="2021-07-15 12:00"
     precision="month"
     color-scheme="vue"
     :row-height="40"
