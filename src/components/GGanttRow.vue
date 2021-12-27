@@ -68,7 +68,7 @@ const isHovering = ref(false)
 const rowStyle = computed(() => {
   return {
     height: `${rowHeight.value}px`,
-    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : colors.value.background
+    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
   }
 })
 
@@ -91,7 +91,7 @@ const onDrop = (e: MouseEvent) => {
 <style scoped>
   .g-gantt-row {
     width: 100%;
-    transition: background 0.3s;
+    transition: background 0.4s;
     position: relative;
   }
 

@@ -1,11 +1,11 @@
 <template>
   <g-gantt-chart
-    chart-start="2020-12-15 12:00"
+    chart-start="2021-07-11 12:00"
     chart-end="2021-07-15 12:00"
-    precision="month"
-    color-scheme="vue"
+    precision="hour"
     :row-height="40"
-    width="1200px"
+    grid
+    width="1400px"
     bar-start="beginDate"
     bar-end="endDate"
     push-on-overlap

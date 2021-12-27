@@ -30,6 +30,7 @@
 
     <g-gantt-grid
       v-if="grid"
+      :highlighted-units="highlightedUnits"
     />
     <div id="g-gantt-rows-container">
       <slot />   <!-- the g-gantt-row components go here -->
@@ -57,6 +58,7 @@ interface GGanttChartProps {
   grid?: boolean
   pushOnOverlap?: boolean
   rowHeight?: number
+  highlightedUnits?: number[]
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
@@ -66,7 +68,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   colorScheme: "default",
   grid: false,
   pushOnOverlap: false,
-  rowHeight: 40
+  rowHeight: 40,
+  highlightedUnits: () => []
 })
 
 // eslint-disable-next-line func-call-spacing
@@ -134,7 +137,6 @@ provide(INJECTION_KEYS.emitBarEventKey, emitBarEvent)
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    padding-bottom: 23px;
     font-family: Rubik;
     border-radius: 5px;
   }
