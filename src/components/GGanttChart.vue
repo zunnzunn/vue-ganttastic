@@ -44,7 +44,7 @@ import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import INJECTION_KEYS from "../models/symbols"
 import { computed, provide, toRefs, defineProps, withDefaults, defineEmits, useSlots } from "vue"
-import { GanttBarObject } from "@/models/models"
+import { GanttBarObject } from "../models/models"
 
 interface GGanttChartProps {
   chartStart: string

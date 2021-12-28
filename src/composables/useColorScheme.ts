@@ -1,4 +1,4 @@
-import { colorSchemes } from "@/components/color-schemes"
+import { colorSchemes } from "../components/color-schemes"
 import { computed } from "vue"
 import { GGanttChartPropsRefs } from "../models/models"
 

@@ -1,4 +1,4 @@
-import { GGanttChartPropsRefs } from "@/models/models"
+import { GGanttChartPropsRefs } from "../models/models"
 import dayjs from "dayjs"
 import { computed } from "vue"
 

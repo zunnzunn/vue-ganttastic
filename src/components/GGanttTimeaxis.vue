@@ -55,7 +55,7 @@
 import { ColorScheme } from "./color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 import { defineProps, inject } from "vue"
-import INJECTION_KEYS from "@/models/symbols"
+import INJECTION_KEYS from "../models/symbols"
 
 defineProps<{
   chartStart: string

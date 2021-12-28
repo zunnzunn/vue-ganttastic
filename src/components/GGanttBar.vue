@@ -33,14 +33,14 @@
 </template>
 
 <script setup lang="ts">
-import useBarDragManagement from "@/composables/useBarDragManagement"
-import useTimePositionMapping from "@/composables/useTimePositionMapping"
-import useBarDragLimit from "@/composables/useBarDragLimit"
+import useBarDragManagement from "../composables/useBarDragManagement"
+import useTimePositionMapping from "../composables/useTimePositionMapping"
+import useBarDragLimit from "../composables/useBarDragLimit"
 import { GanttBarObject } from "../models/models"
-import GGanttBarTooltip from "@/components/GGanttBarTooltip.vue"
+import GGanttBarTooltip from "../components/GGanttBarTooltip.vue"
 import dayjs from "dayjs"
 import { defineProps, computed, ref, toRefs, inject } from "vue"
-import INJECTION_KEYS from "@/models/symbols"
+import INJECTION_KEYS from "../models/symbols"
 
 const props = defineProps<{
   bar: GanttBarObject
