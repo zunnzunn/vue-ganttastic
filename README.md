@@ -1,8 +1,9 @@
 # vue-ganttastic
 <img src="https://user-images.githubusercontent.com/28678851/77186503-45358300-6ad3-11ea-9392-7f670eb1ca8c.png" width="600"/>
 
-A simple and easy-to-use Gantt chart component for Vue.js
+A simple and easy-to-use Gantt chart component for Vue.js.  
 
+### This is the branch for Vue-Ganttastic v1 (Vue 2). If you are looking for Vue-Ganttastic v2 (Vue 3) please refer to [this branch](https://github.com/InfectoOne/vue-ganttastic/tree/vue-ganttastic-2).
 ## Homepage
 [Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
 
