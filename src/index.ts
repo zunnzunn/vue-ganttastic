@@ -4,19 +4,18 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 import isBetween from "dayjs/plugin/isBetween"
 
+import GGanttChart from "./components/GGanttChart.vue"
+import GGanttRow from "./components/GGanttRow.vue"
+
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
 
-
-import GGanttChart from "./components/GGanttChart.vue"
-import GGanttRow from "./components/GGanttRow.vue"
-
-const plugin = {
+const ganttastic = {
   install (app: App) {
-    app.component("g-gantt-chart", GGanttChart)
-    app.component("g-gantt-row", GGanttRow)
+    app.component("GGanttChart", GGanttChart)
+    app.component("GGanttRow", GGanttRow)
   }
 }
 
-export default plugin
+export default ganttastic

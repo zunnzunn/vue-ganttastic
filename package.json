@@ -2,23 +2,40 @@
   "name": "@infectoone/vue-ganttastic",
   "version": "2.0.0-alpha.2.4",
   "description": "A simple and customizable Gantt chart component for Vue.js",
+  "author": "Marko Zunic (@infectoone)",
   "scripts": {
+    "serve": "vue-cli-service serve",
     "build": "rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "vue-cli-service lint"
   },
   "main": "dist/library.js",
   "module": "dist/library.mjs",
   "files": [
     "dist/*"
   ],
-  "keywords": [],
-  "author": "Marko Zunic (@InfectoOne)",
-  "license": "MIT",
+  "dependencies": {
+    "dayjs": "^1.10.5"
+  },
   "peerDependencies": {
     "vue": "^3.2.26"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.2.26",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "eslint": "^7.20.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^7.6.0",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
     "rollup": "^2.62.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
@@ -28,7 +45,18 @@
     "typescript": "^4.5.4",
     "vue": "^3.2.26"
   },
-  "dependencies": {
-    "dayjs": "^1.10.7"
+  "keywords": [
+    "gantt",
+    "chart",
+    "bar",
+    "diagram",
+    "vue",
+    "vuejs",
+    "ganttastic"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/InfectoOne/vue-ganttastic"
   }
 }
