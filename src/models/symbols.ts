@@ -15,6 +15,7 @@ const INJECTION_KEYS = {
     colorScheme: Ref<string>
     grid: Ref<boolean>
     pushOnOverlap: Ref<boolean>
+    snapBackOnOverlap: Ref<boolean>
   }>,
   emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<
     (e: MouseEvent, bar: GanttBarObject, datetime?: string) => void

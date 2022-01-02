@@ -57,6 +57,7 @@ interface GGanttChartProps {
   colorScheme?: string
   grid?: boolean
   pushOnOverlap?: boolean
+  snapBackOnOverlap?: boolean
   rowHeight?: number
   highlightedUnits?: number[]
 }
@@ -68,6 +69,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   colorScheme: "default",
   grid: false,
   pushOnOverlap: false,
+  snapBackOnOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => []
 })
@@ -81,7 +83,7 @@ const emit = defineEmits<{
   (e: "mouseleave-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
   (e: "dragstart-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
   (e: "drag-bar", value: {bar: GanttBarObject, e: MouseEvent}) : void
-  (e: "dragend-bar", value: {bar: GanttBarObject, e: MouseEvent, movedBars?: Set<GanttBarObject>}) : void
+  (e: "dragend-bar", value: {bar: GanttBarObject, e: MouseEvent, movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>}) : void
   (e: "contextmenu-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string }) : void
 }>()
 
@@ -104,7 +106,12 @@ const allBarsInChartByRow = computed(() => {
   return allBars
 })
 
-const emitBarEvent = (e: MouseEvent, bar: GanttBarObject, datetime?: string, movedBars?: Set<GanttBarObject>) => {
+const emitBarEvent = (
+  e: MouseEvent,
+  bar: GanttBarObject,
+  datetime?: string,
+  movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>
+) => {
   switch (e.type) {
     case "mousedown": emit("mousedown-bar", { bar, e, datetime }); break
     case "mouseup": emit("mouseup-bar", { bar, e, datetime }); break

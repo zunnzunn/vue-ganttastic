@@ -1,6 +1,6 @@
 {
   "name": "@infectoone/vue-ganttastic",
-  "version": "2.0.0-alpha.2.4",
+  "version": "2.0.0-alpha.2.7",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "author": "Marko Zunic (@infectoone)",
   "scripts": {

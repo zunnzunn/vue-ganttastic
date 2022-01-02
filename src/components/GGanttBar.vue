@@ -115,7 +115,7 @@ const barStyle = computed(() => {
     left: `${xStart}px`,
     width: `${xEnd - xStart}px`,
     height: `${rowHeight.value * 0.8}px`,
-    zIndex: 2
+    zIndex: isDragging.value ? 3 : 2
   }
 })
 

@@ -31,4 +31,5 @@ export type GGanttChartPropsRefs = {
   colorScheme: Ref<string>
   grid: Ref<boolean>
   pushOnOverlap: Ref<boolean>
+  snapBackOnOverlap: Ref<boolean>
 }

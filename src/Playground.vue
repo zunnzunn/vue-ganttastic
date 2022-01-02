@@ -8,7 +8,7 @@
     width="1400px"
     bar-start="beginDate"
     bar-end="endDate"
-    push-on-overlap
+    snap-back-on-overlap
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
     @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
@@ -47,8 +47,8 @@ const bars1 = ref([
     beginDate: "2021-04-27 13:00",
     endDate: "2021-05-27 19:00",
     ganttBarConfig: {
-      id: "test2",
-      label: "Lorem ipsum dolor",
+      id: "8621987329",
+      label: "I'm in a bundle",
       bundle: "bundle2"
     }
   }
@@ -56,29 +56,38 @@ const bars1 = ref([
 
 const bars2 = ref([
   {
-    beginDate: "2021-01-26 00:00",
-    endDate: "2021-04-27 02:00",
+    beginDate: "2021-04-27 13:00",
+    endDate: "2021-05-27 19:00",
     ganttBarConfig: {
-      id: "test3",
-      hasHandles: true,
-      label: "I am in a bundle",
-      bundle: "bundle1",
+      id: "1592311887",
+      label: "I'm in a bundle",
+      bundle: "bundle2",
       style: {
-        background: "#e09b69",
-        borderRadius: "20px"
+        background: "magenta"
       }
     }
   },
   {
-    beginDate: "2021-05-27 13:00",
-    endDate: "2021-07-27 19:00",
+    beginDate: "2021-01-01 00:00",
+    endDate: "2021-03-01 00:00",
     ganttBarConfig: {
-      id: "test4",
+      id: "7716981641",
       label: "Lorem ipsum dolor",
-      bundle: "bundle2",
+      hasHandles: true,
       style: {
-        background: "cyan",
-        borderRadius: "20px"
+        background: "#b74b52"
+      }
+    }
+  },
+  {
+    beginDate: "2021-06-15 00:00",
+    endDate: "2021-07-10 00:00",
+    ganttBarConfig: {
+      id: "9716981641",
+      label: "Oh hey",
+      style: {
+        background: "#69e064",
+        borderRadius: "15px"
       }
     }
   }
@@ -93,8 +102,7 @@ const addBar = () => {
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,
-      label: "I'm in a bundle",
-      bundle: "bundle1",
+      label: "Hello!",
       style: {
         background: "#5484b7",
         borderRadius: "20px"

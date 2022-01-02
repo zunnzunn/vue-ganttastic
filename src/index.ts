@@ -1,4 +1,4 @@
-import { App } from "vue"
+import { Plugin } from "vue"
 import dayjs from "dayjs"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
@@ -11,8 +11,8 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
 
-const ganttastic = {
-  install (app: App) {
+const ganttastic: Plugin = {
+  install (app, options?) {
     app.component("GGanttChart", GGanttChart)
     app.component("GGanttRow", GGanttRow)
   }

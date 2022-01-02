@@ -4,9 +4,10 @@ import dayjs from "dayjs"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 import isBetween from "dayjs/plugin/isBetween"
+import ganttastic from "./index"
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isBetween)
 
-createApp(Playground).mount("#app")
+createApp(Playground).use(ganttastic).mount("#app")

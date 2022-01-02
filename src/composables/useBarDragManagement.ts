@@ -6,19 +6,26 @@ import useBarDrag from "./useBarDrag"
 export default function useBarDragManagement (
   allRowsInChart : ComputedRef<GanttBarObject[][]>,
   gGanttChartPropsRefs: GGanttChartPropsRefs,
-  emitBarEvent: (e: MouseEvent, bar: GanttBarObject, datetime?: string, movedBars?: Set<GanttBarObject>) => void
+  emitBarEvent: (
+    e: MouseEvent,
+    bar: GanttBarObject,
+    datetime?: string,
+    movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>
+  ) => void
 ) {
-  const movedBarsInDrag = new Set<GanttBarObject>()
+  const movedBarsInDrag = new Map<GanttBarObject, {oldStart: string, oldEnd: string}>()
+
+  const { pushOnOverlap, barStart, barEnd, snapBackOnOverlap } = gGanttChartPropsRefs
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
-    const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag)
+    const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag, onEndDrag)
     const ev = {
       ...e,
       type: "dragstart"
     }
     emitBarEvent(ev, bar)
     initDrag(e)
-    movedBarsInDrag.add(bar)
+    addBarToMovedBars(bar)
   }
 
   const initDragOfBundle = (mainBar: GanttBarObject, e: MouseEvent) => {
@@ -30,7 +37,7 @@ export default function useBarDragManagement (
             const dragEndHandler = bar === mainBar ? onEndDrag : () => null
             const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag, dragEndHandler)
             initDrag(e)
-            movedBarsInDrag.add(bar)
+            addBarToMovedBars(bar)
           }
         })
       })
@@ -51,8 +58,6 @@ export default function useBarDragManagement (
     fixOverlaps(bar)
   }
 
-  const { pushOnOverlap, barStart, barEnd } = gGanttChartPropsRefs
-
   const fixOverlaps = (ganttBar: GanttBarObject) => {
     if (!pushOnOverlap.value) {
       return
@@ -60,7 +65,7 @@ export default function useBarDragManagement (
     let currentBar = ganttBar
     let { overlapBar, overlapType } = getOverlapBarAndType(currentBar)
     while (overlapBar) {
-      movedBarsInDrag.add(overlapBar)
+      addBarToMovedBars(overlapBar)
       const currentBarStart = dayjs(currentBar[barStart.value])
       const currentBarEnd = dayjs(currentBar[barEnd.value])
       const overlapBarStart = dayjs(overlapBar[barStart.value])
@@ -108,13 +113,13 @@ export default function useBarDragManagement (
   }
 
   const moveBundleOfPushedBarByMinutes = (pushedBar: GanttBarObject, minutes: number, direction: "left" | "right") => {
-    movedBarsInDrag.add(pushedBar)
+    addBarToMovedBars(pushedBar)
     if (pushedBar.ganttBarConfig.bundle) {
       allRowsInChart.value.forEach(row => {
         row.forEach(bar => {
           if (bar.ganttBarConfig.bundle === pushedBar.ganttBarConfig.bundle && bar !== pushedBar) {
+            addBarToMovedBars(bar)
             moveBarByMinutes(bar, minutes, direction)
-            movedBarsInDrag.add(bar)
           }
         })
       })
@@ -135,12 +140,39 @@ export default function useBarDragManagement (
   }
 
   const onEndDrag = (e: MouseEvent, bar: GanttBarObject) => {
+    snapBackAllMovedBarsIfNeeded()
     const ev = {
       ...e,
       type: "dragend"
     }
     emitBarEvent(ev, bar, undefined, movedBarsInDrag)
     movedBarsInDrag.clear()
+  }
+
+  const addBarToMovedBars = (bar: GanttBarObject) => {
+    if (!movedBarsInDrag.has(bar)) {
+      const oldStart = bar[barStart.value]
+      const oldEnd = bar[barEnd.value]
+      movedBarsInDrag.set(bar, { oldStart, oldEnd })
+    }
+  }
+
+  const snapBackAllMovedBarsIfNeeded = () => {
+    if (!pushOnOverlap.value && snapBackOnOverlap.value) {
+      let isAnyOverlap = false
+      movedBarsInDrag.forEach((_, bar) => {
+        const { overlapBar } = getOverlapBarAndType(bar)
+        if (overlapBar != null) {
+          isAnyOverlap = true
+        }
+      })
+      if (isAnyOverlap) {
+        movedBarsInDrag.forEach(({ oldStart, oldEnd }, bar) => {
+          bar[barStart.value] = oldStart
+          bar[barEnd.value] = oldEnd
+        })
+      }
+    }
   }
 
   return {
