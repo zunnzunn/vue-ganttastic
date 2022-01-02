@@ -1,13 +1,14 @@
 <template>
   <g-gantt-chart
-    chart-start="2020-12-11 12:00"
-    chart-end="2021-07-15 12:00"
+    chart-start="11.12.2020 12:00"
+    chart-end="15.07.2021 12:00"
     precision="month"
     :row-height="40"
     grid
     width="1400px"
     bar-start="beginDate"
     bar-end="endDate"
+    date-format="DD.MM.YYYY HH:mm"
     snap-back-on-overlap
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -44,8 +45,8 @@ import { GanttBarObject } from "./models/models"
 
 const bars1 = ref([
   {
-    beginDate: "2021-04-27 13:00",
-    endDate: "2021-05-27 19:00",
+    beginDate: "24.04.2021 13:00",
+    endDate: "25.05.2021 19:00",
     ganttBarConfig: {
       id: "8621987329",
       label: "I'm in a bundle",
@@ -56,8 +57,8 @@ const bars1 = ref([
 
 const bars2 = ref([
   {
-    beginDate: "2021-04-27 13:00",
-    endDate: "2021-05-27 19:00",
+    beginDate: "24.04.2021 13:00",
+    endDate: "25.05.2021 19:00",
     ganttBarConfig: {
       id: "1592311887",
       label: "I'm in a bundle",
@@ -68,8 +69,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "2021-01-01 00:00",
-    endDate: "2021-03-01 00:00",
+    beginDate: "01.01.2021 00:00",
+    endDate: "01.03.2021 00:00",
     ganttBarConfig: {
       id: "7716981641",
       label: "Lorem ipsum dolor",
@@ -80,8 +81,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "2021-06-15 00:00",
-    endDate: "2021-07-10 00:00",
+    beginDate: "15.06.2021 00:00",
+    endDate: "10.07.2021 00:00",
     ganttBarConfig: {
       id: "9716981641",
       label: "Oh hey",
@@ -97,8 +98,8 @@ const addBar = () => {
     return
   }
   const bar = {
-    beginDate: "2021-02-26 00:00",
-    endDate: "2021-03-27 02:00",
+    beginDate: "26.02.2021 00:00",
+    endDate: "26.03.2021 02:00",
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,
@@ -141,7 +142,7 @@ const onDragBar = (bar: GanttBarObject, e:MouseEvent) => {
   console.log("drag-bar", bar, e)
 }
 
-const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Set<GanttBarObject>) => {
+const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>) => {
   console.log("dragend-bar", bar, e, movedBars)
 }
 

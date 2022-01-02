@@ -9,6 +9,7 @@ const INJECTION_KEYS = {
     precision: Ref<"hour" | "day" | "month">
     barStart: Ref<string>
     barEnd: Ref<string>
+    dateFormat: Ref<string>
     width: Ref<string>
     rowHeight: Ref<number>
     hideTimeaxis: Ref<boolean>

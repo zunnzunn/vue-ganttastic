@@ -38,7 +38,7 @@ import useTimePositionMapping from "../composables/useTimePositionMapping"
 import useBarDragLimit from "../composables/useBarDragLimit"
 import { GanttBarObject } from "../models/models"
 import GGanttBarTooltip from "../components/GGanttBarTooltip.vue"
-import dayjs from "dayjs"
+import useDayjsHelper from "../composables/useDayjsHelper"
 import { defineProps, computed, ref, toRefs, inject } from "vue"
 import INJECTION_KEYS from "../models/symbols"
 
@@ -58,6 +58,7 @@ const { precision, rowHeight } = gGanttChartPropsRefs
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs, emitBarEvent)
 const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
+const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
 
 const isDragging = ref(false)
 
@@ -100,14 +101,14 @@ const tooltipFormats = {
 }
 const tooltipContent = computed(() => {
   const format = tooltipFormats[precision.value]
-  const barStartFormatted = dayjs(bar.value[barStart.value]).format(format)
-  const barEndFormatted = dayjs(bar.value[barEnd.value]).format(format)
+  const barStartFormatted = toDayjs(bar.value, "start").format(format)
+  const barEndFormatted = toDayjs(bar.value, "end").format(format)
   return `${barStartFormatted} - ${barEndFormatted}`
 })
 
 const barStyle = computed(() => {
-  const xStart = mapTimeToPosition(bar.value.beginDate)
-  const xEnd = mapTimeToPosition(bar.value.endDate)
+  const xStart = mapTimeToPosition(bar.value[barStart.value])
+  const xEnd = mapTimeToPosition(bar.value[barEnd.value])
   return {
     ...bar.value.ganttBarConfig.style,
     position: "absolute",

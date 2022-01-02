@@ -1,5 +1,6 @@
-import dayjs from "dayjs"
-import { GanttBarObject, GGanttChartPropsRefs } from "../models/models"
+import { GanttBarObject, GGanttChartPropsRefs } from "./../models/models"
+import useDayjsHelper from "./useDayjsHelper"
+
 import useTimePositionMapping from "./useTimePositionMapping"
 import { Ref, ref } from "vue"
 
@@ -14,7 +15,9 @@ export default function useBarDrag (
   const isDragging = ref(false)
   let cursorOffsetX = 0
   let dragCallBack : (e: MouseEvent) => void
+
   const { mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
+  const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
 
   const initDrag = (e: MouseEvent) => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
@@ -60,7 +63,7 @@ export default function useBarDrag (
     if (barElement && barContainer) {
       const xStart = e.clientX - barContainer.left
       const newBarStart = mapPositionToTime(xStart)
-      if (dayjs(newBarStart).isSameOrAfter(bar.value[barEnd.value])) {
+      if (toDayjs(newBarStart).isSameOrAfter(toDayjs(bar.value, "end"))) {
         return
       }
       bar.value[barStart.value] = newBarStart
@@ -74,7 +77,7 @@ export default function useBarDrag (
     if (barElement && barContainer) {
       const xEnd = e.clientX - barContainer.left
       const newBarEnd = mapPositionToTime(xEnd)
-      if (dayjs(newBarEnd).isSameOrBefore(bar.value[barStart.value])) {
+      if (toDayjs(newBarEnd).isSameOrBefore(toDayjs(bar.value, "start"))) {
         return
       }
       bar.value[barEnd.value] = newBarEnd

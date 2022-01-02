@@ -52,6 +52,7 @@ interface GGanttChartProps {
   precision?: "hour" | "day" | "month"
   barStart: string
   barEnd: string
+  dateFormat?: string
   width?: string
   hideTimeaxis?: boolean
   colorScheme?: string
@@ -63,6 +64,7 @@ interface GGanttChartProps {
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
+  dateFormat: "YYYY-MM-DD HH:mm",
   precision: "day",
   width: "1200px",
   hideTimeaxis: false,

@@ -26,6 +26,7 @@ export type GGanttChartPropsRefs = {
   precision: Ref<"hour" | "day" | "month">
   barStart: Ref<string>
   barEnd: Ref<string>
+  dateFormat: Ref<string>
   width: Ref<string>
   hideTimeaxis: Ref<boolean>
   colorScheme: Ref<string>

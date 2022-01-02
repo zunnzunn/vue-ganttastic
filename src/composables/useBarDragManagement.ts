@@ -1,7 +1,7 @@
 import { GanttBarObject, GGanttChartPropsRefs } from "../models/models"
 import { ComputedRef, ref } from "vue"
-import dayjs from "dayjs"
 import useBarDrag from "./useBarDrag"
+import useDayjsHelper from "./useDayjsHelper"
 
 export default function useBarDragManagement (
   allRowsInChart : ComputedRef<GanttBarObject[][]>,
@@ -15,7 +15,8 @@ export default function useBarDragManagement (
 ) {
   const movedBarsInDrag = new Map<GanttBarObject, {oldStart: string, oldEnd: string}>()
 
-  const { pushOnOverlap, barStart, barEnd, snapBackOnOverlap } = gGanttChartPropsRefs
+  const { pushOnOverlap, barStart, barEnd, snapBackOnOverlap, dateFormat } = gGanttChartPropsRefs
+  const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
     const { initDrag } = useBarDrag(ref(bar), gGanttChartPropsRefs, onDrag, onEndDrag)
@@ -66,21 +67,21 @@ export default function useBarDragManagement (
     let { overlapBar, overlapType } = getOverlapBarAndType(currentBar)
     while (overlapBar) {
       addBarToMovedBars(overlapBar)
-      const currentBarStart = dayjs(currentBar[barStart.value])
-      const currentBarEnd = dayjs(currentBar[barEnd.value])
-      const overlapBarStart = dayjs(overlapBar[barStart.value])
-      const overlapBarEnd = dayjs(overlapBar[barEnd.value])
+      const currentBarStart = toDayjs(currentBar[barStart.value])
+      const currentBarEnd = toDayjs(currentBar[barEnd.value])
+      const overlapBarStart = toDayjs(overlapBar[barStart.value])
+      const overlapBarEnd = toDayjs(overlapBar[barEnd.value])
       let minuteDiff : number
       switch (overlapType) {
         case "left":
           minuteDiff = overlapBarEnd.diff(currentBarStart, "minutes", true)
-          overlapBar[barEnd.value] = currentBarStart.format("YYYY-MM-DD HH:mm:ss")
-          overlapBar[barStart.value] = overlapBarStart.subtract(minuteDiff, "minutes").format("YYYY-MM-DD HH:mm:ss")
+          overlapBar[barEnd.value] = currentBarStart.format(dateFormat.value)
+          overlapBar[barStart.value] = overlapBarStart.subtract(minuteDiff, "minutes").format(dateFormat.value)
           break
         case "right":
           minuteDiff = currentBarEnd.diff(overlapBarStart, "minutes", true)
-          overlapBar[barStart.value] = currentBarEnd.format("YYYY-MM-DD HH:mm:ss")
-          overlapBar[barEnd.value] = overlapBarEnd.add(minuteDiff, "minutes").format("YYYY-MM-DD HH:mm:ss")
+          overlapBar[barStart.value] = currentBarEnd.format(dateFormat.value)
+          overlapBar[barEnd.value] = overlapBarEnd.add(minuteDiff, "minutes").format(dateFormat.value)
           break
         default:
           console.warn("Vue-Ganttastic: One bar is inside of the other one! This should never occur while push-on-overlap is active!")
@@ -97,14 +98,18 @@ export default function useBarDragManagement (
   const getOverlapBarAndType = (ganttBar: GanttBarObject) => {
     let overlapLeft, overlapRight, overlapInBetween
     const allBarsInRow = allRowsInChart.value.find(row => row.includes(ganttBar)) || []
+    const ganttBarStart = toDayjs(ganttBar[barStart.value])
+    const ganttBarEnd = toDayjs(ganttBar[barEnd.value])
     const overlapBar = allBarsInRow.find(otherBar => {
       if (otherBar === ganttBar) {
         return false
       }
-      overlapLeft = dayjs(ganttBar[barStart.value]).isBetween(otherBar[barStart.value], otherBar[barEnd.value])
-      overlapRight = dayjs(ganttBar[barEnd.value]).isBetween(otherBar[barStart.value], otherBar[barEnd.value])
-      overlapInBetween = dayjs(otherBar[barStart.value]).isBetween(ganttBar[barStart.value], ganttBar[barEnd.value]) ||
-                        dayjs(otherBar[barEnd.value]).isBetween(ganttBar[barStart.value], ganttBar[barEnd.value])
+      const otherBarStart = toDayjs(otherBar[barStart.value])
+      const otherBarEnd = toDayjs(otherBar[barEnd.value])
+      overlapLeft = ganttBarStart.isBetween(otherBarStart, otherBarEnd)
+      overlapRight = ganttBarEnd.isBetween(otherBarStart, otherBarEnd)
+      overlapInBetween = otherBarStart.isBetween(ganttBarStart, ganttBarEnd) ||
+                        otherBarEnd.isBetween(ganttBarStart, ganttBarEnd)
       return overlapLeft || overlapRight || overlapInBetween
     })
     let overlapType : "left" | "right" | "between" | null = null
@@ -129,12 +134,12 @@ export default function useBarDragManagement (
   const moveBarByMinutes = (bar: GanttBarObject, minutes: number, direction: "left" | "right") => {
     switch (direction) {
       case "left":
-        bar[barStart.value] = dayjs(bar[barStart.value]).subtract(minutes, "minutes").format("YYYY-MM-DD HH:mm:ss")
-        bar[barEnd.value] = dayjs(bar[barEnd.value]).subtract(minutes, "minutes").format("YYYY-MM-DD HH:mm:ss")
+        bar[barStart.value] = toDayjs(bar, "start").subtract(minutes, "minutes").format(dateFormat.value)
+        bar[barEnd.value] = toDayjs(bar, "end").subtract(minutes, "minutes").format(dateFormat.value)
         break
       case "right":
-        bar[barStart.value] = dayjs(bar[barStart.value]).add(minutes, "minutes").format("YYYY-MM-DD HH:mm:ss")
-        bar[barEnd.value] = dayjs(bar[barEnd.value]).add(minutes, "minutes").format("YYYY-MM-DD HH:mm:ss")
+        bar[barStart.value] = toDayjs(bar, "start").add(minutes, "minutes").format(dateFormat.value)
+        bar[barEnd.value] = toDayjs(bar, "end").add(minutes, "minutes").format(dateFormat.value)
     }
     fixOverlaps(bar)
   }
@@ -145,7 +150,7 @@ export default function useBarDragManagement (
       ...e,
       type: "dragend"
     }
-    emitBarEvent(ev, bar, undefined, movedBarsInDrag)
+    emitBarEvent(ev, bar, undefined, new Map(movedBarsInDrag))
     movedBarsInDrag.clear()
   }
 
