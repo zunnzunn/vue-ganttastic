@@ -1,5 +1,6 @@
 <template>
   <g-gantt-chart
+    id="chart"
     chart-start="11.12.2020 12:00"
     chart-end="15.07.2021 12:00"
     precision="month"
@@ -116,7 +117,9 @@ const addBar = () => {
 
 const deleteBar = () => {
   const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
-  bars1.value.splice(idx, 1)
+  if (idx !== -1) {
+    bars1.value.splice(idx, 1)
+  }
 }
 
 const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
@@ -151,3 +154,8 @@ const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) 
   console.log("contextmenu-bar", bar, e, datetime)
 }
 </script>
+
+<style>
+#chart >>> div {
+  font-family: "Calibri" !important;
+}</style>

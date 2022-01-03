@@ -1,24 +1,9 @@
-import { InjectionKey, Ref, ComputedRef } from "vue"
-import { GanttBarObject } from "./models"
+import { InjectionKey, ComputedRef } from "vue"
+import { GanttBarObject, GGanttChartPropsRefs } from "./models"
 
 const INJECTION_KEYS = {
   allBarsInChartKey: Symbol("allbarsInChartKey") as InjectionKey<ComputedRef<GanttBarObject[][]>>,
-  gGanttChartPropsKey: Symbol("gGanttChartPropsKey") as InjectionKey<{
-    chartStart: Ref<string>
-    chartEnd: Ref<string>
-    precision: Ref<"hour" | "day" | "month">
-    barStart: Ref<string>
-    barEnd: Ref<string>
-    dateFormat: Ref<string>
-    width: Ref<string>
-    rowHeight: Ref<number>
-    hideTimeaxis: Ref<boolean>
-    colorScheme: Ref<string>
-    grid: Ref<boolean>
-    pushOnOverlap: Ref<boolean>
-    noOverlap: Ref<boolean>
-    gGanttChart: Ref<HTMLElement | null>
-  }>,
+  gGanttChartPropsKey: Symbol("gGanttChartPropsKey") as InjectionKey<GGanttChartPropsRefs>,
   emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<
     (e: MouseEvent, bar: GanttBarObject, datetime?: string) => void
   >

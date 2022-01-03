@@ -10,7 +10,6 @@ export type GanttBarObject = {
     immobile?: boolean
     bundle?: string
     pushOnOverlap?: boolean
-    shadow?: boolean
     dragLimitLeft?: number
     dragLimitRight?: number
     style?: CSSStyleSheet
@@ -23,6 +22,7 @@ export type GGanttChartPropsRefs = {
   precision: Ref<"hour" | "day" | "month">
   barStart: Ref<string>
   barEnd: Ref<string>
+  rowHeight: Ref<number>
   dateFormat: Ref<string>
   width: Ref<string>
   hideTimeaxis: Ref<boolean>
@@ -31,4 +31,5 @@ export type GGanttChartPropsRefs = {
   pushOnOverlap: Ref<boolean>
   noOverlap: Ref<boolean>
   gGanttChart: Ref<HTMLElement | null>
+  font: Ref<string>
 }

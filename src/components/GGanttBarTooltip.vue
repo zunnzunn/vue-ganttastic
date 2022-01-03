@@ -9,7 +9,8 @@
         class="g-gantt-tooltip"
         :style="{
           top: tooltipTop,
-          left: tooltipLeft
+          left: tooltipLeft,
+          fontFamily: font
         }"
       >
         <div
@@ -65,7 +66,7 @@ const tooltipFormats = {
   month: "DD. MMMM YYYY"
 }
 const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
-const { precision } = gGanttChartPropsRefs
+const { precision, font } = gGanttChartPropsRefs
 const tooltipContent = computed(() => {
   const format = tooltipFormats[precision.value]
   if (bar && bar.value) {
@@ -90,7 +91,6 @@ const tooltipContent = computed(() => {
   transition: opacity 0.2s;
   display: flex;
   align-items: center;
-  font-family: Rubik;
 }
 .g-gantt-tooltip:before {
   content: '';

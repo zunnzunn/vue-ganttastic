@@ -2,7 +2,7 @@
   <div
     id="g-gantt-chart"
     ref="gGanttChart"
-    :style="{width, background: colors.background}"
+    :style="{width, background: colors.background, fontFamily: font}"
   >
     <g-gantt-timeaxis
       v-if="!hideTimeaxis"
@@ -76,6 +76,7 @@ interface GGanttChartProps {
   noOverlap?: boolean
   rowHeight?: number
   highlightedUnits?: number[]
+  font?: string
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
@@ -88,7 +89,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   pushOnOverlap: false,
   noOverlap: false,
   rowHeight: 40,
-  highlightedUnits: () => []
+  highlightedUnits: () => [],
+  font: "Helvetica"
 })
 
 // eslint-disable-next-line func-call-spacing
@@ -104,7 +106,7 @@ const emit = defineEmits<{
   (e: "contextmenu-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string }) : void
 }>()
 
-const { chartStart, chartEnd, precision, width } = toRefs(props)
+const { chartStart, chartEnd, precision, width, font } = toRefs(props)
 const slots = useSlots()
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
@@ -179,8 +181,6 @@ provide(INJECTION_KEYS.emitBarEventKey, emitBarEvent)
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
-
   #g-gantt-chart{
     position: relative;
     display: flex;
@@ -192,7 +192,6 @@ provide(INJECTION_KEYS.emitBarEventKey, emitBarEvent)
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-family: Rubik;
     border-radius: 5px;
   }
 

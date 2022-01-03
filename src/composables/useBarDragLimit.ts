@@ -27,7 +27,7 @@ export default function useBarDragLimit (
     }
     for (const sideValue of ["left", "right"]) {
       const side = sideValue as "left" | "right"
-      const { gapDistanceSoFar, bundleBarsAndGapDist } = countGapDistanceToNextImmobileBar(bar, 0, side, false)
+      const { gapDistanceSoFar, bundleBarsAndGapDist } = countGapDistanceToNextImmobileBar(bar, 0, side)
       let totalGapDistance = gapDistanceSoFar
       const bundleBarsOnPath = bundleBarsAndGapDist
       if (bundleBarsOnPath) {
@@ -71,8 +71,7 @@ export default function useBarDragLimit (
   const countGapDistanceToNextImmobileBar = (
     bar: GanttBarObject,
     gapDistanceSoFar = 0,
-    side: "left" | "right",
-    ignoreShadows = true
+    side: "left" | "right"
   ) => {
     const bundleBarsAndGapDist = bar.ganttBarConfig.bundle ? [{ bar, gapDistance: gapDistanceSoFar }] : []
     let currentBar = bar
@@ -84,7 +83,7 @@ export default function useBarDragLimit (
         const nextBarElem = document.getElementById(nextBar.ganttBarConfig.id) as HTMLElement
         const nextBarOffsetRight = nextBarElem.offsetLeft + nextBarElem.offsetWidth
         gapDistanceSoFar += currentBarElem.offsetLeft - nextBarOffsetRight
-        if (nextBar.ganttBarConfig.immobile || (nextBar.ganttBarConfig.shadow && !ignoreShadows)) {
+        if (nextBar.ganttBarConfig.immobile) {
           return { gapDistanceSoFar, bundleBarsAndGapDist }
         } else if (nextBar.ganttBarConfig.bundle) {
           bundleBarsAndGapDist.push({ bar: nextBar, gapDistance: gapDistanceSoFar })
@@ -99,7 +98,7 @@ export default function useBarDragLimit (
         const nextBarElem = document.getElementById(nextBar.ganttBarConfig.id) as HTMLElement
         const currentBarOffsetRight = currentBarElem.offsetLeft + currentBarElem.offsetWidth
         gapDistanceSoFar += nextBarElem.offsetLeft - currentBarOffsetRight
-        if (nextBar.ganttBarConfig.immobile || (nextBar.ganttBarConfig.shadow && !ignoreShadows)) {
+        if (nextBar.ganttBarConfig.immobile) {
           return { gapDistanceSoFar, bundleBarsAndGapDist }
         } else if (nextBar.ganttBarConfig.bundle) {
           bundleBarsAndGapDist.push({ bar: nextBar, gapDistance: gapDistanceSoFar })
