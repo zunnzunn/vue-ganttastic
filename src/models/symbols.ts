@@ -16,7 +16,7 @@ const INJECTION_KEYS = {
     colorScheme: Ref<string>
     grid: Ref<boolean>
     pushOnOverlap: Ref<boolean>
-    snapBackOnOverlap: Ref<boolean>
+    noOverlap: Ref<boolean>
     gGanttChart: Ref<HTMLElement | null>
   }>,
   emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<

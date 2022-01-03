@@ -13,7 +13,7 @@
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
         <div>
-          {{ bar.ganttBarConfig.label|| "" }}
+          {{ bar.ganttBarConfig.label || "" }}
         </div>
       </slot>
     </div>
@@ -87,16 +87,17 @@ const { barStart, barEnd, width } = gGanttChartPropsRefs
 const xStart = ref(0)
 const xEnd = ref(0)
 
-window.addEventListener("resize", () => {
-  xStart.value = mapTimeToPosition(bar.value[barStart.value])
-  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-})
 watch([bar, width], () => {
   nextTick(() => {
     xStart.value = mapTimeToPosition(bar.value[barStart.value])
     xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
   })
 }, { deep: true, immediate: true })
+
+window.addEventListener("resize", () => {
+  xStart.value = mapTimeToPosition(bar.value[barStart.value])
+  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+})
 
 const barStyle = computed(() => {
   return {

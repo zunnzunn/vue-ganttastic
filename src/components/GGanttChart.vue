@@ -33,11 +33,13 @@
       v-if="grid"
       :highlighted-units="highlightedUnits"
     />
+
     <div id="g-gantt-rows-container">
       <slot />   <!-- the g-gantt-row components go here -->
     </div>
+
     <g-gantt-bar-tooltip
-      v-model="showTooltip"
+      :model-value="showTooltip || isDragging"
       :bar="tooltipBar"
     >
       <template #default>
@@ -51,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import colorSchemes from "./color-schemes"
+import colorSchemes from "../color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
@@ -71,7 +73,7 @@ interface GGanttChartProps {
   colorScheme?: string
   grid?: boolean
   pushOnOverlap?: boolean
-  snapBackOnOverlap?: boolean
+  noOverlap?: boolean
   rowHeight?: number
   highlightedUnits?: number[]
 }
@@ -79,12 +81,12 @@ interface GGanttChartProps {
 const props = withDefaults(defineProps<GGanttChartProps>(), {
   dateFormat: "YYYY-MM-DD HH:mm",
   precision: "day",
-  width: "1200px",
+  width: "100%",
   hideTimeaxis: false,
   colorScheme: "default",
   grid: false,
   pushOnOverlap: false,
-  snapBackOnOverlap: false,
+  noOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => []
 })
@@ -122,8 +124,21 @@ const allBarsInChartByRow = computed(() => {
 })
 
 const showTooltip = ref(false)
+const isDragging = ref(false)
 const tooltipBar = ref<GanttBarObject | null>(null)
 let tooltipTimeoutId : number
+const initTooltip = (bar: GanttBarObject) => {
+  if (tooltipTimeoutId) {
+    clearTimeout(tooltipTimeoutId)
+  }
+  tooltipTimeoutId = setTimeout(() => { showTooltip.value = true }, 800)
+  tooltipBar.value = bar
+}
+
+const clearTooltip = () => {
+  clearTimeout(tooltipTimeoutId)
+  showTooltip.value = false
+}
 
 const emitBarEvent = (
   e: MouseEvent,
@@ -136,21 +151,22 @@ const emitBarEvent = (
     case "mouseup": emit("mouseup-bar", { bar, e, datetime }); break
     case "dblclick": emit("dblclick-bar", { bar, e, datetime }); break
     case "mouseenter":
-      if (tooltipTimeoutId) {
-        clearTimeout(tooltipTimeoutId)
-      }
-      tooltipTimeoutId = setTimeout(() => { showTooltip.value = true }, 800)
-      tooltipBar.value = bar
+      initTooltip(bar)
       emit("mouseenter-bar", { bar, e })
       break
     case "mouseleave":
-      clearTimeout(tooltipTimeoutId)
-      showTooltip.value = false
+      clearTooltip()
       emit("mouseleave-bar", { bar, e })
       break
-    case "dragstart": emit("dragstart-bar", { bar, e }); break
+    case "dragstart":
+      isDragging.value = true
+      emit("dragstart-bar", { bar, e })
+      break
     case "drag": emit("drag-bar", { bar, e }); break
-    case "dragend": emit("dragend-bar", { bar, e, movedBars }); break
+    case "dragend":
+      isDragging.value = false
+      emit("dragend-bar", { bar, e, movedBars })
+      break
     case "contextmenu": emit("contextmenu-bar", { bar, e, datetime }); break
   }
 }

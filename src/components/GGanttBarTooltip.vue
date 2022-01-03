@@ -78,7 +78,7 @@ const tooltipContent = computed(() => {
 
 </script>
 
-<style>
+<style scoped>
 .g-gantt-tooltip {
   position: fixed;
   background: black;

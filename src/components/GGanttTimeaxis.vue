@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ColorScheme } from "./color-schemes"
+import { ColorScheme } from "../color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 import { defineProps, inject } from "vue"
 import INJECTION_KEYS from "../models/symbols"

@@ -3,13 +3,12 @@
     chart-start="11.12.2020 12:00"
     chart-end="15.07.2021 12:00"
     precision="month"
-    :row-height="rowHeight"
+    :row-height="40"
     grid
-    width="70%"
+    width="100%"
     bar-start="beginDate"
     bar-end="endDate"
     date-format="DD.MM.YYYY HH:mm"
-    snap-back-on-overlap
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
     @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
@@ -88,14 +87,14 @@ const bars2 = ref([
       label: "Oh hey",
       style: {
         background: "#69e064",
-        borderRadius: "15px"
+        borderRadius: "15px",
+        color: "blue",
+        fontSize: "10px"
       }
     }
   }
 ])
-const rowHeight = ref(40)
 const addBar = () => {
-  rowHeight.value = 60
   if (bars1.value.some(bar => bar.ganttBarConfig.id === "test1")) {
     return
   }
@@ -116,7 +115,6 @@ const addBar = () => {
 }
 
 const deleteBar = () => {
-  rowHeight.value = 40
   const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
   bars1.value.splice(idx, 1)
 }

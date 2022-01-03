@@ -13,10 +13,7 @@ export type GanttBarObject = {
     shadow?: boolean
     dragLimitLeft?: number
     dragLimitRight?: number
-    style?: {
-      background?: string
-      borderRadius?: string
-    }
+    style?: CSSStyleSheet
   }
 }
 
@@ -32,6 +29,6 @@ export type GGanttChartPropsRefs = {
   colorScheme: Ref<string>
   grid: Ref<boolean>
   pushOnOverlap: Ref<boolean>
-  snapBackOnOverlap: Ref<boolean>
+  noOverlap: Ref<boolean>
   gGanttChart: Ref<HTMLElement | null>
 }

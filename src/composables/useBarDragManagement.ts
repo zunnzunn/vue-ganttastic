@@ -15,7 +15,7 @@ export default function useBarDragManagement (
 ) {
   const movedBarsInDrag = new Map<GanttBarObject, {oldStart: string, oldEnd: string}>()
 
-  const { pushOnOverlap, barStart, barEnd, snapBackOnOverlap, dateFormat } = gGanttChartPropsRefs
+  const { pushOnOverlap, barStart, barEnd, noOverlap, dateFormat } = gGanttChartPropsRefs
   const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
@@ -163,7 +163,7 @@ export default function useBarDragManagement (
   }
 
   const snapBackAllMovedBarsIfNeeded = () => {
-    if (!pushOnOverlap.value && snapBackOnOverlap.value) {
+    if (!pushOnOverlap.value && noOverlap.value) {
       let isAnyOverlap = false
       movedBarsInDrag.forEach((_, bar) => {
         const { overlapBar } = getOverlapBarAndType(bar)

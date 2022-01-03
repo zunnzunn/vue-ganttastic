@@ -29,7 +29,12 @@
           v-for="bar in bars"
           :key="bar.ganttBarConfig.id"
           :bar="bar"
-        />
+        >
+          <slot
+            name="bar-label"
+            :bar="bar"
+          />
+        </g-gantt-bar>
       </transition-group>
     </div>
   </div>
