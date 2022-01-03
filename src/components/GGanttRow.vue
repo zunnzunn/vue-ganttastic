@@ -1,6 +1,5 @@
 <template>
   <div
-    ref="g-gantt-row"
     class="g-gantt-row"
     :style="rowStyle"
     @dragover="$event.preventDefault(); isHovering = true"
@@ -29,7 +28,6 @@
         <g-gantt-bar
           v-for="bar in bars"
           :key="bar.ganttBarConfig.id"
-          ref="ganttBar"
           :bar="bar"
         />
       </transition-group>

@@ -33,4 +33,5 @@ export type GGanttChartPropsRefs = {
   grid: Ref<boolean>
   pushOnOverlap: Ref<boolean>
   snapBackOnOverlap: Ref<boolean>
+  gGanttChart: Ref<HTMLElement | null>
 }

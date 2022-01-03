@@ -1,6 +1,7 @@
 <template>
   <div
     id="g-gantt-chart"
+    ref="gGanttChart"
     :style="{width, background: colors.background}"
   >
     <g-gantt-timeaxis
@@ -35,6 +36,17 @@
     <div id="g-gantt-rows-container">
       <slot />   <!-- the g-gantt-row components go here -->
     </div>
+    <g-gantt-bar-tooltip
+      v-model="showTooltip"
+      :bar="tooltipBar"
+    >
+      <template #default>
+        <slot
+          name="bar-tooltip"
+          :bar="tooltipBar"
+        />
+      </template>
+    </g-gantt-bar-tooltip>
   </div>
 </template>
 
@@ -42,8 +54,9 @@
 import colorSchemes from "./color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
+import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { computed, provide, toRefs, defineProps, withDefaults, defineEmits, useSlots } from "vue"
+import { computed, provide, ref, toRefs, defineProps, withDefaults, defineEmits, useSlots } from "vue"
 import { GanttBarObject } from "../models/models"
 
 interface GGanttChartProps {
@@ -108,6 +121,10 @@ const allBarsInChartByRow = computed(() => {
   return allBars
 })
 
+const showTooltip = ref(false)
+const tooltipBar = ref<GanttBarObject | null>(null)
+let tooltipTimeoutId : number
+
 const emitBarEvent = (
   e: MouseEvent,
   bar: GanttBarObject,
@@ -118,8 +135,19 @@ const emitBarEvent = (
     case "mousedown": emit("mousedown-bar", { bar, e, datetime }); break
     case "mouseup": emit("mouseup-bar", { bar, e, datetime }); break
     case "dblclick": emit("dblclick-bar", { bar, e, datetime }); break
-    case "mouseenter": emit("mouseenter-bar", { bar, e }); break
-    case "mouseleave": emit("mouseleave-bar", { bar, e }); break
+    case "mouseenter":
+      if (tooltipTimeoutId) {
+        clearTimeout(tooltipTimeoutId)
+      }
+      tooltipTimeoutId = setTimeout(() => { showTooltip.value = true }, 800)
+      tooltipBar.value = bar
+      emit("mouseenter-bar", { bar, e })
+      break
+    case "mouseleave":
+      clearTimeout(tooltipTimeoutId)
+      showTooltip.value = false
+      emit("mouseleave-bar", { bar, e })
+      break
     case "dragstart": emit("dragstart-bar", { bar, e }); break
     case "drag": emit("drag-bar", { bar, e }); break
     case "dragend": emit("dragend-bar", { bar, e, movedBars }); break
@@ -127,8 +155,10 @@ const emitBarEvent = (
   }
 }
 
+const gGanttChart = ref<HTMLElement | null>(null)
+
 provide(INJECTION_KEYS.allBarsInChartKey, allBarsInChartByRow)
-provide(INJECTION_KEYS.gGanttChartPropsKey, toRefs(props))
+provide(INJECTION_KEYS.gGanttChartPropsKey, { ...toRefs(props), gGanttChart })
 provide(INJECTION_KEYS.emitBarEventKey, emitBarEvent)
 </script>
 

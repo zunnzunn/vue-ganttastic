@@ -21,14 +21,6 @@
       <div class="g-gantt-bar-handle-left" />
       <div class="g-gantt-bar-handle-right" />
     </template>
-
-    <g-gantt-bar-tooltip
-      :bar-id="bar.ganttBarConfig.id"
-      :bar-style="barStyle"
-      :force-show="isDragging"
-    >
-      {{ tooltipContent }}
-    </g-gantt-bar-tooltip>
   </div>
 </template>
 
@@ -37,9 +29,7 @@ import useBarDragManagement from "../composables/useBarDragManagement"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
 import useBarDragLimit from "../composables/useBarDragLimit"
 import { GanttBarObject } from "../models/models"
-import GGanttBarTooltip from "../components/GGanttBarTooltip.vue"
-import useDayjsHelper from "../composables/useDayjsHelper"
-import { defineProps, computed, ref, toRefs, inject } from "vue"
+import { defineProps, computed, ref, toRefs, inject, watch, nextTick } from "vue"
 import INJECTION_KEYS from "../models/symbols"
 
 const props = defineProps<{
@@ -54,11 +44,10 @@ if (!allRowsInChart || !gGanttChartPropsRefs || !emitBarEvent) {
 }
 
 const { bar } = toRefs(props)
-const { precision, rowHeight } = gGanttChartPropsRefs
+const { rowHeight } = gGanttChartPropsRefs
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs, emitBarEvent)
 const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
-const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
 
 const isDragging = ref(false)
 
@@ -93,28 +82,29 @@ const onMouseEvent = (e: MouseEvent) => {
   emitBarEvent(e, bar.value, datetime)
 }
 
-const { barStart, barEnd } = gGanttChartPropsRefs
-const tooltipFormats = {
-  hour: "HH:mm",
-  day: "DD. MMM HH:mm",
-  month: "DD. MMMM YYYY"
-}
-const tooltipContent = computed(() => {
-  const format = tooltipFormats[precision.value]
-  const barStartFormatted = toDayjs(bar.value, "start").format(format)
-  const barEndFormatted = toDayjs(bar.value, "end").format(format)
-  return `${barStartFormatted} - ${barEndFormatted}`
+const { barStart, barEnd, width } = gGanttChartPropsRefs
+
+const xStart = ref(0)
+const xEnd = ref(0)
+
+window.addEventListener("resize", () => {
+  xStart.value = mapTimeToPosition(bar.value[barStart.value])
+  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
 })
+watch([bar, width], () => {
+  nextTick(() => {
+    xStart.value = mapTimeToPosition(bar.value[barStart.value])
+    xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+  })
+}, { deep: true, immediate: true })
 
 const barStyle = computed(() => {
-  const xStart = mapTimeToPosition(bar.value[barStart.value])
-  const xEnd = mapTimeToPosition(bar.value[barEnd.value])
   return {
     ...bar.value.ganttBarConfig.style,
     position: "absolute",
     top: `${rowHeight.value * 0.1}px`,
-    left: `${xStart}px`,
-    width: `${xEnd - xStart}px`,
+    left: `${xStart.value}px`,
+    width: `${xEnd.value - xStart.value}px`,
     height: `${rowHeight.value * 0.8}px`,
     zIndex: isDragging.value ? 3 : 2
   }

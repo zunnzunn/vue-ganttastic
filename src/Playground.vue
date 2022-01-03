@@ -3,9 +3,9 @@
     chart-start="11.12.2020 12:00"
     chart-end="15.07.2021 12:00"
     precision="month"
-    :row-height="40"
+    :row-height="rowHeight"
     grid
-    width="1400px"
+    width="70%"
     bar-start="beginDate"
     bar-end="endDate"
     date-format="DD.MM.YYYY HH:mm"
@@ -93,7 +93,9 @@ const bars2 = ref([
     }
   }
 ])
+const rowHeight = ref(40)
 const addBar = () => {
+  rowHeight.value = 60
   if (bars1.value.some(bar => bar.ganttBarConfig.id === "test1")) {
     return
   }
@@ -114,6 +116,7 @@ const addBar = () => {
 }
 
 const deleteBar = () => {
+  rowHeight.value = 40
   const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
   bars1.value.splice(idx, 1)
 }

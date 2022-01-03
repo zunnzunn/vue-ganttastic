@@ -17,6 +17,7 @@ const INJECTION_KEYS = {
     grid: Ref<boolean>
     pushOnOverlap: Ref<boolean>
     snapBackOnOverlap: Ref<boolean>
+    gGanttChart: Ref<HTMLElement | null>
   }>,
   emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<
     (e: MouseEvent, bar: GanttBarObject, datetime?: string) => void

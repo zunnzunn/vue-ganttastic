@@ -5,11 +5,11 @@
       mode="out-in"
     >
       <div
-        v-if="showTooltip || forceShow"
+        v-if="modelValue"
         class="g-gantt-tooltip"
         :style="{
-          top: tooltipY,
-          left:tooltipX
+          top: tooltipTop,
+          left: tooltipLeft
         }"
       >
         <div
@@ -17,7 +17,7 @@
           :style="{background: dotColor}"
         />
         <slot>
-          {{ tooltipX }}
+          {{ tooltipContent }}
         </slot>
       </div>
     </transition>
@@ -25,53 +25,57 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRefs, defineProps, watch, onMounted } from "vue"
+import { GanttBarObject } from "../models/models"
+import INJECTION_KEYS from "../models/symbols"
+import { computed, toRefs, ref, defineProps, watch, nextTick, inject } from "vue"
+import useDayjsHelper from "../composables/useDayjsHelper"
 
 const props = defineProps<{
-  barId: string,
-  barStyle: {top: string, left: string, background: string}
-  forceShow: boolean
+  bar?: GanttBarObject
+  modelValue: boolean
 }>()
 
-const showTooltip = ref(false)
-let tooltipTimeoutId : number
-const { barId } = toRefs(props)
-onMounted(() => {
-  const barElement = document.getElementById(barId.value)
-  if (!barElement) {
-    console.warn("GGanttBarTooltip: No bar element with id " + barId.value)
+const { bar } = toRefs(props)
+const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
+if (!gGanttChartPropsRefs) {
+  throw Error("GGanttBarTooltip: Failed to inject values from GGanttChart!")
+}
+
+const tooltipTop = ref("0px")
+const tooltipLeft = ref("0px")
+watch(bar, () => {
+  nextTick(() => {
+    const barId = bar?.value?.ganttBarConfig.id || ""
+    if (barId) {
+      const barElement = document.getElementById(barId)
+      let { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
+      const { rowHeight } = gGanttChartPropsRefs
+      left = Math.max(left, 10)
+      tooltipTop.value = `${top + rowHeight.value - 10}px`
+      tooltipLeft.value = `${left}px`
+    }
+  })
+}, { deep: true, immediate: true })
+
+const dotColor = computed(() => bar?.value?.ganttBarConfig.style?.background || "cadetblue")
+
+const tooltipFormats = {
+  hour: "HH:mm",
+  day: "DD. MMM HH:mm",
+  month: "DD. MMMM YYYY"
+}
+const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
+const { precision } = gGanttChartPropsRefs
+const tooltipContent = computed(() => {
+  const format = tooltipFormats[precision.value]
+  if (bar && bar.value) {
+    const barStartFormatted = toDayjs(bar.value, "start").format(format)
+    const barEndFormatted = toDayjs(bar.value, "end").format(format)
+    return `${barStartFormatted} - ${barEndFormatted}`
   }
-  barElement?.addEventListener("mouseenter", onMouseenter)
-  barElement?.addEventListener("mouseleave", onMouseleave)
-  setTooltipPosition()
+  return ""
 })
 
-const onMouseenter = () => {
-  if (tooltipTimeoutId) {
-    clearTimeout(tooltipTimeoutId)
-  }
-  tooltipTimeoutId = setTimeout(() => { showTooltip.value = true }, 800)
-}
-
-const onMouseleave = () => {
-  clearTimeout(tooltipTimeoutId)
-  showTooltip.value = false
-}
-
-const { barStyle } = toRefs(props)
-const dotColor = computed(() => barStyle.value.background || "cadetblue")
-const tooltipX = ref("0px")
-const tooltipY = ref("0px")
-
-const setTooltipPosition = () => {
-  const barElement = document.getElementById(barId.value)
-  let { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
-  left = Math.max(left, 10)
-  tooltipX.value = `${left}px`
-  tooltipY.value = `${top + 30}px`
-}
-
-watch(barStyle, () => setTooltipPosition(), { deep: true })
 </script>
 
 <style>
