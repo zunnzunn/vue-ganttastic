@@ -154,8 +154,3 @@ const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) 
   console.log("contextmenu-bar", bar, e, datetime)
 }
 </script>
-
-<style>
-#chart >>> div {
-  font-family: "Calibri" !important;
-}</style>

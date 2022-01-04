@@ -21,3 +21,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Docs dist directory
+docs/.vuepress/.cache
+docs/.vuepress/.temp
