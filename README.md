@@ -1,121 +1,40 @@
-# vue-ganttastic
-<img src="https://user-images.githubusercontent.com/28678851/77186503-45358300-6ad3-11ea-9392-7f670eb1ca8c.png" width="600"/>
+# Vue Ganttastic
+<div style="display: flex; flex-direction: column; align-items:center;">
+<img
+    src="https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png" 
+    style="max-width: 20%; margin: 10px;"
+    alt="Vue Ganttastic logo"
+/>  
 
-A simple and easy-to-use Gantt chart component for Vue.js.  
+<b>Vue Ganttastic</b> is a simple, interactive and highly customizable Gantt chart component for Vue 3.   
+</div>
 
-### This is the branch for Vue-Ganttastic v1 (Vue 2). If you are looking for Vue-Ganttastic v2 (Vue 3) please refer to [this branch](https://github.com/InfectoOne/vue-ganttastic/tree/vue-ganttastic-2).
-## Homepage
-[Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
+  
+## Features
+- **[Vue 3](https://v3.vuejs.org/) support**
+- **[TypeScript](https://www.typescriptlang.org/) support** *(ships with out of the box type declarations)*
+- **Interactivity** *(dynamic, moveable, pushable bars with various event handlers)*
+-  **Reactivity / Responsiveness** (*bars will be properly repositioned on width resize*)
+- **Customization options** (*chart and bar styling, changes in behavior, slots, event handlers etc.*)
+- **[Day.js](https://day.js.org/en/) support**  *(uses Day.js under the hood for date-time manipulation)*
 
-## Installation
-You can install and use Vue-Ganttastic in your project using <kbd>npm</kbd>:
-```
-npm install vue-ganttastic
-```
+## Guide and Docs
+To get started, check out the [official docs](https://infectoone.github.io/vue-ganttastic/getting-started.html).  
+*Hint: if the sidebar links are broken, try refreshing the page.*
 
-[Moment.js](https://momentjs.com/) is a peer-dependency of Vue-Ganttastic. In order for Vue-Ganttastic to work correctly, you need to install it in your project:
-```
-npm install moment
-```
+## About
+**License** [MIT](https://choosealicense.com/licenses/mit/)  
+**Author**: Marko Žunić, BSc  
+[GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)  
+## Support the project
+Vue Ganttastic is a free open-source project I work on in my spare time. Buy me a beer and let's give a toast to open-source developers! :beers:
 
-## Basic Usage
-Import the components <code>GGanttChart</code> and <code>GGanttRow</code>.  
-Use <code>g-gantt-chart</code> in your template, pass the desired chart start and chart end time as props (<code>chart-start</code> and <code>chart-end</code>) and add <code>g-gantt-row</code>s
-to the default template slot.  
-Pass an array containing your bar objects to every row using the <code>bars</code> prop, while specifying the name of the properties in your bar objects that stand for the bar start and bar end time using the props <code>bar-start</code> and <code>bar-end</code>  
 
-For more detailed information, such as how to style the bars or additional configuration options, please refer to the [docs](https://infectoone.github.io/vue-ganttastic-homepage/#/docs) on the project's homepage (coming soon).
+[<img src="https://pics.paypal.com/00/s/MTdhMWZmNTUtOWQ1Yi00YmRjLWJjMjgtY2Y0NTNhODM0OTJl/file.PNG" height="80">](https://www.paypal.com/donate?hosted_button_id=M63C8DAMV5YDJ)
 
-The following code showcases a simple usage example in a .vue SFC (Single File Component)
-```html
-<template>
-  ...
+## Screenshots
+![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)
 
-  <g-gantt-chart
-    :chart-start="myChartStart"
-    :chart-end="myChartEnd"
-  >
-    <g-gantt-row
-      v-for="row in rows"
-      :key="row.label"
-      :label="row.label"
-      :bars="row.bars"
-      bar-start="myStart"
-      bar-end="myEnd"
-    />
-  </g-gantt-chart>
+![image](https://user-images.githubusercontent.com/28678851/148191529-b50c0d17-bcc1-4a78-9d2c-ff2a36b03f52.png)  
 
-  ...
-</template>
-
-<script>
-
-import {GGanttChart, GGanttRow} from 'vue-ganttastic'
-
-export default {
-
-  ...
-
-  components:{
-    GGanttChart,
-    GGanttRow
-  },
-
-  data(){
-    return {
-      myChartStart: "2020-03-01 00:00",
-      myChartEnd: "2020-03-03 00:00",
-      rows: [
-        {
-          label: "My row #1",
-          bars: [
-            {
-              myStart: "2020-03-01 12:10",
-              myEnd: "2020-03-01 16:35"
-            }
-          ]
-        },
-        {
-          label: "My row #2",
-          bars: [
-            {
-              myStart: "2020-03-02 01:00",
-              myEnd: "2020-03-02 12:00"
-            },
-            {
-              myStart: "2020-03-02 13:00",
-              myEnd: "2020-03-02 22:00"
-            }
-          ]
-        }
-      ]
-    }
-  }
-
-  ...
-
-}
-</script>
-
-```
-
-## Contributing
-Pull requests are warmly welcomed, while every major change or proposal ought to be discussed in an issue first. As the project is still new, I will gladly accept suggestions, proposals, contributions etc.
-
-### Contributing - How to run the project
-  1. Clone the project
-  2. Install the Vue CLI service, if you don't already have it installed:
-      ```
-        npm install -g @vue/cli
-        npm install -g @vue/cli-service-global
-      ```
-  3. <code>Playground.vue</code> is a dedicated Vue SFC where all    Vue-Ganttastic features can be
-     played around with and tested out. Get it running using:
-      ```
-        vue serve src/Playground.vue
-      ```
-## Dependencies
-[Moment.js](https://momentjs.com/)
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+![image](https://user-images.githubusercontent.com/28678851/148191757-a2520dce-aeed-43df-87b2-3a64e225f9e7.png)

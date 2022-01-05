@@ -1,180 +1,161 @@
-<!-- use Playground.vue to play around with the gantt chart components and test out new features -->
 <template>
-  <div>
-    <g-gantt-chart
-        :chart-start="chartStart"
-        :chart-end="chartEnd"
-        :grid="grid"
-        :hide-timeaxis="hideTimeaxis"
-        :push-on-overlap="true"
-        snap-back-on-overlap
-        :highlighted-hours="highlightedHours"
-        :row-label-width="`${rowLabelWidth}%`"
-        :row-height="rowHeight"
-        :theme="selectedTheme"
-        @dragend-bar="onDragend($event)"
-      >
-        <template v-for="row in rowList">
-          <g-gantt-row 
-            :key="row.label"
-            :label="row.label"
-            :bars="row.barList"
-            :highlight-on-hover="highlightOnHover"
-            bar-start="myStart"
-            bar-end="myEnd"
-          >
-            <template #bar-label="{bar}">
-              <span>{{bar.label}}</span>
-            </template>
-          </g-gantt-row>
-        </template>
-      </g-gantt-chart>
-  </div>
+  <g-gantt-chart
+    :chart-start="chartStart"
+    :chart-end="chartEnd"
+    precision="month"
+    :row-height="40"
+    grid
+    width="100%"
+    bar-start="beginDate"
+    bar-end="endDate"
+    :date-format="format"
+    @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
+    @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
+    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
+    @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
+    @dragstart-bar="onDragstartBar($event.bar, $event.e)"
+    @drag-bar="onDragBar($event.bar, $event.e)"
+    @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
+    @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
+  >
+    <g-gantt-row
+      label="My row 1"
+      :bars="bars1"
+      highlight-on-hover
+    />
+    <g-gantt-row
+      label="My row 2"
+      highlight-on-hover
+      :bars="bars2"
+    />
+  </g-gantt-chart>
+
+  <button @click="addBar()">
+    Add bar
+  </button>
+  <button @click="deleteBar()">
+    Delete bar
+  </button>
 </template>
 
-<script>
-import GGanttChart from './GGanttChart.vue'
-import GGanttRow from './GGanttRow.vue'
+<script setup lang="ts">
+import { ref } from "vue"
+import GGanttRow from "./components/GGanttRow.vue"
+import GGanttChart from "./components/GGanttChart.vue"
+import { GanttBarObject } from "./models/models"
 
-export default {
-  components:{
-    GGanttChart,
-    GGanttRow
-  },
-  data(){
-    return {
-      chartStart: "2020-03-02 00:00",
-      chartEnd: "2020-03-04 00:00",
-      pushOnOverlap: true,
-      grid: true,
-      rowHeight: 40,
-      rowLabelWidth: 15,
-      hideTimeaxis: false,
-      highlightOnHover: false,
-      hours: [...Array(24).keys()],
-      highlightedHours: [10,12],
-      showContextmenu: false,
-      contextmenuTimeout: null,
-      contextmenuX: 0,
-      contextmenuY: 0,
-      selectedTheme: "default",
-      themes: [
-        "default",
-        "vue",
-        "dark",
-        "material-blue",
-        "creamy",
-        "slumber",
-        "sky",
-        "crimson",
-        "grove",
-        "fuchsia",
-        "flare"
-      ],
-      rowList: [
-        {
-          label: "Row #1",
-          barList: [
-            {
-              myStart: "2020-03-03 18:00",
-              myEnd: "2020-03-03 23:00",
-              label: "Immobile",
-              ganttBarConfig: {color:"white", backgroundColor: "#404040", opacity: 0.5, immobile: true}
-            },
-            {
-              myStart: "2020-03-03 04:00",
-              myEnd: "2020-03-03 15:00",
-              label: "Bar",
-              ganttBarConfig: {color:"white", backgroundColor: "#2e74a3", bundle: "blueBundle"}
-            }
-          ]
-        },
+const chartStart = ref("11.12.2020 12:00")
+const chartEnd = ref("15.07.2021 12:00")
+const format = ref("DD.MM.YYYY HH:mm")
 
-        {
-          label: "Row #2",
-          barList: [
-            {
-              myStart: "2020-03-02 09:00",
-              myEnd: "2020-03-02 18:00",
-              image: "vue_ganttastic_logo_no_text.png",
-              label: "I have an image",
-              ganttBarConfig: {color:"white", backgroundColor: "#de3b26", bundle:"redBundle"}
-            },
-            {
-              myStart: "2020-03-03 04:00",
-              myEnd: "2020-03-03 15:00",
-              label: "We belong together ^",
-              ganttBarConfig: {color:"white", backgroundColor: "#2e74a3", bundle:"blueBundle"}
-            },
-            {
-              myStart: "2020-03-03 18:00",
-              myEnd: "2020-03-03 22:00",
-              label: "Bar",
-              ganttBarConfig: {color:"white", backgroundColor: "#aa34a3"}
-            }
-          ]
-        },
-
-        {
-          label: "Row #3",
-          barList: [
-            {
-              myStart: "2020-03-02 09:00",
-              myEnd: "2020-03-02 18:00",
-              label: "I am with stupid ^",
-              ganttBarConfig: {color:"white", backgroundColor: "#de3b26", bundle: "redBundle"}
-            },
-            {
-              myStart: "2020-03-02 22:30",
-              myEnd: "2020-03-03 05:00",
-              label: "With handles!",
-              ganttBarConfig: {color:"white", backgroundColor: "#a23def", handles: true}
-            },
-            {
-              myStart: "2020-03-02 01:00",
-              myEnd: "2020-03-02 07:00",
-              label: "Bar",
-              ganttBarConfig: {color:"white", backgroundColor: "#5effad", pushOnOverlap: false, zIndex: 3}
-            },
-            {
-              myStart: "2020-03-03 14:00",
-              myEnd: "2020-03-03 20:00",
-              label: "Woooow!",
-              ganttBarConfig: {color:"white", background: "repeating-linear-gradient(45deg,#de7359,#de7359 10px,#ffc803 10px,#ffc803 20px)"}
-            }, 
-          ]
-        },
-
-        {
-          label: "Row #4",
-          barList: [
-            {
-              myStart: "2020-03-03 06:30",
-              myEnd: "2020-03-03 20:00",
-              label: "Bar",
-              ganttBarConfig:{color:"white", backgroundColor: "#d18aaf", handles: true}
-            },
-            {
-              myStart: "2020-03-02 00:30",
-              myEnd: "2020-03-03 01:00",
-              label: "Rectangular",
-              ganttBarConfig: {color:"white", backgroundColor: "#f2840f", borderRadius: 0}
-            }, 
-          ]
-        }
-
-      ]
-    }
-  },
-
-  methods: {
-    onDragend(e){
-      console.log(e)
+const bars1 = ref([
+  {
+    beginDate: "24.04.2021 13:00",
+    endDate: "25.05.2021 19:00",
+    ganttBarConfig: {
+      id: "8621987329",
+      label: "I'm in a bundle",
+      bundle: "bundle2"
     }
   }
+])
+
+const bars2 = ref([
+  {
+    beginDate: "24.04.2021 13:00",
+    endDate: "25.05.2021 19:00",
+    ganttBarConfig: {
+      id: "1592311887",
+      label: "I'm in a bundle",
+      bundle: "bundle2",
+      style: {
+        background: "magenta"
+      }
+    }
+  },
+  {
+    beginDate: "01.01.2021 00:00",
+    endDate: "01.03.2021 00:00",
+    ganttBarConfig: {
+      id: "7716981641",
+      label: "Lorem ipsum dolor",
+      hasHandles: true,
+      style: {
+        background: "#b74b52"
+      }
+    }
+  },
+  {
+    beginDate: "15.06.2021 00:00",
+    endDate: "10.07.2021 00:00",
+    ganttBarConfig: {
+      id: "9716981641",
+      label: "Oh hey",
+      style: {
+        background: "#69e064",
+        borderRadius: "15px",
+        color: "blue",
+        fontSize: "10px"
+      }
+    }
+  }
+])
+const addBar = () => {
+  if (bars1.value.some(bar => bar.ganttBarConfig.id === "test1")) {
+    return
+  }
+  const bar = {
+    beginDate: "26.02.2021 00:00",
+    endDate: "26.03.2021 02:00",
+    ganttBarConfig: {
+      id: "test1",
+      hasHandles: true,
+      label: "Hello!",
+      style: {
+        background: "#5484b7",
+        borderRadius: "20px"
+      }
+    }
+  }
+  bars1.value.push(bar)
+}
+
+const deleteBar = () => {
+  const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
+  if (idx !== -1) {
+    bars1.value.splice(idx, 1)
+  }
+}
+
+const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("mousedown-bar", bar, e, datetime)
+}
+
+const onMouseupBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("mouseup-bar", bar, e, datetime)
+}
+
+const onMouseenterBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("mouseenter-bar", bar, e)
+}
+
+const onMouseleaveBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("mouseleave-bar", bar, e)
+}
+
+const onDragstartBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("dragstart-bar", bar, e)
+}
+
+const onDragBar = (bar: GanttBarObject, e:MouseEvent) => {
+  console.log("drag-bar", bar, e)
+}
+
+const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>) => {
+  console.log("dragend-bar", bar, e, movedBars)
+}
+
+const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("contextmenu-bar", bar, e, datetime)
 }
 </script>
-
-<style>
-
-</style>
