@@ -2,7 +2,7 @@
 <div style="display: flex; flex-direction: column; align-items:center;">
 <img
     src="https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png" 
-    style="max-width: 20%; margin: 10px;"
+    style="margin: 10px;" height="150"
     alt="Vue Ganttastic logo"
 />  
 
