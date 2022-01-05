@@ -82,12 +82,12 @@ const onMouseEvent = (e: MouseEvent) => {
   emitBarEvent(e, bar.value, datetime)
 }
 
-const { barStart, barEnd, width } = gGanttChartPropsRefs
+const { barStart, barEnd, width, chartStart, chartEnd } = gGanttChartPropsRefs
 
 const xStart = ref(0)
 const xEnd = ref(0)
 
-watch([bar, width], () => {
+watch([bar, width, chartStart, chartEnd], () => {
   nextTick(() => {
     xStart.value = mapTimeToPosition(bar.value[barStart.value])
     xEnd.value = mapTimeToPosition(bar.value[barEnd.value])

@@ -1,15 +1,14 @@
 <template>
   <g-gantt-chart
-    id="chart"
-    chart-start="11.12.2020 12:00"
-    chart-end="15.07.2021 12:00"
+    :chart-start="chartStart"
+    :chart-end="chartEnd"
     precision="month"
     :row-height="40"
     grid
     width="100%"
     bar-start="beginDate"
     bar-end="endDate"
-    date-format="DD.MM.YYYY HH:mm"
+    :date-format="format"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
     @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
@@ -30,6 +29,7 @@
       :bars="bars2"
     />
   </g-gantt-chart>
+
   <button @click="addBar()">
     Add bar
   </button>
@@ -37,11 +37,16 @@
     Delete bar
   </button>
 </template>
+
 <script setup lang="ts">
 import { ref } from "vue"
 import GGanttRow from "./components/GGanttRow.vue"
 import GGanttChart from "./components/GGanttChart.vue"
 import { GanttBarObject } from "./models/models"
+
+const chartStart = ref("11.12.2020 12:00")
+const chartEnd = ref("15.07.2021 12:00")
+const format = ref("DD.MM.YYYY HH:mm")
 
 const bars1 = ref([
   {
