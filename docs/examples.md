@@ -2,14 +2,18 @@
 # Live Demos
 
 ## Simple hour chart  
-### 
 - `precision`: `hour`
-<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="02.01.2022 12:00" precision="hour" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm"> <g-gantt-row label="My row 1" :bars="hourBarList1" highlight-on-hover/><g-gantt-row label="Another row" :bars="hourBarList2" highlight-on-hover/></g-gantt-chart>
+<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="02.01.2022 12:00" precision="hour" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm">
+<g-gantt-row label="My row 1" :bars="hourBarList1" highlight-on-hover/>
+<g-gantt-row label="Another row" :bars="hourBarList2" highlight-on-hover/>
+</g-gantt-chart>
 
 <button @click="addHourBar()" :disabled="hourBarList2.length > 0"> Add bar </button>
 <button @click="deleteHourBar()" style="margin-left: 10px" :disabled="hourBarList2.length === 0"> Delete bar </button>
+
+
+
 ## Day chart with dark theme  
-### 
 - `precision`: `day`
 - `row-height` : `70`
 - `no-overlap`
@@ -17,16 +21,36 @@
 
 Used slots:
 `g-gantt-row` --  `label`, `bar-label`
-<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="03.01.2022 03:00" precision="day" grid width="100%" :row-height="70" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="dark" no-overlap> <g-gantt-row label="Row label" :bars="dayBarList1" highlight-on-hover><template #bar-label="{bar}"><img v-if="bar.imgSrc" :src="bar.imgSrc" height="30" width="30"/> {{bar.ganttBarConfig.label}} </template></g-gantt-row><g-gantt-row label="My row 2" :bars="[]" highlight-on-hover><template #label><img src='https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png' height="20" widht="20" style="padding-right:10px"/> Look, an image!</template></g-gantt-row></g-gantt-chart>
+<g-gantt-chart chart-start="30.10.2022 12:00" chart-end="02.11.2022 13:00" precision="day" grid width="100%" :row-height="70" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="dark" no-overlap>
+<g-gantt-row label="Row label" :bars="dayBarList1" highlight-on-hover>
+<template #bar-label="{bar}">
+<img v-if="bar.imgSrc" :src="bar.imgSrc" height="30" width="30"/>
+{{bar.ganttBarConfig.label}}
+</template>
+</g-gantt-row>
+<g-gantt-row label="My row 2" :bars="[]" highlight-on-hover>
+<template #label>
+<img src='https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png' height="20" widht="20" style="padding-right:10px"/>
+Look, an image!
+</template>
+</g-gantt-row>
+</g-gantt-chart>
+
+
 
 ## Month chart pushing and bundles
-### 
 - `precision`: `month`
 - `push-on-overlap`
 - `color-scheme` : `vue`
 - `font` : `Calibri`
-<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="15.03.2022 03:00" precision="month" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="vue" font="Calibri" push-on-overlap> <g-gantt-row label="My row 1" :bars="monthBarList1" highlight-on-hover/><g-gantt-row label="My row 2" :bars="monthBarList2" highlight-on-hover/>
-<g-gantt-row label="Look at me!" :bars="monthBarList3" highlight-on-hover/><g-gantt-row label="Fourth row" :bars="[]" highlight-on-hover/></g-gantt-chart>
+<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="15.03.2022 03:00" precision="month" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="vue" font="Calibri" push-on-overlap>
+<g-gantt-row label="My row 1" :bars="monthBarList1" highlight-on-hover/>
+<g-gantt-row label="My row 2" :bars="monthBarList2" highlight-on-hover/>
+<g-gantt-row label="Look at me!" :bars="monthBarList3" highlight-on-hover/>
+<g-gantt-row label="Fourth row" :bars="[]" highlight-on-hover/>
+</g-gantt-chart>
+
+
 
 <script setup>
 import { ref } from "vue"
@@ -62,8 +86,8 @@ const hourBarList2 = ref([])
 
 const dayBarList1 = ref([
   {
-    beginDate: "01.01.2022 15:00",
-    endDate: "01.01.2022 19:45",
+    beginDate: "31.10.2022 15:00",
+    endDate: "01.11.2022 05:45",
     ganttBarConfig: {
       id: "a621987323",
       label: "Drag me",
@@ -74,8 +98,8 @@ const dayBarList1 = ref([
     }
   },
   {
-    beginDate: "01.01.2022 23:00",
-    endDate: "02.01.2022 18:00",
+    beginDate: "01.11.2022 09:00",
+    endDate: "02.11.2022 08:00",
     imgSrc: "https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png",
     ganttBarConfig: {
       id: "x21987322",

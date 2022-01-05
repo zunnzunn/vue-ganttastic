@@ -48,12 +48,12 @@ For further configuration, you can add some optional properties to the nested `g
 
 | Property name         | Type    | Description           |
 |-----------------------|---------|-----------------------|
-| id | string | A unique string identifier for the bar  (*mandatory*) 
-| label | string?  | Text displayed on the bar
-| hasHandles | boolean?  | Used to toggle handles on the left and right side of the bar that can be dragged to change the width of the bar |
-| immobile | boolean?  | Used to toggle whether bar can be moved (dragged)
-| bundle | string?  | A string identifier for a bundle. A bundle is a collection of bars that are dragged simultaneously.
-| style | CSSStyleSheet?  | CSS-based styling for your bar (e.g `background`, `fontSize`, `borderRadius` etc.)
+| `id` | `string` | A unique string identifier for the bar  (*mandatory*) 
+| `label` | `string?`  | Text displayed on the bar
+| `hasHandles` | `boolean?`  | Used to toggle handles on the left and right side of the bar that can be dragged to change the width of the bar |
+| `immobile` | `boolean?`  | Used to toggle whether bar can be moved (dragged)
+| `bundle` | `string?`  | A string identifier for a bundle. A bundle is a collection of bars that are dragged simultaneously.
+| `style` | `CSSStyleSheet?`  | CSS-based styling for your bar (e.g `background`, `fontSize`, `borderRadius` etc.)
 
 ## Extending the width of a bar
 Simply add `hasHandles: true` to the `ganttBarConfig` to make the bar extendable by dragging the handles on its left or right side.  
@@ -77,8 +77,6 @@ If you want to bind a group of bars one to another so that when you drag one bar
 It is completely up to you to specify which kind of behavior you would like e.g. when a bar is clicked on or when a bar-drag is ended. For this, you may use special events emitted by `g-gantt-chart`:
 ```vue
 <g-gantt-chart
-  chart-start="11.12.2020 12:00"
-  chart-end="15.07.2021 12:00"
   ...
   @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
   @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -88,17 +86,17 @@ It is completely up to you to specify which kind of behavior you would like e.g.
   @drag-bar="onDragBar($event.bar, $event.e)"
   @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
   @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
-  >
+>
   ...
-  </g-gantt-chart>
+</g-gantt-chart>
 
-  <script setup lang="ts">
-  ...
-  const onMousedownBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-    // do something
-  }
-  ...
-  </script>
+<script setup lang="ts">
+...
+const onMousedownBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
+  // do something
+}
+...
+</script>
 ```
 ## Drag and drop  
 The `g-gantt-row` component comes with a special `drop` event, that you can use to implement custom drag-and-drop behavior. The event data also includes the `datetime` position on which the drop occured.
@@ -106,21 +104,20 @@ The `g-gantt-row` component comes with a special `drop` event, that you can use 
 <g-gantt-chart
    ...
 >
- <g-gantt-row
+  <g-gantt-row
     label="This is my row"
     :bars="bars1"
-    highlight-on-hover
-    @drop="onDrop($event.e, $event.datetime)
+    @drop="onDrop($event.e, $event.datetime)"
   />
 </g-gantt-chart>
 
-  <script setup lang="ts">
-  ...
-  const onDrop = (e: MouseEvent, datetime?: string) => {
-    // do something
-  }
-  ...
-  </script>
+<script setup lang="ts">
+...
+const onDrop = (e: MouseEvent, datetime?: string) => {
+  // do something
+}
+...
+</script>
 ```
 
 ## Time axis precision

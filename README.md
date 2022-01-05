@@ -1,9 +1,15 @@
 # Vue Ganttastic
-<img class="centered"
-    src="https://user-images.githubusercontent.com/28678851/148047166-db201d39-eac0-4908-a44c-7d3fc29f8d18.png" 
-    alt="Vue Ganttastic logo"/>  
-Vue Ganttastic is a simple, interactive and highly customizable Gantt chart component for Vue 3.   
+<div style="display: flex; flex-direction: column; align-items:center;">
+<img
+    src="https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png" 
+    style="max-width: 120px; margin: 10px;"
+    alt="Vue Ganttastic logo"
+/>  
 
+<b>Vue Ganttastic</b> is a simple, interactive and highly customizable Gantt chart component for Vue 3.   
+</div>
+
+  
 ## Features
 - **[Vue 3](https://v3.vuejs.org/) support**
 - **[TypeScript](https://www.typescriptlang.org/) support** *(ships with out of the box type declarations)*
@@ -13,9 +19,24 @@ Vue Ganttastic is a simple, interactive and highly customizable Gantt chart comp
 - **[Day.js](https://day.js.org/en/) support**  *(uses Day.js under the hood for date-time manipulation)*
 
 ## Guide and Docs
-To install and get started, check out the [official docs]().
+To get started, check out the [official docs](https://infectoone.github.io/vue-ganttastic/getting-started.html).
 
 ## About
 **License** [MIT](https://choosealicense.com/licenses/mit/)  
 **Author**: Marko Žunić, BSc  
-[GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)
+[GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)  
+## Support the project
+Vue Ganttastic is a free open-source project I work on in my spare time. Buy me a beer and let's give a toast to open-source developers! :beers:
+
+<form action="https://www.paypal.com/donate" method="post" target="_top">
+<input type="hidden" name="hosted_button_id" value="M63C8DAMV5YDJ" />
+<input type="image" src="https://pics.paypal.com/00/s/MTdhMWZmNTUtOWQ1Yi00YmRjLWJjMjgtY2Y0NTNhODM0OTJl/file.PNG" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" style="max-width:200px"/>
+<img alt="" border="0" src="https://www.paypal.com/en_AT/i/scr/pixel.gif" width="1" height="1" />
+</form>
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)
+
+![image](https://user-images.githubusercontent.com/28678851/148191529-b50c0d17-bcc1-4a78-9d2c-ff2a36b03f52.png)  
+
+![image](https://user-images.githubusercontent.com/28678851/148191757-a2520dce-aeed-43df-87b2-3a64e225f9e7.png)
