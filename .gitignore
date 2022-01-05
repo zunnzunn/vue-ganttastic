@@ -19,3 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+docs/.vuepress/dist
+docs/.vuepress/.cache
+docs/.vuepress/.temp
