@@ -1,4 +1,4 @@
-# GGanttChart
+# Reference: GGanttChart
 The main component of Vue Ganttastic. Represents an entire chart and is meant to have at least one `g-gantt-row` child component.
 ## Props
 | Prop        | Type    | Default | Description                  |
@@ -37,9 +37,9 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 ## Slots
 | Slot name                  | Slot data             | Description                             |
 |----------------------------|-----------------------| ----------------------------------------|
-| `upper-timeunit`           |  `{label: string, value: string}` | Content of an upper time-unit section in the time axis |
-| `timeunit`           |  `{label: string, value: string}` | Content of a time-unit section in the time axis |
-| `bar-tooltip`        |  `{bar: GanttBarObject}` | Slot for the tooltip which appears when hovering over a bar |
+| `upper-timeunit`           |  `{label: string, value: string}` | Content of an upper time-unit section in the time axis. |
+| `timeunit`           |  `{label: string, value: string}` | Content of a time-unit section in the time axis. |
+| `bar-tooltip`        |  `{bar: GanttBarObject}` | Slot for the tooltip which appears when hovering over a bar. |
 
 ## Color Schemes
 - `default`

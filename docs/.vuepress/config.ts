@@ -40,40 +40,12 @@ export default defineUserConfig<DefaultThemeOptions>({
     ],
 
     sidebar: [
-      {
-        text: "Introduction",
-        link: "./introduction.md" 
-      },
-
-      {
-        text: "Getting started",
-        link: "./getting-started.md"
-      },
-
-      {
-        text: "Common use cases",
-        link: "./common-use-cases.md"
-      },
-
-      {
-        text: "Examples",
-        link: "./examples.md" 
-      },
-
-      {
-        text: "Component Reference",
-        link: "./GGanttChart.md",
-        children: [
-          {
-            text: "GGanttChart",
-            link: "./GGanttChart.md",
-          },
-          {
-            text: "GGanttRow",
-            link: "./GGanttRow.md",
-          },
-        ]
-      },
+      "./introduction.md",
+      "./getting-started.md",
+      "./common-use-cases.md",
+      "./examples.md",
+      "./GGanttChart.md",
+      "./GGanttRow.md"
     ]
 
   },
