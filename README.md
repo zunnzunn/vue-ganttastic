@@ -1,8 +1,9 @@
 # vue-ganttastic
 <img src="https://user-images.githubusercontent.com/28678851/77186503-45358300-6ad3-11ea-9392-7f670eb1ca8c.png" width="600"/>
 
-A simple and easy-to-use Gantt chart component for Vue.js 2
-## If you are looking for the Vue 3 version of Vue-Ganttastic, check out the master branch of this project.
+A simple and easy-to-use Gantt chart component for Vue.js
+
+**Using Vue 3? Check out the [Vue-Ganttastic v2](https://github.com/InfectoOne/vue-ganttastic/tree/master) and the corresponding [npm package](https://www.npmjs.com/package/@infectoone/vue-ganttastic).**
 
 ## Homepage
 [Homepage of the project](https://infectoone.github.io/vue-ganttastic-homepage/#/docs)
@@ -99,20 +100,29 @@ export default {
 
 ```
 
-## Contributing
-Pull requests are warmly welcomed, while every major change or proposal ought to be discussed in an issue first. As the project is still new, I will gladly accept suggestions, proposals, contributions etc.
 
-### Contributing - How to run the project
+
+## Contributing (run and build project)
+
   1. Clone the project
   2. Install the Vue CLI service, if you don't already have it installed:
       ```
         npm install -g @vue/cli
         npm install -g @vue/cli-service-global
       ```
+  3. Install all dependencies:
+      ```
+      npm install
+      ```
   3. <code>Playground.vue</code> is a dedicated Vue SFC where all    Vue-Ganttastic features can be
      played around with and tested out. Get it running using:
       ```
         vue serve src/Playground.vue
+      ```
+
+  4. To build the project:
+      ```
+        npx bili --bundle-node-modules
       ```
 ## Dependencies
 [Moment.js](https://momentjs.com/)
