@@ -15,6 +15,7 @@ export default function useTimeaxisUnits (
       case "day":
       case "date":
         return "month"
+      case "week":
       case "month":
         return "year"
       default:
@@ -30,6 +31,7 @@ export default function useTimeaxisUnits (
     hour: "HH",
     date: "DD",
     day: "DD.MMM ",
+    week: "ww",
     month: "MMMM YYYY",
     year: "YYYY"
   }
@@ -93,6 +95,7 @@ export default function useTimeaxisUnits (
         width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
+    console.log(lowerUnits)
     return { upperUnits, lowerUnits }
   })
 

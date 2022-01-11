@@ -19,7 +19,7 @@ export type GanttBarObject = {
 export type GGanttChartPropsRefs = {
   chartStart: Ref<string>
   chartEnd: Ref<string>
-  precision: Ref<"hour" | "day" | "date" | "month">
+  precision: Ref<"hour" | "day" | "date" | "week" | "month">
   barStart: Ref<string>
   barEnd: Ref<string>
   rowHeight: Ref<number>

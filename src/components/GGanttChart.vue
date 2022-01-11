@@ -64,7 +64,7 @@ import { GanttBarObject } from "../models/models"
 interface GGanttChartProps {
   chartStart: string
   chartEnd: string
-  precision?: "hour" | "day" | "date" | "month"
+  precision?: "hour" | "day" | "date" | "week" | "month"
   barStart: string
   barEnd: string
   dateFormat?: string
