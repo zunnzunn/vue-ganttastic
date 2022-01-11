@@ -2,7 +2,7 @@
   <g-gantt-chart
     :chart-start="chartStart"
     :chart-end="chartEnd"
-    precision="week"
+    precision="month"
     :row-height="40"
     grid
     width="100%"

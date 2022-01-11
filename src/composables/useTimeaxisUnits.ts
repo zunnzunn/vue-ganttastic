@@ -19,7 +19,7 @@ export default function useTimeaxisUnits (
       case "month":
         return "year"
       default:
-        throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'date', 'month'")
+        throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'date', 'week', 'month'")
     }
   })
 
