@@ -25,6 +25,7 @@ export default function useTimeaxisUnits (
     hour: "HH",
     date: "DD.MMM ",
     day: "DD.MMM ",
+    dayOfMonth: "DD",
     month: "MMMM YYYY",
     year: "YYYY"
   }
