@@ -14,8 +14,8 @@ export default function useTimeaxisUnits (
         return "day"
       case "day":
       case "date":
-        return "month"
       case "week":
+        return "month"
       case "month":
         return "year"
       default:
