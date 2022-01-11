@@ -13,19 +13,23 @@ export default function useTimeaxisUnits (
       case "hour":
         return "day"
       case "day":
+      case "date":
         return "month"
       case "month":
         return "year"
       default:
-        throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'month'")
+        throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'date', 'month'")
     }
+  })
+
+  const lowerPrecision = computed(() => {
+    return precision?.value === "date" ? "day" : precision?.value
   })
 
   const displayFormats = {
     hour: "HH",
-    date: "DD.MMM ",
+    date: "DD",
     day: "DD.MMM ",
-    dayOfMonth: "DD",
     month: "MMMM YYYY",
     year: "YYYY"
   }
@@ -34,7 +38,7 @@ export default function useTimeaxisUnits (
     const upperUnits :{label: string, value?: string, width?: string}[] = []
     const lowerUnits :{label: string, value?: string, width?: string}[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
-    const lowerUnit = precision.value
+    const lowerUnit = lowerPrecision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
     const totalMinutes = chartEndDayjs.value.diff(chartStartDayjs.value, "minutes", true)
     let upperUnitMinutesCount = 0
@@ -69,7 +73,7 @@ export default function useTimeaxisUnits (
         width = `${currentUnit.endOf(lowerUnit).diff(currentUnit.startOf(lowerUnit), "minutes", true) / totalMinutes * 100}%`
       }
       lowerUnits.push({
-        label: currentUnit.format(displayFormats[lowerUnit]),
+        label: currentUnit.format(displayFormats[precision?.value]),
         value: String(currentUnit[lowerUnit]()),
         width
       })
@@ -89,6 +93,7 @@ export default function useTimeaxisUnits (
         width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
+    console.log(lowerUnits)
     return { upperUnits, lowerUnits }
   })
 

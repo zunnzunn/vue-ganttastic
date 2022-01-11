@@ -60,7 +60,7 @@ import INJECTION_KEYS from "../models/symbols"
 defineProps<{
   chartStart: string
   chartEnd: string
-  precision: "hour" | "day" | "month"
+  precision: "hour" | "day" | "date" | "month"
   colors: ColorScheme
 }>()
 const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
