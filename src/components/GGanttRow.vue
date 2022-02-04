@@ -44,7 +44,7 @@
 import useColorScheme from "../composables/useColorScheme"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
 import INJECTION_KEYS from "../models/symbols"
-import { defineProps, defineEmits, inject, ref, Ref, toRefs, computed } from "vue"
+import { inject, ref, Ref, toRefs, computed } from "vue"
 import { GanttBarObject } from "../models/models"
 import GGanttBar from "./GGanttBar.vue"
 

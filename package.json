@@ -1,6 +1,6 @@
 {
   "name": "@infectoone/vue-ganttastic",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "author": "Marko Zunic (@infectoone)",
   "homepage": "https://infectoone.github.io/vue-ganttastic/",
@@ -37,7 +37,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.6.0",
+    "eslint-plugin-vue": "^8.4.1",
     "postcss": "^8.4.5",
     "postcss-loader": "^6.2.1",
     "rollup": "^2.62.0",

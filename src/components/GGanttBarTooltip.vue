@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { GanttBarObject } from "../models/models"
 import INJECTION_KEYS from "../models/symbols"
-import { computed, toRefs, ref, defineProps, watch, nextTick, inject } from "vue"
+import { computed, toRefs, ref, watch, nextTick, inject } from "vue"
 import useDayjsHelper from "../composables/useDayjsHelper"
 
 const props = defineProps<{

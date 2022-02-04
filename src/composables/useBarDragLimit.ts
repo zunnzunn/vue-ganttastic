@@ -1,8 +1,7 @@
-import { ComputedRef } from "vue"
 import { GanttBarObject, GGanttChartPropsRefs } from "../models/models"
 
 export default function useBarDragLimit (
-  allRowsInChart : ComputedRef<GanttBarObject[][]>,
+  getRowsInChart : () => GanttBarObject[][],
   gGanttChartPropsRefs: GGanttChartPropsRefs
 ) {
   const { pushOnOverlap } = gGanttChartPropsRefs
@@ -10,7 +9,7 @@ export default function useBarDragLimit (
   const getBarsFromBundle = (bundle?: string) => {
     const res: GanttBarObject[] = []
     if (bundle != null) {
-      allRowsInChart.value.forEach(row => {
+      getRowsInChart().forEach(row => {
         row.forEach(bar => {
           if (bar.ganttBarConfig.bundle === bundle) {
             res.push(bar)
@@ -22,7 +21,7 @@ export default function useBarDragLimit (
   }
 
   const setDragLimitsOfGanttBar = (bar: GanttBarObject) => {
-    if (!pushOnOverlap || bar.ganttBarConfig.pushOnOverlap === false) {
+    if (!pushOnOverlap.value || bar.ganttBarConfig.pushOnOverlap === false) {
       return
     }
     for (const sideValue of ["left", "right"]) {
@@ -112,7 +111,7 @@ export default function useBarDragLimit (
 
   const getNextGanttBar = (bar: GanttBarObject, side: "left" | "right") => {
     const barElem = document.getElementById(bar.ganttBarConfig.id) as HTMLElement
-    const allBarsInRow = allRowsInChart.value.find(row => row.includes(bar)) || []
+    const allBarsInRow = getRowsInChart().find(row => row.includes(bar)) || []
     let allBarsLeftOrRight = []
     if (side === "left") {
       allBarsLeftOrRight = allBarsInRow.filter(otherBar => {

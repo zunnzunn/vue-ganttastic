@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import useColorScheme from "../composables/useColorScheme"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
-import { defineProps, inject, toRefs } from "vue"
+import { inject, toRefs } from "vue"
 import INJECTION_KEYS from "../models/symbols"
 
 const props = defineProps<{

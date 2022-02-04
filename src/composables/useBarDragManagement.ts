@@ -1,10 +1,10 @@
 import { GanttBarObject, GGanttChartPropsRefs } from "../models/models"
-import { ComputedRef, ref } from "vue"
+import { ref } from "vue"
 import useBarDrag from "./useBarDrag"
 import useDayjsHelper from "./useDayjsHelper"
 
 export default function useBarDragManagement (
-  allRowsInChart : ComputedRef<GanttBarObject[][]>,
+  getRowsInChart : () => GanttBarObject[][],
   gGanttChartPropsRefs: GGanttChartPropsRefs,
   emitBarEvent: (
     e: MouseEvent,
@@ -32,7 +32,7 @@ export default function useBarDragManagement (
   const initDragOfBundle = (mainBar: GanttBarObject, e: MouseEvent) => {
     const bundle = mainBar.ganttBarConfig.bundle
     if (bundle != null) {
-      allRowsInChart.value.forEach(row => {
+      getRowsInChart().forEach(row => {
         row.forEach(bar => {
           if (bar.ganttBarConfig.bundle === bundle) {
             const dragEndHandler = bar === mainBar ? onEndDrag : () => null
@@ -97,7 +97,7 @@ export default function useBarDragManagement (
 
   const getOverlapBarAndType = (ganttBar: GanttBarObject) => {
     let overlapLeft, overlapRight, overlapInBetween
-    const allBarsInRow = allRowsInChart.value.find(row => row.includes(ganttBar)) || []
+    const allBarsInRow = getRowsInChart().find(row => row.includes(ganttBar)) || []
     const ganttBarStart = toDayjs(ganttBar[barStart.value])
     const ganttBarEnd = toDayjs(ganttBar[barEnd.value])
     const overlapBar = allBarsInRow.find(otherBar => {
@@ -120,7 +120,7 @@ export default function useBarDragManagement (
   const moveBundleOfPushedBarByMinutes = (pushedBar: GanttBarObject, minutes: number, direction: "left" | "right") => {
     addBarToMovedBars(pushedBar)
     if (pushedBar.ganttBarConfig.bundle) {
-      allRowsInChart.value.forEach(row => {
+      getRowsInChart().forEach(row => {
         row.forEach(bar => {
           if (bar.ganttBarConfig.bundle === pushedBar.ganttBarConfig.bundle && bar !== pushedBar) {
             addBarToMovedBars(bar)

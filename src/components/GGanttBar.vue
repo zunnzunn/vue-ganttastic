@@ -29,25 +29,25 @@ import useBarDragManagement from "../composables/useBarDragManagement"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
 import useBarDragLimit from "../composables/useBarDragLimit"
 import { GanttBarObject } from "../models/models"
-import { defineProps, computed, ref, toRefs, inject, watch, nextTick } from "vue"
+import { computed, ref, toRefs, inject, watch, nextTick } from "vue"
 import INJECTION_KEYS from "../models/symbols"
 
 const props = defineProps<{
   bar: GanttBarObject
 }>()
 
-const allRowsInChart = inject(INJECTION_KEYS.allBarsInChartKey)
+const getRowsInChart = inject(INJECTION_KEYS.getChartRowsKey)
 const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
 const emitBarEvent = inject(INJECTION_KEYS.emitBarEventKey)
-if (!allRowsInChart || !gGanttChartPropsRefs || !emitBarEvent) {
+if (!getRowsInChart || !gGanttChartPropsRefs || !emitBarEvent) {
   throw Error("GGanttBar: Failed to inject values from GGanttChart!")
 }
 
 const { bar } = toRefs(props)
 const { rowHeight } = gGanttChartPropsRefs
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
-const { initDragOfBar, initDragOfBundle } = useBarDragManagement(allRowsInChart, gGanttChartPropsRefs, emitBarEvent)
-const { setDragLimitsOfGanttBar } = useBarDragLimit(allRowsInChart, gGanttChartPropsRefs)
+const { initDragOfBar, initDragOfBundle } = useBarDragManagement(getRowsInChart, gGanttChartPropsRefs, emitBarEvent)
+const { setDragLimitsOfGanttBar } = useBarDragLimit(getRowsInChart, gGanttChartPropsRefs)
 
 const isDragging = ref(false)
 

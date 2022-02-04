@@ -58,7 +58,7 @@ import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { computed, provide, ref, toRefs, defineProps, withDefaults, defineEmits, useSlots } from "vue"
+import { computed, provide, ref, toRefs, useSlots} from "vue"
 import { GanttBarObject } from "../models/models"
 
 interface GGanttChartProps {
@@ -111,7 +111,7 @@ const slots = useSlots()
 const colors = computed(() => {
   return colorSchemes[props.colorScheme] || colorSchemes.default
 })
-const allBarsInChartByRow = computed(() => {
+const getChartRows = () => {
   const defaultSlot = slots.default?.()
   const allBars: GanttBarObject[][] = []
   if (defaultSlot) {
@@ -119,15 +119,24 @@ const allBarsInChartByRow = computed(() => {
       if (child.props?.bars) {
         const bars = child.props.bars as GanttBarObject[]
         allBars.push(bars)
+      // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
+      } else if (Array.isArray(child.children)) {
+        child.children.forEach(grandchild => {
+          const granchildNode = grandchild as {props?: {bars?: GanttBarObject[]}}
+          if (granchildNode?.props?.bars) {
+            const bars = granchildNode.props.bars as GanttBarObject[]
+            allBars.push(bars)
+          }
+        })
       }
     })
   }
   return allBars
-})
+}
 
 const showTooltip = ref(false)
 const isDragging = ref(false)
-const tooltipBar = ref<GanttBarObject | null>(null)
+const tooltipBar = ref<GanttBarObject | undefined>(undefined)
 let tooltipTimeoutId : number
 const initTooltip = (bar: GanttBarObject) => {
   if (tooltipTimeoutId) {
@@ -175,7 +184,7 @@ const emitBarEvent = (
 
 const gGanttChart = ref<HTMLElement | null>(null)
 
-provide(INJECTION_KEYS.allBarsInChartKey, allBarsInChartByRow)
+provide(INJECTION_KEYS.getChartRowsKey, getChartRows)
 provide(INJECTION_KEYS.gGanttChartPropsKey, { ...toRefs(props), gGanttChart })
 provide(INJECTION_KEYS.emitBarEventKey, emitBarEvent)
 </script>
