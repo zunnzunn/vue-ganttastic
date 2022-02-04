@@ -58,7 +58,7 @@ import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import INJECTION_KEYS from "../models/symbols"
-import { computed, provide, ref, toRefs, useSlots} from "vue"
+import { computed, provide, ref, toRefs, useSlots } from "vue"
 import { GanttBarObject } from "../models/models"
 
 interface GGanttChartProps {
