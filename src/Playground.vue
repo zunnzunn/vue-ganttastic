@@ -44,8 +44,8 @@ import GGanttRow from "./components/GGanttRow.vue"
 import GGanttChart from "./components/GGanttChart.vue"
 import { GanttBarObject } from "./models/models"
 
-const chartStart = ref("11.12.2020 12:00")
-const chartEnd = ref("15.07.2021 12:00")
+const chartStart = ref("01.03.2020 12:00")
+const chartEnd = ref("15.05.2020 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
 
 const bars1 = ref([

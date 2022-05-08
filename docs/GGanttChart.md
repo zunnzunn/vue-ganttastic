@@ -11,7 +11,7 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `date-format` | string?  | `"YYYY-MM-DD HH:mm"` | Datetime string format of `chart-start`, `chart-end` and the values of the `bar-start`, `bar-end` properties in bar objects. See [Day.js format tokens](https://day.js.org/docs/en/parse/string-format).
 | `width` | string? | `"100%"` | Width of the chart (e.g. `80%` or `800px`)
 | `hide-timeaxis` | boolean? | `false` | Toggle visibility of the time axis.
-| `color-scheme` | string? | `"default"` | Color scheme (theme) of the chart. See [color schemes](#color-schemes).
+| `color-scheme` | string \| ColorScheme | `"default"` | Color scheme (theme) of the chart. Either use the name of one of the predefined schemes or pass a color-scheme-object of your own. See [color schemes](#color-schemes).
 | `grid` | string? | `false` | Toggle visibility of background grid.
 | `push-on-overlap` | boolean? | `false` | Specifies whether bars "push one another" when dragging and overlaping.
 | `no-overlap` | boolean? |  `false` | If `push-on-overlap` is `false`, toggle this to prevent overlaps after drag by snapping the dragged bar back to its original position.
@@ -41,7 +41,9 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `timeunit`           |  `{label: string, value: string}` | Content of a time-unit section in the time axis. |
 | `bar-tooltip`        |  `{bar: GanttBarObject}` | Slot for the tooltip which appears when hovering over a bar. |
 
-## Color Schemes
+## Color Schemes  
+
+List of pre-defined color schemes:
 - `default`
 - `creamy`
 - `crimson`
@@ -53,3 +55,17 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 - `sky`
 - `slumber`
 - `vue`
+
+You can also provide your own color scheme. Your custom color scheme should be an object of the following shape:
+```javascript
+{
+  primary: string,
+  secondary: string,
+  ternary: string,
+  quartenary: string,
+  hoverHighlight: string,
+  text: string,
+  background: string,
+  toast?: string
+}
+```

@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import colorSchemes from "../color-schemes"
+import colorSchemes, { ColorScheme } from "../color-schemes"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
@@ -70,7 +70,7 @@ interface GGanttChartProps {
   dateFormat?: string
   width?: string
   hideTimeaxis?: boolean
-  colorScheme?: string
+  colorScheme?: string | ColorScheme
   grid?: boolean
   pushOnOverlap?: boolean
   noOverlap?: boolean
@@ -106,10 +106,14 @@ const emit = defineEmits<{
   (e: "contextmenu-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string }) : void
 }>()
 
-const { chartStart, chartEnd, precision, width, font } = toRefs(props)
+const { chartStart, chartEnd, precision, width, font, colorScheme } = toRefs(props)
 const slots = useSlots()
 const colors = computed(() => {
-  return colorSchemes[props.colorScheme] || colorSchemes.default
+  if (typeof colorScheme.value === "string") {
+    return colorSchemes[colorScheme.value] || colorSchemes.default
+  } else {
+    return colorScheme.value
+  }
 })
 const getChartRows = () => {
   const defaultSlot = slots.default?.()
