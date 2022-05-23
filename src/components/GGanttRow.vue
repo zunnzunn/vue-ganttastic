@@ -9,6 +9,7 @@
     @mouseleave="isHovering = false"
   >
     <div
+      v-if="!isBlank(label)"
       class="g-gantt-row-label"
       :style="{background: colors.primary, color: colors.text}"
     >
@@ -87,6 +88,10 @@ const onDrop = (e: MouseEvent) => {
   const xPos = e.clientX - container.left
   const datetime = mapPositionToTime(xPos)
   emit("drop", { e, datetime })
+}
+
+const isBlank = (str: string) => {
+  return (!str || /^\s*$/.test(str))
 }
 
 </script>
