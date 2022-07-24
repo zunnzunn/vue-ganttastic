@@ -4,7 +4,7 @@
     class="g-gantt-bar"
     :style="barStyle"
     @mousedown="onMouseEvent"
-    @mouseup="onMouseEvent"
+    @click="onMouseEvent"
     @dblclick="onMouseEvent"
     @mouseenter="onMouseEvent"
     @mouseleave="onMouseEvent"

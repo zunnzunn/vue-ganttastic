@@ -93,8 +93,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   font: "Helvetica"
 })
 
-// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
+  (e: "click-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
   (e: "mousedown-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
   (e: "mouseup-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
   (e: "dblclick-bar", value: {bar: GanttBarObject, e: MouseEvent, datetime?: string}) : void
@@ -162,6 +162,7 @@ const emitBarEvent = (
   movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>
 ) => {
   switch (e.type) {
+    case "click" : emit("click-bar", {bar, e, datetime}); break
     case "mousedown": emit("mousedown-bar", { bar, e, datetime }); break
     case "mouseup": emit("mouseup-bar", { bar, e, datetime }); break
     case "dblclick": emit("dblclick-bar", { bar, e, datetime }); break

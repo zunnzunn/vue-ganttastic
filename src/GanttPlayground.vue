@@ -9,6 +9,7 @@
     bar-start="beginDate"
     bar-end="endDate"
     :date-format="format"
+    @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
     @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
@@ -125,6 +126,10 @@ const deleteBar = () => {
   if (idx !== -1) {
     bars1.value.splice(idx, 1)
   }
+}
+
+const onClickBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+  console.log("click-bar", bar, e, datetime)
 }
 
 const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {

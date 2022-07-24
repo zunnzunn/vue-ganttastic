@@ -1,5 +1,5 @@
 import { createApp } from "vue"
-import Playground from "./Playground.vue"
+import Playground from "./GanttPlayground.vue"
 import dayjs from "dayjs"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"

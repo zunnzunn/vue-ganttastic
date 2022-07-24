@@ -22,6 +22,7 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 ## Custom Events
 | Event name                 | Event data                                                 |
 |----------------------------|------------------------------------------------------------|
+| `click-bar`                |  `{bar: GanttBarObject, e: MouseEvent, datetime?: string}` |
 | `mousedown-bar`            |  `{bar: GanttBarObject, e: MouseEvent, datetime?: string}` |
 | `mouseup-bar`            |  `{bar: GanttBarObject, e: MouseEvent, datetime?: string}` |
 | `dblclick-bar`            |  `{bar: GanttBarObject, e: MouseEvent, datetime?: string}` |
