@@ -12,6 +12,7 @@ export default [
         file: "dist/library.mjs"
       }
     ],
+    external: [/^(dayjs)/],
     plugins: [
       vue({
         preprocessStyles: true
