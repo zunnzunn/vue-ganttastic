@@ -1,12 +1,17 @@
-import { InjectionKey } from "vue"
-import { GanttBarObject, GGanttChartPropsRefs } from "./models"
+import type { InjectionKey } from "vue"
 
-const INJECTION_KEYS = {
-  getChartRowsKey: Symbol("getChartRowsKey") as InjectionKey<() => GanttBarObject[][]>,
-  gGanttChartPropsKey: Symbol("gGanttChartPropsKey") as InjectionKey<GGanttChartPropsRefs>,
-  emitBarEventKey: Symbol("emitBarEventKey") as InjectionKey<
-    (e: MouseEvent, bar: GanttBarObject, datetime?: string) => void
-  >
+import type { GGanttChartConfig } from "../components/GGanttChart.vue"
+import type { GanttBarObject } from "../types"
+
+export type Context = {
+  getChartRows: () => GanttBarObject[][]
+  config: GGanttChartConfig
+  emitBarEvent: (
+    e: MouseEvent,
+    bar: GanttBarObject,
+    datetime?: string,
+    movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
+  ) => void
 }
 
-export default INJECTION_KEYS
+export const CONTEXT = Symbol("CONTEXT") as InjectionKey<Context>

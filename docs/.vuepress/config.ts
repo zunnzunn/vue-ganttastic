@@ -1,6 +1,7 @@
-import { defineUserConfig } from 'vuepress'
-import type { DefaultThemeOptions } from 'vuepress'
-const { path } = require('@vuepress/utils')
+import { viteBundler, defineUserConfig, type DefaultThemeOptions } from 'vuepress'
+import { path } from '@vuepress/utils'
+import { searchPlugin } from '@vuepress/plugin-search'
+import { defaultTheme } from '@vuepress/theme-default'
 
 export default defineUserConfig<DefaultThemeOptions>({
   // site config
@@ -8,24 +9,18 @@ export default defineUserConfig<DefaultThemeOptions>({
   title: "Vue Ganttastic",
   description: "A simple and customizable Gantt chart component for Vue",
   base: '/vue-ganttastic/',
-  clientAppEnhanceFiles: path.resolve(
-    __dirname,
-    './clientAppEnhance.ts'
-  ),
   plugins: [
     [
-      '@vuepress/plugin-search',
-      {
+      searchPlugin({
         locales: {
-          '/': {
-            placeholder: 'Search',
-          }
+          '/': { placeholder: 'Search' }
         }
-      }
+      }),
     ]
   ],
   // theme and its config
-  themeConfig: {
+  theme: defaultTheme({
+    name: 'vue-ganttastic',
     logo: 'https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png',
     extractHeaders: true,
     navbar: [
@@ -47,6 +42,5 @@ export default defineUserConfig<DefaultThemeOptions>({
       "./GGanttChart.md",
       "./GGanttRow.md"
     ]
-
-  },
+  }),
 })

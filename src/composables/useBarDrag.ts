@@ -1,23 +1,24 @@
-import { GanttBarObject, GGanttChartPropsRefs } from "./../models/models"
+import { type Ref, ref } from "vue"
+
+import type { GanttBarObject } from "../types"
+import useContext from "./useContext"
 import useDayjsHelper from "./useDayjsHelper"
-
 import useTimePositionMapping from "./useTimePositionMapping"
-import { Ref, ref } from "vue"
 
-export default function useBarDrag (
+export default function useBarDrag(
   bar: Ref<GanttBarObject>,
-  gGanttChartPropsRefs: GGanttChartPropsRefs,
   onDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null,
   onEndDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null
 ) {
-  const { barStart, barEnd, pushOnOverlap } = gGanttChartPropsRefs
+  const { config } = useContext()
+  const { barStart, barEnd, pushOnOverlap } = config
 
   const isDragging = ref(false)
   let cursorOffsetX = 0
-  let dragCallBack : (e: MouseEvent) => void
+  let dragCallBack: (e: MouseEvent) => void
 
-  const { mapPositionToTime } = useTimePositionMapping(gGanttChartPropsRefs)
-  const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
+  const { mapPositionToTime } = useTimePositionMapping()
+  const { toDayjs } = useDayjsHelper()
 
   const initDrag = (e: MouseEvent) => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
@@ -26,14 +27,15 @@ export default function useBarDrag (
       const mousedownType = (e.target as Element).className
       switch (mousedownType) {
         case "g-gantt-bar-handle-left":
-          document.body.style.cursor = "w-resize"
+          document.body.style.cursor = "ew-resize"
           dragCallBack = dragByLeftHandle
           break
         case "g-gantt-bar-handle-right":
-          document.body.style.cursor = "w-resize"
+          document.body.style.cursor = "ew-resize"
           dragCallBack = dragByRightHandle
           break
-        default: dragCallBack = drag
+        default:
+          dragCallBack = drag
       }
       isDragging.value = true
       window.addEventListener("mousemove", dragCallBack)
@@ -43,10 +45,12 @@ export default function useBarDrag (
 
   const drag = (e: MouseEvent) => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
-    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    const barContainer = barElement
+      ?.closest(".g-gantt-row-bars-container")
+      ?.getBoundingClientRect()
     if (barElement && barContainer) {
       const barWidth = barElement.getBoundingClientRect().width
-      const xStart = (e.clientX - barContainer.left - cursorOffsetX)
+      const xStart = e.clientX - barContainer.left - cursorOffsetX
       const xEnd = xStart + barWidth
       if (isOutOfRange(xStart, xEnd)) {
         return
@@ -59,7 +63,9 @@ export default function useBarDrag (
 
   const dragByLeftHandle = (e: MouseEvent) => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
-    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    const barContainer = barElement
+      ?.closest(".g-gantt-row-bars-container")
+      ?.getBoundingClientRect()
     if (barElement && barContainer) {
       const xStart = e.clientX - barContainer.left
       const newBarStart = mapPositionToTime(xStart)
@@ -73,7 +79,9 @@ export default function useBarDrag (
 
   const dragByRightHandle = (e: MouseEvent) => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
-    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
+    const barContainer = barElement
+      ?.closest(".g-gantt-row-bars-container")
+      ?.getBoundingClientRect()
     if (barElement && barContainer) {
       const xEnd = e.clientX - barContainer.left
       const newBarEnd = mapPositionToTime(xEnd)

@@ -1,11 +1,11 @@
 export type ColorScheme = {
-  primary: string,
-  secondary: string,
-  ternary: string,
-  quartenary: string,
-  hoverHighlight: string,
-  text: string,
-  background: string,
+  primary: string
+  secondary: string
+  ternary: string
+  quartenary: string
+  hoverHighlight: string
+  text: string
+  background: string
   toast?: string
 }
 
@@ -121,6 +121,8 @@ export const colorSchemes: Record<string, ColorScheme> = {
     text: "white",
     background: "white"
   }
-}
+} as const
+
+export type ColorSchemeKey = keyof ColorScheme
 
 export default colorSchemes

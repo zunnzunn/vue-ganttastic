@@ -1,13 +1,15 @@
-import { colorSchemes } from "../color-schemes"
 import { computed } from "vue"
-import { GGanttChartPropsRefs } from "../models/models"
 
-export default function useColorScheme (
-  gGanttChartPropsRefs: GGanttChartPropsRefs
-) {
-  const { colorScheme } = gGanttChartPropsRefs
+import { colorSchemes } from "../color-schemes"
+import useContext from "./useContext"
+
+export default function useColorScheme() {
+  const { config } = useContext()
+  const { colorScheme } = config
   const colors = computed(() => {
-    return colorSchemes[colorScheme.value] || colorSchemes.default
+    return typeof colorScheme.value !== "string"
+      ? colorScheme.value
+      : colorSchemes[colorScheme.value] || colorSchemes.default
   })
 
   return {

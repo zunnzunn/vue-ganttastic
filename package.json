@@ -1,47 +1,46 @@
 {
   "name": "@infectoone/vue-ganttastic",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "A simple and customizable Gantt chart component for Vue.js",
   "author": "Marko Zunic (@infectoone)",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "rollup -c",
-    "lint": "vue-cli-service lint",
+    "serve": "vite",
+    "build": "run-p build:types build:lib",
+    "build:lib": "vite build",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --isolatedModules false --outFile lib/index.d.ts",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
+    "lint:fix": "npm run lint --fix",
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs"
   },
-  "main": "dist/library.js",
-  "module": "dist/library.mjs",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
   "files": [
-    "dist/*"
+    "lib/*"
   ],
-  "dependencies": {
-    "dayjs": "^1.10.5"
-  },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-typescript": "^5.0.8",
-    "@vue/cli-service": "^5.0.8",
-    "@vue/eslint-config-typescript": "^9.1.0",
-    "@vuepress/plugin-search": "^2.0.0-beta.32",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "postcss": "^8.4.5",
-    "postcss-loader": "^6.2.1",
-    "rollup": "^2.62.0",
+    "@rushstack/eslint-patch": "^1.1.4",
+    "@types/node": "^16.11.54",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "@vuepress/plugin-search": "2.0.0-beta.50",
+    "eslint": "^8.22.0",
+    "eslint-plugin-vue": "^9.3.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-typescript": "^1.0.1",
-    "rollup-plugin-vue": "^6.0.0",
-    "tslib": "^2.3.1",
-    "typescript": "^4.5.4",
-    "vue": "^3.2.26",
-    "vuepress": "^2.0.0-beta.32"
+    "typescript": "~4.7.4",
+    "vite": "^3.0.9",
+    "vite-plugin-vue-type-imports": "^0.2.0",
+    "vue-tsc": "^0.40.1",
+    "vuepress": "2.0.0-beta.50"
   },
   "peerDependencies": {
-    "vue": "^3.2.26"
+    "dayjs": "^1.11.5",
+    "vue": "^3.2.37"
   },
   "homepage": "https://infectoone.github.io/vue-ganttastic/",
   "keywords": [
