@@ -1,6 +1,6 @@
 <template>
   <div
-    :id="bar.ganttBarConfig.id"
+    :id="barConfig.id"
     class="g-gantt-bar"
     :style="barStyle"
     @mousedown="onMouseEvent"
@@ -13,11 +13,11 @@
     <div class="g-gantt-bar-label">
       <slot :bar="bar">
         <div>
-          {{ bar.ganttBarConfig.label || "" }}
+          {{ barConfig.label || "" }}
         </div>
       </slot>
     </div>
-    <template v-if="bar.ganttBarConfig.hasHandles">
+    <template v-if="barConfig.hasHandles">
       <div class="g-gantt-bar-handle-left" />
       <div class="g-gantt-bar-handle-right" />
     </template>
@@ -57,16 +57,16 @@ const { setDragLimitsOfGanttBar } = useBarDragLimit()
 
 const isDragging = ref(false)
 
+const barConfig = computed(() => bar.value.ganttBarConfig)
+
 function firstMousemoveCallback(e: MouseEvent) {
-  bar.value.ganttBarConfig.bundle != null
-    ? initDragOfBundle(bar.value, e)
-    : initDragOfBar(bar.value, e)
+  barConfig.value.bundle != null ? initDragOfBundle(bar.value, e) : initDragOfBar(bar.value, e)
   isDragging.value = true
 }
 
 const prepareForDrag = () => {
   setDragLimitsOfGanttBar(bar.value)
-  if (bar.value.ganttBarConfig.immobile) {
+  if (barConfig.value.immobile) {
     return
   }
 
@@ -124,7 +124,7 @@ onUnmounted(() => window.removeEventListener("resize", calculateBarSize))
 
 const barStyle = computed(() => {
   return {
-    ...bar.value.ganttBarConfig.style,
+    ...barConfig.value.style,
     position: "absolute",
     top: `${rowHeight.value * 0.1}px`,
     left: `${xStart.value}px`,
