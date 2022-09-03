@@ -1,6 +1,6 @@
 <template>
   <div
-    ref="gGanttChart"
+    ref="ganttChart"
     class="g-gantt-chart"
     :style="{ width, background: colors.background, fontFamily: font }"
   >
@@ -49,6 +49,7 @@ import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
 import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
 import type { GanttBarObject } from "../types"
+import { useElementSize } from "@vueuse/core"
 
 export interface GGanttChartProps {
   chartStart: string
@@ -70,7 +71,10 @@ export interface GGanttChartProps {
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
   colors: ComputedRef<ColorScheme>
-  gGanttChart: Ref<HTMLElement | null>
+  chartSize: {
+    width: Ref<number>
+    height: Ref<number>
+  }
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
@@ -205,12 +209,14 @@ const emitBarEvent = (
   }
 }
 
-const gGanttChart = ref<HTMLElement | null>(null)
+const ganttChart = ref<HTMLElement | null>(null)
+const chartSize = useElementSize(ganttChart)
+
 provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
   colors,
-  gGanttChart
+  chartSize
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 </script>

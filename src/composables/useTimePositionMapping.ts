@@ -5,7 +5,7 @@ import useDayjsHelper from "./useDayjsHelper.js"
 import provideConfig from "../provider/provideConfig.js"
 
 export default function useTimePositionMapping(config: GGanttChartConfig = provideConfig()) {
-  const { dateFormat, gGanttChart } = config
+  const { dateFormat, chartSize } = config
   const { chartStartDayjs, chartEndDayjs, toDayjs } = useDayjsHelper(config)
 
   const totalNumOfMinutes = computed(() => {
@@ -13,13 +13,13 @@ export default function useTimePositionMapping(config: GGanttChartConfig = provi
   })
 
   const mapTimeToPosition = (time: string) => {
-    const width = gGanttChart.value?.getBoundingClientRect().width || 0
+    const width = chartSize.width.value || 0
     const diffFromStart = toDayjs(time).diff(chartStartDayjs.value, "minutes", true)
     return Math.ceil((diffFromStart / totalNumOfMinutes.value) * width)
   }
 
   const mapPositionToTime = (xPos: number) => {
-    const width = gGanttChart.value?.getBoundingClientRect().width || 0
+    const width = chartSize.width.value || 0
     const diffFromStart = (xPos / width) * totalNumOfMinutes.value
     return chartStartDayjs.value.add(diffFromStart, "minutes").format(dateFormat.value)
   }

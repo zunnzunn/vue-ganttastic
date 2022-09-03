@@ -100,27 +100,21 @@ const onMouseEvent = (e: MouseEvent) => {
   emitBarEvent(e, bar.value, datetime)
 }
 
-const { barStart, barEnd, width, chartStart, chartEnd } = config
+const { barStart, barEnd, width, chartStart, chartEnd, chartSize } = config
 
 const xStart = ref(0)
 const xEnd = ref(0)
 
-function calculateBarSize() {
-  xStart.value = mapTimeToPosition(bar.value[barStart.value])
-  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-}
-
-watch(
-  [bar, width, chartStart, chartEnd],
-  async () => {
-    await nextTick()
-    calculateBarSize()
-  },
-  { deep: true, immediate: true }
-)
-
-onMounted(() => window.addEventListener("resize", calculateBarSize))
-onUnmounted(() => window.removeEventListener("resize", calculateBarSize))
+onMounted(() => {
+  watch(
+    [bar, width, chartStart, chartEnd, chartSize.width],
+    () => {
+      xStart.value = mapTimeToPosition(bar.value[barStart.value])
+      xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+    },
+    { deep: true, immediate: true }
+  )
+})
 
 const barStyle = computed(() => {
   return {
