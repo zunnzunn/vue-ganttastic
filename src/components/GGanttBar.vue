@@ -32,6 +32,7 @@ import {
   watch,
   nextTick,
   type CSSProperties,
+  onMounted,
   onUnmounted
 } from "vue"
 
@@ -115,7 +116,7 @@ watch(
   { deep: true, immediate: true }
 )
 
-window.addEventListener("resize", calculateSize)
+onMounted(() => window.addEventListener("resize", calculateSize))
 onUnmounted(() => window.removeEventListener("resize", calculateSize))
 
 const barStyle = computed(() => {
