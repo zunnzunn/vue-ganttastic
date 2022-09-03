@@ -28,10 +28,7 @@
       <!-- the g-gantt-row components go here -->
     </div>
 
-    <g-gantt-bar-tooltip
-      :model-value="showTooltip || isDragging"
-      :bar="tooltipBar"
-    >
+    <g-gantt-bar-tooltip :model-value="showTooltip || isDragging" :bar="tooltipBar">
       <template #default>
         <slot name="bar-tooltip" :bar="tooltipBar" />
       </template>
@@ -40,25 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  provide,
-  ref,
-  toRefs,
-  useSlots,
-  type ToRefs,
-  type Ref
-} from "vue"
+import { computed, provide, ref, toRefs, useSlots, type ToRefs, type Ref } from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import colorSchemes, { type ColorScheme } from "../color-schemes"
-import {
-  CHART_ROWS_KEY,
-  CONFIG_KEY,
-  EMIT_BAR_EVENT_KEY
-} from "../provider/symbols"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols"
 import type { GanttBarObject } from "../types"
 
 export interface GGanttChartProps {
@@ -98,22 +83,10 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
 })
 
 const emit = defineEmits<{
-  (
-    e: "click-bar",
-    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }
-  ): void
-  (
-    e: "mousedown-bar",
-    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }
-  ): void
-  (
-    e: "mouseup-bar",
-    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }
-  ): void
-  (
-    e: "dblclick-bar",
-    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }
-  ): void
+  (e: "click-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
+  (e: "mousedown-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
+  (e: "mouseup-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
+  (e: "dblclick-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
   (e: "mouseenter-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
   (e: "mouseleave-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
   (e: "dragstart-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
@@ -126,14 +99,10 @@ const emit = defineEmits<{
       movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
     }
   ): void
-  (
-    e: "contextmenu-bar",
-    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }
-  ): void
+  (e: "contextmenu-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
 }>()
 
-const { chartStart, chartEnd, precision, width, font, colorScheme } =
-  toRefs(props)
+const { chartStart, chartEnd, precision, width, font, colorScheme } = toRefs(props)
 const slots = useSlots()
 const colors = computed(() =>
   typeof colorScheme.value === "string"

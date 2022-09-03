@@ -6,9 +6,7 @@
       class="g-grid-line"
       :style="{
         width,
-        background: highlightedUnits?.includes(Number(value))
-          ? colors.hoverHighlight
-          : undefined
+        background: highlightedUnits?.includes(Number(value)) ? colors.hoverHighlight : undefined
       }"
     />
   </div>

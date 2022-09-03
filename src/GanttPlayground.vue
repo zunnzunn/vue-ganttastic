@@ -120,19 +120,11 @@ const onClickBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("click-bar", bar, e, datetime)
 }
 
-const onMousedownBar = (
-  bar: GanttBarObject,
-  e: MouseEvent,
-  datetime?: string
-) => {
+const onMousedownBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("mousedown-bar", bar, e, datetime)
 }
 
-const onMouseupBar = (
-  bar: GanttBarObject,
-  e: MouseEvent,
-  datetime?: string
-) => {
+const onMouseupBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("mouseup-bar", bar, e, datetime)
 }
 
@@ -160,11 +152,7 @@ const onDragendBar = (
   console.log("dragend-bar", bar, e, movedBars)
 }
 
-const onContextmenuBar = (
-  bar: GanttBarObject,
-  e: MouseEvent,
-  datetime?: string
-) => {
+const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("contextmenu-bar", bar, e, datetime)
 }
 </script>

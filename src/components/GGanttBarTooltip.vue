@@ -10,10 +10,7 @@
           fontFamily: font
         }"
       >
-        <div
-          class="g-gantt-tooltip-color-dot"
-          :style="{ background: dotColor }"
-        />
+        <div class="g-gantt-tooltip-color-dot" :style="{ background: dotColor }" />
         <slot>
           {{ tooltipContent }}
         </slot>
@@ -70,9 +67,7 @@ watch(
   { deep: true, immediate: true }
 )
 
-const dotColor = computed(
-  () => bar?.value?.ganttBarConfig.style?.background || DEFAULT_DOT_COLOR
-)
+const dotColor = computed(() => bar?.value?.ganttBarConfig.style?.background || DEFAULT_DOT_COLOR)
 
 const { toDayjs } = useDayjsHelper()
 const { precision, font } = config

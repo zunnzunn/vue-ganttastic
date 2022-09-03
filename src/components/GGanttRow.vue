@@ -8,21 +8,14 @@
     @mouseover="isHovering = true"
     @mouseleave="isHovering = false"
   >
-    <div
-      class="g-gantt-row-label"
-      :style="{ background: colors.primary, color: colors.text }"
-    >
+    <div class="g-gantt-row-label" :style="{ background: colors.primary, color: colors.text }">
       <slot name="label">
         {{ label }}
       </slot>
     </div>
     <div ref="barContainer" class="g-gantt-row-bars-container" v-bind="$attrs">
       <transition-group name="bar-transition" tag="div">
-        <g-gantt-bar
-          v-for="bar in bars"
-          :key="bar.ganttBarConfig.id"
-          :bar="bar"
-        >
+        <g-gantt-bar v-for="bar in bars" :key="bar.ganttBarConfig.id" :bar="bar">
           <slot name="bar-label" :bar="bar" />
         </g-gantt-bar>
       </transition-group>
@@ -57,10 +50,7 @@ const isHovering = ref(false)
 const rowStyle = computed(() => {
   return {
     height: `${config.rowHeight.value}px`,
-    background:
-      highlightOnHover?.value && isHovering.value
-        ? colors.value.hoverHighlight
-        : null
+    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
   } as StyleValue
 })
 
@@ -70,9 +60,7 @@ const barContainer: Ref<HTMLElement | null> = ref(null)
 const onDrop = (e: MouseEvent) => {
   const container = barContainer.value?.getBoundingClientRect()
   if (!container) {
-    console.error(
-      "Vue-Ganttastic: failed to find bar container element for row."
-    )
+    console.error("Vue-Ganttastic: failed to find bar container element for row.")
     return
   }
   const xPos = e.clientX - container.left

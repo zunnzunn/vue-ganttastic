@@ -5,18 +5,13 @@ import type { GGanttChartConfig } from "../components/GGanttChart.vue"
 import type { GanttBarObject } from "../types"
 import provideConfig from "../provider/provideConfig"
 
-export default function useDayjsHelper(
-  config: GGanttChartConfig = provideConfig()
-) {
+export default function useDayjsHelper(config: GGanttChartConfig = provideConfig()) {
   const { chartStart, chartEnd, barStart, barEnd, dateFormat } = config
 
   const chartStartDayjs = computed(() => toDayjs(chartStart.value))
   const chartEndDayjs = computed(() => toDayjs(chartEnd.value))
 
-  const toDayjs = (
-    value: string | GanttBarObject,
-    startOrEnd?: "start" | "end"
-  ) => {
+  const toDayjs = (value: string | GanttBarObject, startOrEnd?: "start" | "end") => {
     if (typeof value === "string") {
       return dayjs(value, dateFormat.value, true)
     }
@@ -25,8 +20,7 @@ export default function useDayjsHelper(
         "VueGanttastic - toDayjs: passed a GanttBarObject as value, but did not provide start|end parameter."
       )
     }
-    const property =
-      startOrEnd === "start" ? value[barStart.value] : value[barEnd.value]
+    const property = startOrEnd === "start" ? value[barStart.value] : value[barEnd.value]
     return dayjs(property, dateFormat.value, true)
   }
 

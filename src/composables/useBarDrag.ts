@@ -48,9 +48,7 @@ export default function createBarDrag(
 
   function getBarElements() {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
-    const barContainer = barElement
-      ?.closest(".g-gantt-row-bars-container")
-      ?.getBoundingClientRect()
+    const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
     return { barElement, barContainer }
   }
 

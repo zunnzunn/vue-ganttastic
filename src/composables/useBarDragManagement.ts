@@ -13,10 +13,7 @@ export default function useBarDragManagement() {
   const emitBarEvent = provideEmitBarEvent()
   const { pushOnOverlap, barStart, barEnd, noOverlap, dateFormat } = config
 
-  const movedBarsInDrag = new Map<
-    GanttBarObject,
-    { oldStart: string; oldEnd: string }
-  >()
+  const movedBarsInDrag = new Map<GanttBarObject, { oldStart: string; oldEnd: string }>()
 
   const { toDayjs } = useDayjsHelper()
 
@@ -40,12 +37,7 @@ export default function useBarDragManagement() {
       row.forEach((bar) => {
         if (bar.ganttBarConfig.bundle === bundle) {
           const dragEndHandler = bar === mainBar ? onEndDrag : () => null
-          const { initDrag } = createBarDrag(
-            ref(bar),
-            onDrag,
-            dragEndHandler,
-            config
-          )
+          const { initDrag } = createBarDrag(ref(bar), onDrag, dragEndHandler, config)
           initDrag(e)
           addBarToMovedBars(bar)
         }
@@ -103,8 +95,7 @@ export default function useBarDragManagement() {
 
   const getOverlapBarAndType = (ganttBar: GanttBarObject) => {
     let overlapLeft, overlapRight, overlapInBetween
-    const allBarsInRow =
-      getChartRows().find((row) => row.includes(ganttBar)) || []
+    const allBarsInRow = getChartRows().find((row) => row.includes(ganttBar)) || []
     const ganttBarStart = toDayjs(ganttBar[barStart.value])
     const ganttBarEnd = toDayjs(ganttBar[barEnd.value])
     const overlapBar = allBarsInRow.find((otherBar) => {
@@ -142,10 +133,7 @@ export default function useBarDragManagement() {
     }
     getChartRows().forEach((row) => {
       row.forEach((bar) => {
-        if (
-          bar.ganttBarConfig.bundle === pushedBar.ganttBarConfig.bundle &&
-          bar !== pushedBar
-        ) {
+        if (bar.ganttBarConfig.bundle === pushedBar.ganttBarConfig.bundle && bar !== pushedBar) {
           addBarToMovedBars(bar)
           moveBarByMinutes(bar, minutes, direction)
         }
@@ -153,11 +141,7 @@ export default function useBarDragManagement() {
     })
   }
 
-  const moveBarByMinutes = (
-    bar: GanttBarObject,
-    minutes: number,
-    direction: "left" | "right"
-  ) => {
+  const moveBarByMinutes = (bar: GanttBarObject, minutes: number, direction: "left" | "right") => {
     switch (direction) {
       case "left":
         bar[barStart.value] = toDayjs(bar, "start")
@@ -168,12 +152,8 @@ export default function useBarDragManagement() {
           .format(dateFormat.value)
         break
       case "right":
-        bar[barStart.value] = toDayjs(bar, "start")
-          .add(minutes, "minutes")
-          .format(dateFormat.value)
-        bar[barEnd.value] = toDayjs(bar, "end")
-          .add(minutes, "minutes")
-          .format(dateFormat.value)
+        bar[barStart.value] = toDayjs(bar, "start").add(minutes, "minutes").format(dateFormat.value)
+        bar[barEnd.value] = toDayjs(bar, "end").add(minutes, "minutes").format(dateFormat.value)
     }
     fixOverlaps(bar)
   }
