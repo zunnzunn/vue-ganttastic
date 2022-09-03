@@ -119,7 +119,7 @@ export default function createBarDrag(
 
   const endDrag = (e: MouseEvent) => {
     isDragging.value = false
-    document.body.style.cursor = "auto"
+    document.body.style.cursor = ""
     window.removeEventListener("mousemove", dragCallBack)
     window.removeEventListener("mouseup", endDrag)
     onEndDrag(e, bar.value)
