@@ -1,8 +1,10 @@
 import type { GanttBarObject } from "../types"
 import useContext from "./useContext"
+import useConfig from "./useConfig"
 
 export default function useBarDragLimit() {
-  const { config, getChartRows } = useContext()
+  const { pushOnOverlap } = useConfig()
+  const { getChartRows } = useContext()
 
   const getBarsFromBundle = (bundle?: string) => {
     const res: GanttBarObject[] = []
@@ -19,7 +21,7 @@ export default function useBarDragLimit() {
   }
 
   const setDragLimitsOfGanttBar = (bar: GanttBarObject) => {
-    if (!config.pushOnOverlap || bar.ganttBarConfig.pushOnOverlap === false) {
+    if (!pushOnOverlap.value || bar.ganttBarConfig.pushOnOverlap === false) {
       return
     }
     for (const sideValue of ["left", "right"]) {
@@ -28,48 +30,49 @@ export default function useBarDragLimit() {
         countGapDistanceToNextImmobileBar(bar, 0, side)
       let totalGapDistance = gapDistanceSoFar
       const bundleBarsOnPath = bundleBarsAndGapDist
-      if (bundleBarsOnPath) {
-        for (let i = 0; i < bundleBarsOnPath.length; i++) {
-          const barFromBundle = bundleBarsOnPath[i].bar
-          const gapDist = bundleBarsOnPath[i].gapDistance
-          const otherBarsFromBundle = getBarsFromBundle(
-            barFromBundle.ganttBarConfig.bundle
-          ).filter((otherBar) => otherBar !== barFromBundle)
-          otherBarsFromBundle.forEach((otherBar) => {
-            const nextGapDistanceAndBars = countGapDistanceToNextImmobileBar(
-              otherBar,
-              gapDist,
-              side
-            )
-            const newGapDistance = nextGapDistanceAndBars.gapDistanceSoFar
-            const newBundleBars = nextGapDistanceAndBars.bundleBarsAndGapDist
+      if (!bundleBarsOnPath) {
+        continue
+      }
+
+      for (let i = 0; i < bundleBarsOnPath.length; i++) {
+        const barFromBundle = bundleBarsOnPath[i].bar
+        const gapDist = bundleBarsOnPath[i].gapDistance
+        const otherBarsFromBundle = getBarsFromBundle(
+          barFromBundle.ganttBarConfig.bundle
+        ).filter((otherBar) => otherBar !== barFromBundle)
+        otherBarsFromBundle.forEach((otherBar) => {
+          const nextGapDistanceAndBars = countGapDistanceToNextImmobileBar(
+            otherBar,
+            gapDist,
+            side
+          )
+          const newGapDistance = nextGapDistanceAndBars.gapDistanceSoFar
+          const newBundleBars = nextGapDistanceAndBars.bundleBarsAndGapDist
+          if (
+            newGapDistance != null &&
+            (!totalGapDistance || newGapDistance < totalGapDistance)
+          ) {
+            totalGapDistance = newGapDistance
+          }
+          newBundleBars.forEach((newBundleBar) => {
             if (
-              newGapDistance != null &&
-              (!totalGapDistance || newGapDistance < totalGapDistance)
+              !bundleBarsOnPath.find(
+                (barAndGap) => barAndGap.bar === newBundleBar.bar
+              )
             ) {
-              totalGapDistance = newGapDistance
+              bundleBarsOnPath.push(newBundleBar)
             }
-            newBundleBars.forEach((newBundleBar) => {
-              if (
-                !bundleBarsOnPath.find(
-                  (barAndGap) => barAndGap.bar === newBundleBar.bar
-                )
-              ) {
-                bundleBarsOnPath.push(newBundleBar)
-              }
-            })
           })
-        }
-        const barElem = document.getElementById(
-          bar.ganttBarConfig.id
-        ) as HTMLElement
-        if (totalGapDistance != null && side === "left") {
-          bar.ganttBarConfig.dragLimitLeft =
-            barElem.offsetLeft - totalGapDistance
-        } else if (totalGapDistance != null && side === "right") {
-          bar.ganttBarConfig.dragLimitRight =
-            barElem.offsetLeft + barElem.offsetWidth + totalGapDistance
-        }
+        })
+      }
+      const barElem = document.getElementById(
+        bar.ganttBarConfig.id
+      ) as HTMLElement
+      if (totalGapDistance != null && side === "left") {
+        bar.ganttBarConfig.dragLimitLeft = barElem.offsetLeft - totalGapDistance
+      } else if (totalGapDistance != null && side === "right") {
+        bar.ganttBarConfig.dragLimitRight =
+          barElem.offsetLeft + barElem.offsetWidth + totalGapDistance
       }
     }
     // all bars from the bundle of the clicked bar need to have the same drag limit:

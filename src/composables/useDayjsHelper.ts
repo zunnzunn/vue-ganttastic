@@ -1,11 +1,13 @@
 import dayjs from "dayjs"
 import { computed } from "vue"
 
+import type { GGanttChartConfig } from "../components/GGanttChart.vue"
 import type { GanttBarObject } from "../types"
-import useContext from "./useContext"
+import useConfig from "./useConfig"
 
-export default function useDayjsHelper() {
-  const { config } = useContext()
+export default function useDayjsHelper(
+  config: GGanttChartConfig = useConfig()
+) {
   const { chartStart, chartEnd, barStart, barEnd, dateFormat } = config
 
   const chartStartDayjs = computed(() => toDayjs(chartStart.value))

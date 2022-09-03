@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import useContext from "../composables/useContext"
+import useConfig from "../composables/useConfig"
 import type { ColorScheme } from "../color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 
@@ -54,8 +54,7 @@ defineProps<{
   precision: "hour" | "day" | "month"
   colors: ColorScheme
 }>()
-const { config } = useContext()
-const { precision } = config
+const { precision } = useConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
 </script>
 

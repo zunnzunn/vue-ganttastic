@@ -1,18 +1,15 @@
 import { computed } from "vue"
 
 import { colorSchemes } from "../color-schemes"
-import useContext from "./useContext"
+import useConfig from "./useConfig"
 
 export default function useColorScheme() {
-  const { config } = useContext()
-  const { colorScheme } = config
+  const { colorScheme } = useConfig()
   const colors = computed(() => {
     return typeof colorScheme.value !== "string"
       ? colorScheme.value
       : colorSchemes[colorScheme.value] || colorSchemes.default
   })
 
-  return {
-    colors
-  }
+  return { colors }
 }

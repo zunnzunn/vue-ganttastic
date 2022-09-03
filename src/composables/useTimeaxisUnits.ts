@@ -2,11 +2,10 @@ import { computed } from "vue"
 import type { ManipulateType } from "dayjs"
 
 import useDayjsHelper from "./useDayjsHelper"
-import useContext from "./useContext"
+import useConfig from "./useConfig"
 
 export default function useTimeaxisUnits() {
-  const { config } = useContext()
-  const { precision } = config
+  const { precision } = useConfig()
   const { chartStartDayjs, chartEndDayjs } = useDayjsHelper()
 
   const upperPrecision = computed(() => {

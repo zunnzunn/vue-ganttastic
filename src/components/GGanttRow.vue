@@ -35,7 +35,7 @@ import { ref, type Ref, toRefs, computed, type StyleValue } from "vue"
 
 import useColorScheme from "../composables/useColorScheme"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
-import useContext from "../composables/useContext"
+import useConfig from "../composables/useConfig"
 import type { GanttBarObject } from "../types"
 import GGanttBar from "./GGanttBar.vue"
 
@@ -51,13 +51,13 @@ const emit = defineEmits<{
 }>()
 
 const { colors } = useColorScheme()
-const { config } = useContext()
+const config = useConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
 
 const rowStyle = computed(() => {
   return {
-    height: `${config.rowHeight}px`,
+    height: `${config.rowHeight.value}px`,
     background:
       highlightOnHover?.value && isHovering.value
         ? colors.value.hoverHighlight

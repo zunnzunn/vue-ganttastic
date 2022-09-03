@@ -29,10 +29,10 @@ import {
   computed,
   ref,
   toRefs,
-  inject,
   watch,
   nextTick,
-  type CSSProperties
+  type CSSProperties,
+  onUnmounted
 } from "vue"
 
 import useBarDragManagement from "../composables/useBarDragManagement"
@@ -40,14 +40,16 @@ import useTimePositionMapping from "../composables/useTimePositionMapping"
 import useBarDragLimit from "../composables/useBarDragLimit"
 import type { GanttBarObject } from "../types"
 import useContext from "../composables/useContext"
+import useConfig from "../composables/useConfig"
 
 const props = defineProps<{
   bar: GanttBarObject
 }>()
-const { config, emitBarEvent } = useContext()
+const { emitBarEvent } = useContext()
+const config = useConfig()
+const { rowHeight } = useConfig()
 
 const { bar } = toRefs(props)
-const { rowHeight } = config
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping()
 const { initDragOfBar, initDragOfBundle } = useBarDragManagement()
 const { setDragLimitsOfGanttBar } = useBarDragLimit()
@@ -56,26 +58,27 @@ const isDragging = ref(false)
 
 const prepareForDrag = () => {
   setDragLimitsOfGanttBar(bar.value)
-  if (!bar.value.ganttBarConfig.immobile) {
-    const firstMousemoveCallback = (e: MouseEvent) => {
-      bar.value.ganttBarConfig.bundle != null
-        ? initDragOfBundle(bar.value, e)
-        : initDragOfBar(bar.value, e)
-      isDragging.value = true
-    }
-    window.addEventListener("mousemove", firstMousemoveCallback, {
-      once: true
-    }) // on first mousemove event
-    window.addEventListener(
-      "mouseup",
-      () => {
-        // in case user does not move the mouse after mousedown at all
-        window.removeEventListener("mousemove", firstMousemoveCallback)
-        isDragging.value = false
-      },
-      { once: true }
-    )
+  if (bar.value.ganttBarConfig.immobile) {
+    return
   }
+  const firstMousemoveCallback = (e: MouseEvent) => {
+    bar.value.ganttBarConfig.bundle != null
+      ? initDragOfBundle(bar.value, e)
+      : initDragOfBar(bar.value, e)
+    isDragging.value = true
+  }
+  window.addEventListener("mousemove", firstMousemoveCallback, {
+    once: true
+  }) // on first mousemove event
+  window.addEventListener(
+    "mouseup",
+    () => {
+      // in case user does not move the mouse after mousedown at all
+      window.removeEventListener("mousemove", firstMousemoveCallback)
+      isDragging.value = false
+    },
+    { once: true }
+  )
 }
 const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
@@ -98,21 +101,22 @@ const { barStart, barEnd, width, chartStart, chartEnd } = config
 const xStart = ref(0)
 const xEnd = ref(0)
 
+function calculateSize() {
+  xStart.value = mapTimeToPosition(bar.value[barStart.value])
+  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+}
+
 watch(
   [bar, width, chartStart, chartEnd],
-  () => {
-    nextTick(() => {
-      xStart.value = mapTimeToPosition(bar.value[barStart.value])
-      xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-    })
+  async () => {
+    await nextTick()
+    calculateSize()
   },
   { deep: true, immediate: true }
 )
 
-window.addEventListener("resize", () => {
-  xStart.value = mapTimeToPosition(bar.value[barStart.value])
-  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-})
+window.addEventListener("resize", calculateSize)
+onUnmounted(() => window.removeEventListener("resize", calculateSize))
 
 const barStyle = computed(() => {
   return {

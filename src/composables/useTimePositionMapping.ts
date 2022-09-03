@@ -1,12 +1,14 @@
+import type { GGanttChartConfig } from "src/components/GGanttChart.vue"
 import { computed } from "vue"
-import useContext from "./useContext"
 
 import useDayjsHelper from "./useDayjsHelper"
+import useConfig from "./useConfig"
 
-export default function useTimePositionMapping() {
-  const { config } = useContext()
+export default function useTimePositionMapping(
+  config: GGanttChartConfig = useConfig()
+) {
   const { dateFormat, gGanttChart } = config
-  const { chartStartDayjs, chartEndDayjs, toDayjs } = useDayjsHelper()
+  const { chartStartDayjs, chartEndDayjs, toDayjs } = useDayjsHelper(config)
 
   const totalNumOfMinutes = computed(() => {
     return chartEndDayjs.value.diff(chartStartDayjs.value, "minutes")
