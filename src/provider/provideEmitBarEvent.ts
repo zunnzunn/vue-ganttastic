@@ -1,5 +1,5 @@
-import { EMIT_BAR_EVENT_KEY } from "./symbols"
 import { inject } from "vue"
+import { EMIT_BAR_EVENT_KEY } from "./symbols"
 
 export default function provideEmitBarEvent() {
   const emitBarEvent = inject(EMIT_BAR_EVENT_KEY)
