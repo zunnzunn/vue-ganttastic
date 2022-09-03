@@ -2,10 +2,10 @@ import type { GGanttChartConfig } from "src/components/GGanttChart.vue"
 import { computed } from "vue"
 
 import useDayjsHelper from "./useDayjsHelper"
-import useConfig from "./useConfig"
+import provideConfig from "../provider/provideConfig"
 
 export default function useTimePositionMapping(
-  config: GGanttChartConfig = useConfig()
+  config: GGanttChartConfig = provideConfig()
 ) {
   const { dateFormat, gGanttChart } = config
   const { chartStartDayjs, chartEndDayjs, toDayjs } = useDayjsHelper(config)

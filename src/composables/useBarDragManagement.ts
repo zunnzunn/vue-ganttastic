@@ -3,12 +3,14 @@ import type { GanttBarObject } from "../types"
 import { ref } from "vue"
 import createBarDrag from "./useBarDrag"
 import useDayjsHelper from "./useDayjsHelper"
-import useContext from "./useContext"
-import useConfig from "./useConfig"
+import provideConfig from "../provider/provideConfig"
+import provideGetChartRows from "../provider/provideGetChartRows"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent"
 
 export default function useBarDragManagement() {
-  const config = useConfig()
-  const { getChartRows, emitBarEvent } = useContext()
+  const config = provideConfig()
+  const getChartRows = provideGetChartRows()
+  const emitBarEvent = provideEmitBarEvent()
   const { pushOnOverlap, barStart, barEnd, noOverlap, dateFormat } = config
 
   const movedBarsInDrag = new Map<

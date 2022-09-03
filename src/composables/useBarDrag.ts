@@ -1,4 +1,5 @@
-import type { GGanttChartConfig } from "src/components/GGanttChart.vue"
+import type { GGanttChartConfig } from "../components/GGanttChart.vue"
+import provideConfig from "../provider/provideConfig"
 import { type Ref, ref } from "vue"
 
 import type { GanttBarObject } from "../types"
@@ -7,9 +8,9 @@ import useTimePositionMapping from "./useTimePositionMapping"
 
 export default function createBarDrag(
   bar: Ref<GanttBarObject>,
-  config: GGanttChartConfig,
   onDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null,
-  onEndDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null
+  onEndDrag: (e: MouseEvent, bar: GanttBarObject) => void = () => null,
+  config: GGanttChartConfig = provideConfig()
 ) {
   const { barStart, barEnd, pushOnOverlap } = config
 

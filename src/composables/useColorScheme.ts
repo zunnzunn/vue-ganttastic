@@ -1,10 +1,10 @@
 import { computed } from "vue"
 
 import { colorSchemes } from "../color-schemes"
-import useConfig from "./useConfig"
+import provideConfig from "../provider/provideConfig"
 
 export default function useColorScheme() {
-  const { colorScheme } = useConfig()
+  const { colorScheme } = provideConfig()
   const colors = computed(() => {
     return typeof colorScheme.value !== "string"
       ? colorScheme.value

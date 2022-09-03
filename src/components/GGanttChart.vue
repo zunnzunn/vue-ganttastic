@@ -47,15 +47,18 @@ import {
   toRefs,
   useSlots,
   type ToRefs,
-  type Ref,
-onMounted
+  type Ref
 } from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import colorSchemes, { type ColorScheme } from "../color-schemes"
-import { CONFIG_KEY, CONTEXT } from "../models/symbols"
+import {
+  CHART_ROWS_KEY,
+  CONFIG_KEY,
+  EMIT_BAR_EVENT_KEY
+} from "../provider/symbols"
 import type { GanttBarObject } from "../types"
 
 export interface GGanttChartProps {
@@ -228,18 +231,12 @@ const emitBarEvent = (
 }
 
 const gGanttChart = ref<HTMLElement | null>(null)
-provide(CONTEXT, {
-  getChartRows,
-  config: {
-    ...toRefs(props),
-    gGanttChart
-  },
-  emitBarEvent
-})
+provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
   gGanttChart
 })
+provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 </script>
 
 <style>

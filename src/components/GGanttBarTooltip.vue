@@ -27,7 +27,7 @@ import { computed, toRefs, ref, watch, nextTick } from "vue"
 
 import type { GanttBarObject } from "../types"
 import useDayjsHelper from "../composables/useDayjsHelper"
-import useConfig from "../composables/useConfig"
+import provideConfig from "../provider/provideConfig"
 
 const TOOLTIP_FORMATS = {
   hour: "HH:mm",
@@ -43,7 +43,7 @@ const props = defineProps<{
 }>()
 
 const { bar } = toRefs(props)
-const config = useConfig()
+const config = provideConfig()
 
 const tooltipTop = ref("0px")
 const tooltipLeft = ref("0px")

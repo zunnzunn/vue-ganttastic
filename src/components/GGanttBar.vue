@@ -39,15 +39,15 @@ import useBarDragManagement from "../composables/useBarDragManagement"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
 import useBarDragLimit from "../composables/useBarDragLimit"
 import type { GanttBarObject } from "../types"
-import useContext from "../composables/useContext"
-import useConfig from "../composables/useConfig"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent"
+import provideConfig from "../provider/provideConfig"
 
 const props = defineProps<{
   bar: GanttBarObject
 }>()
-const { emitBarEvent } = useContext()
-const config = useConfig()
-const { rowHeight } = useConfig()
+const emitBarEvent = provideEmitBarEvent()
+const config = provideConfig()
+const { rowHeight } = config
 
 const { bar } = toRefs(props)
 const { mapTimeToPosition, mapPositionToTime } = useTimePositionMapping()

@@ -1,10 +1,10 @@
 import type { GanttBarObject } from "../types"
-import useContext from "./useContext"
-import useConfig from "./useConfig"
+import provideConfig from "../provider/provideConfig"
+import provideGetChartRows from "../provider/provideGetChartRows"
 
 export default function useBarDragLimit() {
-  const { pushOnOverlap } = useConfig()
-  const { getChartRows } = useContext()
+  const { pushOnOverlap } = provideConfig()
+  const getChartRows = provideGetChartRows()
 
   const getBarsFromBundle = (bundle?: string) => {
     const res: GanttBarObject[] = []
