@@ -21,7 +21,7 @@ export default function useBarDragManagement() {
   const { toDayjs } = useDayjsHelper()
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
-    const { initDrag } = createBarDrag(ref(bar), config, onDrag, onEndDrag)
+    const { initDrag } = createBarDrag(ref(bar), onDrag, onEndDrag, config)
     const ev = {
       ...e,
       type: "dragstart"
@@ -42,9 +42,9 @@ export default function useBarDragManagement() {
           const dragEndHandler = bar === mainBar ? onEndDrag : () => null
           const { initDrag } = createBarDrag(
             ref(bar),
-            config,
             onDrag,
-            dragEndHandler
+            dragEndHandler,
+            config
           )
           initDrag(e)
           addBarToMovedBars(bar)
