@@ -23,14 +23,6 @@ export default defineConfig({
       // make sure to externalize deps that shouldn't be bundled
       // into the library
       external: ["vue", /^(dayjs)/]
-      // output: {
-      //   // Provide global variables to use in the UMD build
-      //   // for externalized deps
-      //   globals: {
-      //     vue: "Vue",
-      //     dayjs: "dayjs"
-      //   }
-      // }
     }
   }
 })

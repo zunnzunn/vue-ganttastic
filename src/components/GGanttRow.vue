@@ -45,7 +45,6 @@ const props = defineProps<{
   highlightOnHover?: boolean
 }>()
 
-// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: "drop", value: { e: MouseEvent; datetime: string }): void
 }>()

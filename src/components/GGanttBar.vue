@@ -57,17 +57,19 @@ const { setDragLimitsOfGanttBar } = useBarDragLimit()
 
 const isDragging = ref(false)
 
+function firstMousemoveCallback(e: MouseEvent) {
+  bar.value.ganttBarConfig.bundle != null
+    ? initDragOfBundle(bar.value, e)
+    : initDragOfBar(bar.value, e)
+  isDragging.value = true
+}
+
 const prepareForDrag = () => {
   setDragLimitsOfGanttBar(bar.value)
   if (bar.value.ganttBarConfig.immobile) {
     return
   }
-  const firstMousemoveCallback = (e: MouseEvent) => {
-    bar.value.ganttBarConfig.bundle != null
-      ? initDragOfBundle(bar.value, e)
-      : initDragOfBar(bar.value, e)
-    isDragging.value = true
-  }
+
   window.addEventListener("mousemove", firstMousemoveCallback, {
     once: true
   }) // on first mousemove event
@@ -81,13 +83,14 @@ const prepareForDrag = () => {
     { once: true }
   )
 }
+
+const barElement = ref<HTMLElement | null>(null)
 const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
   if (e.type === "mousedown") {
     prepareForDrag()
   }
-  const barElement = document.getElementById(bar.value.ganttBarConfig.id)
-  const barContainer = barElement
+  const barContainer = barElement.value
     ?.closest(".g-gantt-row-bars-container")
     ?.getBoundingClientRect()
   let datetime
@@ -102,7 +105,7 @@ const { barStart, barEnd, width, chartStart, chartEnd } = config
 const xStart = ref(0)
 const xEnd = ref(0)
 
-function calculateSize() {
+function calculateBarSize() {
   xStart.value = mapTimeToPosition(bar.value[barStart.value])
   xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
 }
@@ -111,13 +114,13 @@ watch(
   [bar, width, chartStart, chartEnd],
   async () => {
     await nextTick()
-    calculateSize()
+    calculateBarSize()
   },
   { deep: true, immediate: true }
 )
 
-onMounted(() => window.addEventListener("resize", calculateSize))
-onUnmounted(() => window.removeEventListener("resize", calculateSize))
+onMounted(() => window.addEventListener("resize", calculateBarSize))
+onUnmounted(() => window.removeEventListener("resize", calculateBarSize))
 
 const barStyle = computed(() => {
   return {
