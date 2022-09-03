@@ -25,16 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  ref,
-  toRefs,
-  watch,
-  nextTick,
-  type CSSProperties,
-  onMounted,
-  onUnmounted
-} from "vue"
+import { computed, ref, toRefs, watch, type CSSProperties, onMounted, inject } from "vue"
 
 import useBarDragManagement from "../composables/useBarDragManagement.js"
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
@@ -42,6 +33,7 @@ import useBarDragLimit from "../composables/useBarDragLimit.js"
 import type { GanttBarObject } from "../types"
 import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
 import provideConfig from "../provider/provideConfig.js"
+import { BAR_CONTAINER_KEY } from "../provider/symbols"
 
 const props = defineProps<{
   bar: GanttBarObject
@@ -84,15 +76,14 @@ const prepareForDrag = () => {
   )
 }
 
-const barElement = ref<HTMLElement | null>(null)
+const barContainerEl = inject(BAR_CONTAINER_KEY)
+
 const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
   if (e.type === "mousedown") {
     prepareForDrag()
   }
-  const barContainer = barElement.value
-    ?.closest(".g-gantt-row-bars-container")
-    ?.getBoundingClientRect()
+  const barContainer = barContainerEl?.value?.getBoundingClientRect()
   let datetime
   if (barContainer) {
     datetime = mapPositionToTime(e.clientX - barContainer.left)
