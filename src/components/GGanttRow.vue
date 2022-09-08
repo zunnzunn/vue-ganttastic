@@ -26,7 +26,6 @@
 <script setup lang="ts">
 import { ref, type Ref, toRefs, computed, type StyleValue } from "vue"
 
-import useColorScheme from "../composables/useColorScheme"
 import useTimePositionMapping from "../composables/useTimePositionMapping"
 import provideConfig from "../provider/provideConfig"
 import type { GanttBarObject } from "../types"
@@ -42,14 +41,13 @@ const emit = defineEmits<{
   (e: "drop", value: { e: MouseEvent; datetime: string }): void
 }>()
 
-const { colors } = useColorScheme()
-const config = provideConfig()
+const { rowHeight, colors } = provideConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
 
 const rowStyle = computed(() => {
   return {
-    height: `${config.rowHeight.value}px`,
+    height: `${rowHeight.value}px`,
     background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
   } as StyleValue
 })

@@ -37,7 +37,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, toRefs, useSlots, type Ref, type ToRefs } from "vue"
+import {
+  computed,
+  provide,
+  ref,
+  toRefs,
+  useSlots,
+  type ComputedRef,
+  type Ref,
+  type ToRefs
+} from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
@@ -66,6 +75,7 @@ export interface GGanttChartProps {
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
+  colors: ComputedRef<ColorScheme>
   gGanttChart: Ref<HTMLElement | null>
 }
 
@@ -205,6 +215,7 @@ const gGanttChart = ref<HTMLElement | null>(null)
 provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
+  colors,
   gGanttChart
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)

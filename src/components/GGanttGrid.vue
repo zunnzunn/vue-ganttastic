@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import useColorScheme from "../composables/useColorScheme"
+import provideConfig from "../provider/provideConfig"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 
 defineProps<{
   highlightedUnits?: number[]
 }>()
 
-const { colors } = useColorScheme()
+const { colors } = provideConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
 </script>
 
