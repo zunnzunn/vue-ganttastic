@@ -37,12 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, toRefs, useSlots, type ToRefs, type Ref } from "vue"
+import { computed, provide, ref, toRefs, useSlots, type Ref, type ToRefs } from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
-import colorSchemes, { type ColorScheme } from "../color-schemes"
+import { colorSchemes, type ColorScheme } from "../color-schemes"
+import type { ColorSchemeKey } from "../color-schemes"
 import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols"
 import type { GanttBarObject } from "../types"
 
@@ -103,11 +104,12 @@ const emit = defineEmits<{
 }>()
 
 const { chartStart, chartEnd, precision, width, font, colorScheme } = toRefs(props)
+
 const slots = useSlots()
 const colors = computed(() =>
-  typeof colorScheme.value === "string"
-    ? colorSchemes[colorScheme.value] || colorSchemes.default
-    : colorScheme.value
+  typeof colorScheme.value !== "string"
+    ? colorScheme.value
+    : colorSchemes[colorScheme.value as ColorSchemeKey] || colorSchemes.default
 )
 const getChartRows = () => {
   const defaultSlot = slots.default?.()
