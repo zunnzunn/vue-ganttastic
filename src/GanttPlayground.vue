@@ -29,8 +29,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import GGanttRow from "./components/GGanttRow.vue"
-import GGanttChart from "./components/GGanttChart.vue"
 import type { GanttBarObject } from "./types"
 
 const chartStart = ref("21.03.2021 12:00")
