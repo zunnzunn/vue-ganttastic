@@ -17,12 +17,10 @@ export function extendDayjs() {
 
 export { GGanttChart, GGanttRow }
 
-const ganttastic: Plugin = {
+export const ganttastic: Plugin = {
   install(app, options?) {
     extendDayjs()
     app.component("GGanttChart", GGanttChart)
     app.component("GGanttRow", GGanttRow)
   }
 }
-
-export default ganttastic
