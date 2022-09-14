@@ -106,13 +106,10 @@ export default function createBarDrag(
     const dragLimitLeft = bar.value.ganttBarConfig.dragLimitLeft
     const dragLimitRight = bar.value.ganttBarConfig.dragLimitRight
 
-    if (
+    return (
       (xStart && dragLimitLeft != null && xStart < dragLimitLeft) ||
       (xEnd && dragLimitRight != null && xEnd > dragLimitRight)
-    ) {
-      return true
-    }
-    return false
+    )
   }
 
   const endDrag = (e: MouseEvent) => {
