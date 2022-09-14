@@ -46,7 +46,7 @@ export default function createBarDrag(
     window.addEventListener("mouseup", endDrag)
   }
 
-  function getBarElements() {
+  const getBarElements = () => {
     const barElement = document.getElementById(bar.value.ganttBarConfig.id)
     const barContainer = barElement?.closest(".g-gantt-row-bars-container")?.getBoundingClientRect()
     return { barElement, barContainer }
