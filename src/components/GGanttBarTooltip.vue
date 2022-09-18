@@ -1,6 +1,9 @@
 <template>
   <teleport to="body">
-    <transition name="g-fade" mode="out-in">
+    <transition
+      name="fade"
+      mode="out-in"
+    >
       <div
         v-if="modelValue"
         class="g-gantt-tooltip"
@@ -10,7 +13,10 @@
           fontFamily: font
         }"
       >
-        <div class="g-gantt-tooltip-color-dot" :style="{ background: dotColor }" />
+        <div
+          class="gantt-bar-tooltip-color-dot"
+          :style="{background: dotColor}"
+        />
         <slot>
           {{ tooltipContent }}
         </slot>
@@ -20,19 +26,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRefs, ref, watch, nextTick } from "vue"
-
-import type { GanttBarObject } from "../types"
+import { GanttBarObject } from "../models/models"
+import INJECTION_KEYS from "../models/symbols"
+import { computed, toRefs, ref, watch, nextTick, inject } from "vue"
 import useDayjsHelper from "../composables/useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
-
-const TOOLTIP_FORMATS = {
-  hour: "HH:mm",
-  day: "DD. MMM HH:mm",
-  month: "DD. MMMM YYYY"
-} as const
-
-const DEFAULT_DOT_COLOR = "cadetblue"
 
 const props = defineProps<{
   bar?: GanttBarObject
@@ -40,52 +37,49 @@ const props = defineProps<{
 }>()
 
 const { bar } = toRefs(props)
-const config = provideConfig()
+const gGanttChartPropsRefs = inject(INJECTION_KEYS.gGanttChartPropsKey)
+if (!gGanttChartPropsRefs) {
+  throw Error("GGanttBarTooltip: Failed to inject values from GGanttChart!")
+}
 
 const tooltipTop = ref("0px")
 const tooltipLeft = ref("0px")
-watch(
-  () => props.bar,
-  async () => {
-    await nextTick()
-
+watch(bar, () => {
+  nextTick(() => {
     const barId = bar?.value?.ganttBarConfig.id || ""
-    if (!barId) {
-      return
+    if (barId) {
+      const barElement = document.getElementById(barId)
+      let { top, left } = barElement?.getBoundingClientRect() || { top: 0, left: 0 }
+      const { rowHeight } = gGanttChartPropsRefs
+      left = Math.max(left, 10)
+      tooltipTop.value = `${top + rowHeight.value - 10}px`
+      tooltipLeft.value = `${left}px`
     }
+  })
+}, { deep: true, immediate: true })
 
-    const barElement = document.getElementById(barId)
-    const { top, left } = barElement?.getBoundingClientRect() || {
-      top: 0,
-      left: 0
-    }
-    const { rowHeight } = config
-    const leftValue = Math.max(left, 10)
-    tooltipTop.value = `${top + rowHeight.value - 10}px`
-    tooltipLeft.value = `${leftValue}px`
-  },
-  { deep: true, immediate: true }
-)
+const dotColor = computed(() => bar?.value?.ganttBarConfig.style?.background || "cadetblue")
 
-const dotColor = computed(() => bar?.value?.ganttBarConfig.style?.background || DEFAULT_DOT_COLOR)
-
-const { toDayjs } = useDayjsHelper()
-const { precision, font } = config
+const tooltipFormats = {
+  hour: "HH:mm",
+  day: "DD. MMM HH:mm",
+  month: "DD. MMMM YYYY"
+}
+const { toDayjs } = useDayjsHelper(gGanttChartPropsRefs)
+const { precision, font } = gGanttChartPropsRefs
 const tooltipContent = computed(() => {
-  const format = TOOLTIP_FORMATS[precision.value]
+  const format = tooltipFormats[precision.value]
   if (bar && bar.value) {
     const barStartFormatted = toDayjs(bar.value, "start").format(format)
     const barEndFormatted = toDayjs(bar.value, "end").format(format)
-    // NOTE: this is not the HYPHEN-MINUS (-) character by intend.
-    // Instead we use the correct typographic sign the en-dash
-    // see: https://en.wikipedia.org/wiki/Dash#Ranges_of_values
-    return `${barStartFormatted} – ${barEndFormatted}`
+    return `${barStartFormatted} - ${barEndFormatted}`
   }
   return ""
 })
+
 </script>
 
-<style>
+<style scoped>
 .g-gantt-tooltip {
   position: fixed;
   background: black;
@@ -97,11 +91,9 @@ const tooltipContent = computed(() => {
   transition: opacity 0.2s;
   display: flex;
   align-items: center;
-  font-variant-numeric: tabular-nums;
 }
-
 .g-gantt-tooltip:before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 10%;
@@ -113,21 +105,23 @@ const tooltipContent = computed(() => {
   margin-left: -5px;
   margin-top: -5px;
 }
-
-.g-gantt-tooltip-color-dot {
+.g-gantt-tooltip > .gantt-bar-tooltip-color-dot {
   width: 8px;
   height: 8px;
   border-radius: 100%;
   margin-right: 4px;
 }
-
-.g-fade-enter-active,
-.g-fade-leave-active {
-  transition: opacity 0.3s ease;
+.fade-enter-active {
+  animation: fade-in .3s;
+}
+.fade-leave-active {
+  animation: fade-in .3s reverse;
 }
 
-.g-fade-enter-from,
-.g-fade-leave-to {
-  opacity: 0;
-}
-</style>
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}</style>
