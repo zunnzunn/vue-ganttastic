@@ -19,37 +19,23 @@
     @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
     @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
   >
-    <g-gantt-row
-      label="My row 1"
-      :bars="bars1"
-      highlight-on-hover
-    />
-    <g-gantt-row
-      label="My row 2"
-      highlight-on-hover
-      :bars="bars2"
-    />
+    <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
+    <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" />
   </g-gantt-chart>
 
-  <button @click="addBar()">
-    Add bar
-  </button>
-  <button @click="deleteBar()">
-    Delete bar
-  </button>
+  <button type="button" @click="addBar()">Add bar</button>
+  <button type="button" @click="deleteBar()">Delete bar</button>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
-import GGanttRow from "./components/GGanttRow.vue"
-import GGanttChart from "./components/GGanttChart.vue"
-import { GanttBarObject } from "./models/models"
+import type { GanttBarObject } from "./types"
 
 const chartStart = ref("21.03.2021 12:00")
 const chartEnd = ref("15.07.2021 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
 
-const bars1 = ref([
+const bars1 = ref<GanttBarObject[]>([
   {
     beginDate: "24.04.2021 13:00",
     endDate: "25.05.2021 19:00",
@@ -102,7 +88,7 @@ const bars2 = ref([
   }
 ])
 const addBar = () => {
-  if (bars1.value.some(bar => bar.ganttBarConfig.id === "test1")) {
+  if (bars1.value.some((bar) => bar.ganttBarConfig.id === "test1")) {
     return
   }
   const bar = {
@@ -122,45 +108,49 @@ const addBar = () => {
 }
 
 const deleteBar = () => {
-  const idx = bars1.value.findIndex(b => b.ganttBarConfig.id === "test1")
+  const idx = bars1.value.findIndex((b) => b.ganttBarConfig.id === "test1")
   if (idx !== -1) {
     bars1.value.splice(idx, 1)
   }
 }
 
-const onClickBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+const onClickBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("click-bar", bar, e, datetime)
 }
 
-const onMousedownBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+const onMousedownBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("mousedown-bar", bar, e, datetime)
 }
 
-const onMouseupBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+const onMouseupBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("mouseup-bar", bar, e, datetime)
 }
 
-const onMouseenterBar = (bar: GanttBarObject, e:MouseEvent) => {
+const onMouseenterBar = (bar: GanttBarObject, e: MouseEvent) => {
   console.log("mouseenter-bar", bar, e)
 }
 
-const onMouseleaveBar = (bar: GanttBarObject, e:MouseEvent) => {
+const onMouseleaveBar = (bar: GanttBarObject, e: MouseEvent) => {
   console.log("mouseleave-bar", bar, e)
 }
 
-const onDragstartBar = (bar: GanttBarObject, e:MouseEvent) => {
+const onDragstartBar = (bar: GanttBarObject, e: MouseEvent) => {
   console.log("dragstart-bar", bar, e)
 }
 
-const onDragBar = (bar: GanttBarObject, e:MouseEvent) => {
+const onDragBar = (bar: GanttBarObject, e: MouseEvent) => {
   console.log("drag-bar", bar, e)
 }
 
-const onDragendBar = (bar: GanttBarObject, e:MouseEvent, movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>) => {
+const onDragendBar = (
+  bar: GanttBarObject,
+  e: MouseEvent,
+  movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
+) => {
   console.log("dragend-bar", bar, e, movedBars)
 }
 
-const onContextmenuBar = (bar: GanttBarObject, e:MouseEvent, datetime?: string) => {
+const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("contextmenu-bar", bar, e, datetime)
 }
 </script>

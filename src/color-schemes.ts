@@ -1,15 +1,17 @@
+import type { Color } from "csstype"
+
 export type ColorScheme = {
-  primary: string,
-  secondary: string,
-  ternary: string,
-  quartenary: string,
-  hoverHighlight: string,
-  text: string,
-  background: string,
-  toast?: string
+  primary: Color
+  secondary: Color
+  ternary: Color
+  quartenary: Color
+  hoverHighlight: Color
+  text: Color
+  background: Color
+  toast?: Color
 }
 
-export const colorSchemes: Record<string, ColorScheme> = {
+export const colorSchemes = {
   default: {
     primary: "#eeeeee",
     secondary: "#E0E0E0",
@@ -121,6 +123,8 @@ export const colorSchemes: Record<string, ColorScheme> = {
     text: "white",
     background: "white"
   }
-}
+} as const
+
+export type ColorSchemeKey = keyof typeof colorSchemes
 
 export default colorSchemes
