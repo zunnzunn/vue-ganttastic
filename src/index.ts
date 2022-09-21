@@ -24,3 +24,5 @@ export const ganttastic: Plugin = {
     app.component("GGanttRow", GGanttRow)
   }
 }
+
+export default ganttastic

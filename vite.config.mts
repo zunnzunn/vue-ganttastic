@@ -3,10 +3,16 @@ import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import postcssPresetEnv from "postcss-preset-env"
+import styleInject from "@senojs/rollup-plugin-style-inject"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    styleInject({
+      insertAt: "top"
+    })
+  ],
   css: {
     postcss: {
       plugins: [postcssPresetEnv()]

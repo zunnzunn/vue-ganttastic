@@ -1,7 +1,7 @@
 import type { GanttBarObject } from "../types"
 
 import { ref } from "vue"
-import createBarDrag from "./useBarDrag"
+import createBarDrag from "./createBarDrag"
 import useDayjsHelper from "./useDayjsHelper"
 import provideConfig from "../provider/provideConfig"
 import provideGetChartRows from "../provider/provideGetChartRows"

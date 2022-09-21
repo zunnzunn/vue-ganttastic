@@ -7,6 +7,9 @@
 />  
 
 <b>Vue Ganttastic</b> is a simple, interactive and highly customizable Gantt chart component for Vue 3.   
+
+![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)
+
 </div>
 
 
@@ -90,6 +93,22 @@ const row2BarList = ref([
 ])
 </script>
 
+```
+
+## Contributing
+Clone the project, make some changes, test your changes out, create a pull request with a short summary of what changes you made. Contributing is warmly welcomed!
+
+To test your changes out before creating a pull request, create a build:
+```
+npm run build
+```
+To test out the build, you should create a tarball using:
+```
+npm pack
+```
+Then, place the tarball in some other test project and install the package from the tarball by using:
+```
+npm install <name_of_the_package>.tgz
 ```
 
 ## Guide and Docs
