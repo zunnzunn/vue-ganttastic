@@ -8,7 +8,7 @@
     @mouseover="isHovering = true"
     @mouseleave="isHovering = false"
   >
-    <div class="g-gantt-row-label" :style="{ background: colors.primary, color: colors.text }">
+    <div v-if="!isBlank(label)" class="g-gantt-row-label" :style="{ background: colors.primary, color: colors.text }">
       <slot name="label">
         {{ label }}
       </slot>
@@ -54,6 +54,9 @@ const rowStyle = computed(() => {
 
 const { mapPositionToTime } = useTimePositionMapping()
 const barContainer: Ref<HTMLElement | null> = ref(null)
+const isBlank = (str: string) => {
+  return (!str || /^\s*$/.test(str))
+}
 
 const onDrop = (e: MouseEvent) => {
   const container = barContainer.value?.getBoundingClientRect()
