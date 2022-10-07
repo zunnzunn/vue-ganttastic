@@ -7,19 +7,27 @@
     "serve": "vite",
     "build": "run-p build:types build:lib",
     "build:lib": "vite build",
-    "build:types": "vue-tsc --declaration --emitDeclarationOnly --isolatedModules false --outFile lib/index.d.ts",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir lib_types",
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
     "lint:fix": "npm run lint --fix",
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs"
   },
-  "module": "lib/index.mjs",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib_types/vue-ganttastic.d.ts",
+      "import": "./lib/vue-ganttastic.js",
+      "require": "./lib/vue-ganttastic.umd.cjs"
+    }
+  },
+  "main": "./lib/vue-ganttastic.umd.cjs",
+  "types": "./lib_types/vue-ganttastic.d.ts",
   "files": [
-    "lib/index.d.ts",
-    "lib/index.mjs",
-    "lib/style.css"
+    "lib_types",
+    "lib/vue-ganttastic.js",
+    "lib/vue-ganttastic.umd.cjs"
   ],
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

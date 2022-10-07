@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import type { GanttBarObject } from "./types"
+import type { GanttBarObject } from "./types.js"
 
 const chartStart = ref("21.03.2021 12:00")
 const chartEnd = ref("15.07.2021 12:00")

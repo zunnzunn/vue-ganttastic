@@ -44,9 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import provideConfig from "../provider/provideConfig"
-import type { ColorScheme } from "../color-schemes"
-import useTimeaxisUnits from "../composables/useTimeaxisUnits"
+import provideConfig from "../provider/provideConfig.js"
+import type { ColorScheme } from "../color-schemes.js"
+import useTimeaxisUnits from "../composables/useTimeaxisUnits.js"
 
 defineProps<{
   chartStart: string

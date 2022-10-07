@@ -1,11 +1,11 @@
-import type { GanttBarObject } from "../types"
+import type { GanttBarObject } from "../types.js"
 
 import { ref } from "vue"
-import createBarDrag from "./createBarDrag"
-import useDayjsHelper from "./useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
-import provideGetChartRows from "../provider/provideGetChartRows"
-import provideEmitBarEvent from "../provider/provideEmitBarEvent"
+import createBarDrag from "./createBarDrag.js"
+import useDayjsHelper from "./useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
+import provideGetChartRows from "../provider/provideGetChartRows.js"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
 
 export default function useBarDragManagement() {
   const config = provideConfig()

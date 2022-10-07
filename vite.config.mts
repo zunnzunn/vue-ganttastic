@@ -22,17 +22,27 @@ export default defineConfig({
     lib:
       process.env.NODE_ENV === "production"
         ? {
-            entry: fileURLToPath(new URL("src/index.ts", import.meta.url)),
-            name: "index",
-            fileName: "index",
-            formats: ["es"]
+            entry: fileURLToPath(
+              new URL("src/vue-ganttastic.ts", import.meta.url)
+            ),
+            name: "VueGanttastic",
+            fileName: "vue-ganttastic"
           }
         : undefined,
     outDir: process.env.NODE_ENV === "production" ? "lib" : "dist",
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into the library
-      external: ["vue", /^(dayjs)/]
+      external: ["vue", "dayjs"],
+      output: {
+        // Provide global variables to use in the UMD build
+        // for externalized deps
+        globals: {
+          vue: "Vue",
+          dayjs: "dayjs"
+        },
+        exports: "named"
+      }
     }
   }
 })

@@ -1,7 +1,7 @@
 import type { InjectionKey } from "vue"
 
 import type { GGanttChartConfig } from "../components/GGanttChart.vue"
-import type { GanttBarObject } from "../types"
+import type { GanttBarObject } from "../types.js"
 
 export type GetChartRows = () => GanttBarObject[][]
 export type EmitBarEvent = (

@@ -51,10 +51,10 @@ import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
-import { colorSchemes, type ColorScheme } from "../color-schemes"
-import type { ColorSchemeKey } from "../color-schemes"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols"
-import type { GanttBarObject } from "../types"
+import { colorSchemes, type ColorScheme } from "../color-schemes.js"
+import type { ColorSchemeKey } from "../color-schemes.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
+import type { GanttBarObject } from "../types.js"
 
 export interface GGanttChartProps {
   chartStart: string
@@ -151,7 +151,7 @@ const getChartRows = () => {
 const showTooltip = ref(false)
 const isDragging = ref(false)
 const tooltipBar = ref<GanttBarObject | undefined>(undefined)
-let tooltipTimeoutId: number
+let tooltipTimeoutId: ReturnType<typeof setTimeout>
 const initTooltip = (bar: GanttBarObject) => {
   if (tooltipTimeoutId) {
     clearTimeout(tooltipTimeoutId)

@@ -1,5 +1,5 @@
 import { inject } from "vue"
-import { CONFIG_KEY } from "./symbols"
+import { CONFIG_KEY } from "./symbols.js"
 
 export default function provideConfig() {
   const config = inject(CONFIG_KEY)

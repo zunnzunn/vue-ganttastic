@@ -1,8 +1,8 @@
 import { computed } from "vue"
 import type { ManipulateType } from "dayjs"
 
-import useDayjsHelper from "./useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
+import useDayjsHelper from "./useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
 
 export default function useTimeaxisUnits() {
   const { precision } = provideConfig()

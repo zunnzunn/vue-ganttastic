@@ -26,9 +26,9 @@
 <script setup lang="ts">
 import { ref, type Ref, toRefs, computed, type StyleValue } from "vue"
 
-import useTimePositionMapping from "../composables/useTimePositionMapping"
-import provideConfig from "../provider/provideConfig"
-import type { GanttBarObject } from "../types"
+import useTimePositionMapping from "../composables/useTimePositionMapping.js"
+import provideConfig from "../provider/provideConfig.js"
+import type { GanttBarObject } from "../types.js"
 import GGanttBar from "./GGanttBar.vue"
 
 const props = defineProps<{
