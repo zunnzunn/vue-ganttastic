@@ -123,7 +123,7 @@ export const colorSchemes = {
     text: "white",
     background: "white"
   }
-} as const
+} as Record<string, ColorScheme>
 
 export type ColorSchemeKey = keyof typeof colorSchemes
 

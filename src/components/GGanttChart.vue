@@ -65,7 +65,7 @@ export interface GGanttChartProps {
   dateFormat?: string
   width?: string
   hideTimeaxis?: boolean
-  colorScheme?: keyof ColorScheme | ColorScheme
+  colorScheme?: ColorSchemeKey | ColorScheme
   grid?: boolean
   pushOnOverlap?: boolean
   noOverlap?: boolean
@@ -84,7 +84,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   precision: "day",
   width: "100%",
   hideTimeaxis: false,
-  colorScheme: "default" as keyof ColorScheme,
+  colorScheme: "default",
   grid: false,
   pushOnOverlap: false,
   noOverlap: false,
