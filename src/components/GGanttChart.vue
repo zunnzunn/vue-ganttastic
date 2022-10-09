@@ -4,13 +4,7 @@
     class="g-gantt-chart"
     :style="{ width, background: colors.background, fontFamily: font }"
   >
-    <g-gantt-timeaxis
-      v-if="!hideTimeaxis"
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :precision="precision"
-      :colors="colors"
-    >
+    <g-gantt-timeaxis v-if="!hideTimeaxis">
       <template #upper-timeunit="{ label, value }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
         <slot name="upper-timeunit" :label="label" :value="value" />
@@ -113,7 +107,7 @@ const emit = defineEmits<{
   (e: "contextmenu-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
 }>()
 
-const { chartStart, chartEnd, precision, width, font, colorScheme } = toRefs(props)
+const { width, font, colorScheme } = toRefs(props)
 
 const slots = useSlots()
 const colors = computed(() =>
