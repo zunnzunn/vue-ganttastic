@@ -51,7 +51,7 @@ import useTimeaxisUnits from "../composables/useTimeaxisUnits"
 defineProps<{
   chartStart: string
   chartEnd: string
-  precision: "hour" | "day" | "month"
+  precision: "hour" | "day" | "week" | "month"
   colors: ColorScheme
 }>()
 const { precision } = provideConfig()

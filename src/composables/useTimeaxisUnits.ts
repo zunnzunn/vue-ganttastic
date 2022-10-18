@@ -14,6 +14,8 @@ export default function useTimeaxisUnits() {
         return "day"
       case "day":
         return "month"
+      case "week":
+        return "month"
       case "month":
         return "year"
       default:
@@ -28,6 +30,7 @@ export default function useTimeaxisUnits() {
     date: "DD.MMM ",
     day: "DD.MMM ",
     month: "MMMM YYYY",
+    week: "ww",
     year: "YYYY"
   }
 
