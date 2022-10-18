@@ -34,18 +34,9 @@ export default function useTimeaxisUnits() {
     year: "YYYY"
   }
 
-  const uniqKeyFormats = {
-    hour: "HH",
-    date: "DD.MMM",
-    day: "DD/MM",
-    month: "MMMM YYYY",
-    week: "ww",
-    year: "YYYY"
-  }
-
   const timeaxisUnits = computed(() => {
-    const upperUnits: { key: string; label: string; value?: string; width?: string }[] = []
-    const lowerUnits: { key: string; label: string; value?: string; width?: string }[] = []
+    const upperUnits: { label: string; value?: string; width?: string }[] = []
+    const lowerUnits: { label: string; value?: string; width?: string }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
@@ -76,9 +67,6 @@ export default function useTimeaxisUnits() {
           width = (end.diff(start, "minutes", true) / totalMinutes) * 100
         }
         upperUnits.push({
-          key: currentUnit
-            .subtract(1, upperUnit as ManipulateType)
-            .format(uniqKeyFormats[upperUnit]),
           label: currentUnit
             .subtract(1, upperUnit as ManipulateType)
             .format(displayFormats[upperUnit]),
@@ -107,7 +95,6 @@ export default function useTimeaxisUnits() {
           100
       }
       lowerUnits.push({
-        key: chartEndDayjs.value.format(uniqKeyFormats[upperUnit]),
         label: currentUnit.format(displayFormats[lowerUnit]),
         value: String(currentUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
         width: String(width) + "%"
@@ -131,7 +118,6 @@ export default function useTimeaxisUnits() {
         true
       )
       upperUnits.push({
-        key: chartEndDayjs.value.format(uniqKeyFormats[upperUnit]),
         label: chartEndDayjs.value.format(displayFormats[upperUnit]),
         value: String(currentUpperUnitVal),
         width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`

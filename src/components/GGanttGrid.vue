@@ -1,8 +1,8 @@
 <template>
   <div class="g-grid-container">
     <div
-      v-for="{ key, label, value, width } in timeaxisUnits.lowerUnits"
-      :key="key"
+      v-for="({ label, value, width } , index) in timeaxisUnits.lowerUnits"
+      :key="index"
       class="g-grid-line"
       :style="{
         width,

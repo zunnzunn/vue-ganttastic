@@ -2,8 +2,8 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ key, label, value, width }, index) in timeaxisUnits.upperUnits"
-        :key="key"
+        v-for="({ label, value, width }, index) in timeaxisUnits.upperUnits"
+        :key="index"
         class="g-upper-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.primary : colors.secondary,
@@ -19,8 +19,8 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ key, label, value, width }, index) in timeaxisUnits.lowerUnits"
-        :key="key"
+        v-for="({ label, value, width }, index) in timeaxisUnits.lowerUnits"
+        :key="index"
         class="g-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.ternary : colors.quartenary,
