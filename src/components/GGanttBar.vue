@@ -36,12 +36,12 @@ import {
   onUnmounted
 } from "vue"
 
-import useBarDragManagement from "../composables/useBarDragManagement"
-import useTimePositionMapping from "../composables/useTimePositionMapping"
-import useBarDragLimit from "../composables/useBarDragLimit"
+import useBarDragManagement from "../composables/useBarDragManagement.js"
+import useTimePositionMapping from "../composables/useTimePositionMapping.js"
+import useBarDragLimit from "../composables/useBarDragLimit.js"
 import type { GanttBarObject } from "../types"
-import provideEmitBarEvent from "../provider/provideEmitBarEvent"
-import provideConfig from "../provider/provideConfig"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
+import provideConfig from "../provider/provideConfig.js"
 
 const props = defineProps<{
   bar: GanttBarObject

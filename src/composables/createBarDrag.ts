@@ -1,10 +1,11 @@
-import type { GGanttChartConfig } from "../components/GGanttChart.vue"
-import provideConfig from "../provider/provideConfig"
 import { type Ref, ref } from "vue"
 
+import type { GGanttChartConfig } from "../components/GGanttChart.vue"
+import provideConfig from "../provider/provideConfig.js"
+
 import type { GanttBarObject } from "../types"
-import useDayjsHelper from "./useDayjsHelper"
-import useTimePositionMapping from "./useTimePositionMapping"
+import useDayjsHelper from "./useDayjsHelper.js"
+import useTimePositionMapping from "./useTimePositionMapping.js"
 
 export default function createBarDrag(
   bar: Ref<GanttBarObject>,

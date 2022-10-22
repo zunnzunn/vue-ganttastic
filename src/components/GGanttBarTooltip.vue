@@ -23,8 +23,8 @@
 import { computed, toRefs, ref, watch, nextTick } from "vue"
 
 import type { GanttBarObject } from "../types"
-import useDayjsHelper from "../composables/useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
+import useDayjsHelper from "../composables/useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
 
 const TOOLTIP_FORMATS = {
   hour: "HH:mm",

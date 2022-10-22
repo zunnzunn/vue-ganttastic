@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /lib
+/lib_types
 
 
 # local env files
@@ -26,3 +27,5 @@ pnpm-debug.log*
 docs/.vuepress/.cache
 docs/.vuepress/.temp
 docs/.vuepress/dist
+
+*.tgz

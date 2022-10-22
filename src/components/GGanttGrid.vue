@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import provideConfig from "../provider/provideConfig"
-import useTimeaxisUnits from "../composables/useTimeaxisUnits"
+import provideConfig from "../provider/provideConfig.js"
+import useTimeaxisUnits from "../composables/useTimeaxisUnits.js"
 
 defineProps<{
   highlightedUnits?: number[]
