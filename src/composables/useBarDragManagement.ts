@@ -1,4 +1,4 @@
-import type { GanttBarObject } from "../types.js"
+import type { GanttBarObject } from "../types"
 
 import { ref } from "vue"
 import createBarDrag from "./createBarDrag.js"

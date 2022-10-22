@@ -48,7 +48,7 @@ import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
 import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
-import type { GanttBarObject } from "../types.js"
+import type { GanttBarObject } from "../types"
 
 export interface GGanttChartProps {
   chartStart: string

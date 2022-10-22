@@ -39,7 +39,7 @@ import {
 import useBarDragManagement from "../composables/useBarDragManagement.js"
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
 import useBarDragLimit from "../composables/useBarDragLimit.js"
-import type { GanttBarObject } from "../types.js"
+import type { GanttBarObject } from "../types"
 import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
 import provideConfig from "../provider/provideConfig.js"
 

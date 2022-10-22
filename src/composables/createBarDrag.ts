@@ -3,7 +3,7 @@ import { type Ref, ref } from "vue"
 import type { GGanttChartConfig } from "../components/GGanttChart.vue"
 import provideConfig from "../provider/provideConfig.js"
 
-import type { GanttBarObject } from "../types.js"
+import type { GanttBarObject } from "../types"
 import useDayjsHelper from "./useDayjsHelper.js"
 import useTimePositionMapping from "./useTimePositionMapping.js"
 

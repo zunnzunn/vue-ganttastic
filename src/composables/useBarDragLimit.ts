@@ -1,4 +1,4 @@
-import type { GanttBarObject } from "../types.js"
+import type { GanttBarObject } from "../types"
 import provideConfig from "../provider/provideConfig.js"
 import provideGetChartRows from "../provider/provideGetChartRows.js"
 
