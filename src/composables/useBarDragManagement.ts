@@ -107,8 +107,7 @@ export default function useBarDragManagement() {
         otherBarEnd.isBetween(ganttBarStart, ganttBarEnd)
       return overlapLeft || overlapRight || overlapInBetween
     })
-    let overlapType: "left" | "right" | "between" | null = null
-    overlapType = overlapLeft
+    const overlapType = overlapLeft
       ? "left"
       : overlapRight
       ? "right"
