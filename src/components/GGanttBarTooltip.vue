@@ -73,15 +73,15 @@ const { toDayjs } = useDayjsHelper()
 const { precision, font } = config
 const tooltipContent = computed(() => {
   const format = TOOLTIP_FORMATS[precision.value]
-  if (bar && bar.value) {
-    const barStartFormatted = toDayjs(bar.value, "start").format(format)
-    const barEndFormatted = toDayjs(bar.value, "end").format(format)
-    // NOTE: this is not the HYPHEN-MINUS (-) character by intend.
-    // Instead we use the correct typographic sign the en-dash
-    // see: https://en.wikipedia.org/wiki/Dash#Ranges_of_values
-    return `${barStartFormatted} – ${barEndFormatted}`
+  if (!bar?.value) {
+    return ""
   }
-  return ""
+  const barStartFormatted = toDayjs(bar.value, "start").format(format)
+  const barEndFormatted = toDayjs(bar.value, "end").format(format)
+  // NOTE: this is not the HYPHEN-MINUS (-) character by intend.
+  // Instead we use the correct typographic sign the en-dash
+  // see: https://en.wikipedia.org/wiki/Dash#Ranges_of_values
+  return `${barStartFormatted} – ${barEndFormatted}`
 })
 </script>
 
