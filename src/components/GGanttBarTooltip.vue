@@ -79,7 +79,8 @@ const tooltipContent = computed(() => {
     // NOTE: this is not the HYPHEN-MINUS (-) character by intend.
     // Instead we use the correct typographic sign the en-dash
     // see: https://en.wikipedia.org/wiki/Dash#Ranges_of_values
-    return `${barStartFormatted} – ${barEndFormatted}`
+    // return `${barStartFormatted} – ${barEndFormatted}`
+    return bar.value.ganttBarConfig.label
   }
   return ""
 })
