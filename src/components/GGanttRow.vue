@@ -79,9 +79,9 @@ const onDrop = (e: MouseEvent) => {
 
 .g-gantt-row > .g-gantt-row-bars-container {
   position: relative;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid #fff;
   width: 100%;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid #fff;
 }
 
 .g-gantt-row-label {

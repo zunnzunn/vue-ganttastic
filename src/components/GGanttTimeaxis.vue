@@ -2,13 +2,13 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value, width }, index) in timeaxisUnits.upperUnits"
+        v-for="({ label, value, width, date }, index) in timeaxisUnits.upperUnits"
         :key="index"
         class="g-upper-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.primary : colors.secondary,
-          color: colors.text,
-          width
+          color: isCurrent(precision === 'month' ? 'year' : 'month', value, date) ? '#1165E4' : colors.text,
+          width,
         }"
       >
         <slot name="upper-timeunit" :label="label" :value="value">
@@ -19,12 +19,12 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value, width }, index) in timeaxisUnits.lowerUnits"
+        v-for="({ label, value, width, date }, index) in timeaxisUnits.lowerUnits"
         :key="index"
         class="g-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-          color: colors.text,
+          color: isCurrent(precision, value, date) ? '#1165E4' : colors.text,
           flexDirection: precision === 'hour' ? 'column' : 'row',
           alignItems: precision === 'hour' ? '' : 'center',
           width
@@ -47,6 +47,7 @@
 import provideConfig from "../provider/provideConfig"
 import type { ColorScheme } from "../color-schemes"
 import useTimeaxisUnits from "../composables/useTimeaxisUnits"
+import dayjs from "dayjs"
 
 defineProps<{
   chartStart: string
@@ -56,6 +57,20 @@ defineProps<{
 }>()
 const { precision } = provideConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
+
+const isCurrent = (precision, value, date) => {
+  const currenDate = new Date()
+
+  if (precision === 'year') return currenDate.getFullYear() === date.getFullYear()
+
+  if (precision === 'month') return currenDate.getFullYear() === date.getFullYear() && currenDate.getMonth() === date.getMonth()
+
+  if (precision === 'week') return currenDate.getFullYear() === date.getFullYear() && dayjs(currenDate).week() === dayjs(date).week()
+
+  if (precision === 'day') return currenDate.getFullYear() === date.getFullYear() && currenDate.getMonth() === date.getMonth() && currenDate.getDate() === date.getDate()
+
+  return false
+}
 </script>
 
 <style>
@@ -67,7 +82,6 @@ const { timeaxisUnits } = useTimeaxisUnits()
   min-height: 75px;
   background: white;
   z-index: 4;
-  box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
   display: flex;
   flex-direction: column;
 }
