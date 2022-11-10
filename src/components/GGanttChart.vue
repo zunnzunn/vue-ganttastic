@@ -5,13 +5,13 @@
     :style="{ width, background: colors.background, fontFamily: font }"
   >
     <g-gantt-timeaxis v-if="!hideTimeaxis">
-      <template #upper-timeunit="{ label, value }">
+      <template #upper-timeunit="{ label, value, date }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
-        <slot name="upper-timeunit" :label="label" :value="value" />
+        <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
       </template>
-      <template #timeunit="{ label, value }">
+      <template #timeunit="{ label, value, date }">
         <!-- expose timeunit slot of g-gantt-timeaxis-->
-        <slot name="timeunit" :label="label" :value="value" />
+        <slot name="timeunit" :label="label" :value="value" :date="date" />
       </template>
     </g-gantt-timeaxis>
 

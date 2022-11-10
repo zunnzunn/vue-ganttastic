@@ -32,8 +32,8 @@ export default function useTimeaxisUnits() {
   }
 
   const timeaxisUnits = computed(() => {
-    const upperUnits: { label: string; value?: string; width?: string }[] = []
-    const lowerUnits: { label: string; value?: string; width?: string }[] = []
+    const upperUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
+    const lowerUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
@@ -63,11 +63,11 @@ export default function useTimeaxisUnits() {
           const start = currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit)
           width = (end.diff(start, "minutes", true) / totalMinutes) * 100
         }
+        const resultDayjs = currentUnit.subtract(1, upperUnit as ManipulateType)
         upperUnits.push({
-          label: currentUnit
-            .subtract(1, upperUnit as ManipulateType)
-            .format(displayFormats[upperUnit]),
+          label: resultDayjs.format(displayFormats[upperUnit]),
           value: String(currentUpperUnitVal),
+          date: resultDayjs.toDate(),
           width: String(width) + "%"
         })
         upperUnitMinutesCount = 0
@@ -94,6 +94,7 @@ export default function useTimeaxisUnits() {
       lowerUnits.push({
         label: currentUnit.format(displayFormats[lowerUnit]),
         value: String(currentUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
+        date: currentUnit.toDate(),
         width: String(width) + "%"
       })
       const prevUpperUnitUnit = currentUnit
@@ -117,6 +118,7 @@ export default function useTimeaxisUnits() {
       upperUnits.push({
         label: chartEndDayjs.value.format(displayFormats[upperUnit]),
         value: String(currentUpperUnitVal),
+        date: chartEndDayjs.value.toDate(),
         width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
