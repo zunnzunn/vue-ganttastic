@@ -226,7 +226,7 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  /*overflow-x: hidden; REMOVE TO ENABLE STICKY RELATIVE TO PAGE*/
   -webkit-touch-callout: none;
   user-select: none;
   border-radius: 5px;
@@ -235,5 +235,6 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 
 .g-gantt-rows-container {
   position: relative;
+  overflow: hidden;
 }
 </style>

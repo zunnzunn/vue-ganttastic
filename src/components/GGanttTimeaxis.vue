@@ -84,6 +84,7 @@ const isCurrent = (precision, value, date) => {
   z-index: 4;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .g-timeunits-container {
