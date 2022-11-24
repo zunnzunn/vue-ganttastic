@@ -32,7 +32,7 @@ import type { GanttBarObject } from "../types"
 import GGanttBar from "./GGanttBar.vue"
 
 const props = defineProps<{
-  label: string
+  label?: string
   bars: GanttBarObject[]
   highlightOnHover?: boolean
 }>()
