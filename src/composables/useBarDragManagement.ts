@@ -123,7 +123,7 @@ export default function useBarDragManagement() {
     direction: "left" | "right"
   ) => {
     addBarToMovedBars(pushedBar)
-    if (pushedBar.ganttBarConfig.bundle) {
+    if (!pushedBar.ganttBarConfig.bundle) {
       return
     }
     getChartRows().forEach((row) => {
