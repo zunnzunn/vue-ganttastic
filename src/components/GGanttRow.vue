@@ -24,12 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, toRefs, computed, type StyleValue } from "vue"
+import { ref, type Ref, toRefs, computed, type StyleValue, provide } from "vue"
 
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
 import provideConfig from "../provider/provideConfig.js"
 import type { GanttBarObject } from "../types"
 import GGanttBar from "./GGanttBar.vue"
+import { BAR_CONTAINER_KEY } from "../provider/symbols"
 
 const props = defineProps<{
   label: string
@@ -54,6 +55,8 @@ const rowStyle = computed(() => {
 
 const { mapPositionToTime } = useTimePositionMapping()
 const barContainer: Ref<HTMLElement | null> = ref(null)
+
+provide(BAR_CONTAINER_KEY, barContainer)
 
 const onDrop = (e: MouseEvent) => {
   const container = barContainer.value?.getBoundingClientRect()
