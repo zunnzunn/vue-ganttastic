@@ -118,11 +118,7 @@ For further guides and references, check out the [official docs](https://infecto
 **License** [MIT](https://choosealicense.com/licenses/mit/)  
 **Author**: Marko Žunić, BSc  
 [GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)  
-## Support the project
-Vue Ganttastic is a free open-source project I work on in my spare time. Buy me a beer and let's give a toast to open-source developers! :beers:
 
-
-[<img src="https://pics.paypal.com/00/s/MTdhMWZmNTUtOWQ1Yi00YmRjLWJjMjgtY2Y0NTNhODM0OTJl/file.PNG" height="80">](https://www.paypal.com/donate?hosted_button_id=M63C8DAMV5YDJ)
 
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)
