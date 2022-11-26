@@ -2,7 +2,7 @@
   <div class="g-timeaxis">
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value, width }, index) in timeaxisUnits.upperUnits"
+        v-for="({ label, value, date, width }, index) in timeaxisUnits.upperUnits"
         :key="label"
         class="g-upper-timeunit"
         :style="{
@@ -11,7 +11,7 @@
           width
         }"
       >
-        <slot name="upper-timeunit" :label="label" :value="value">
+        <slot name="upper-timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
       </div>
@@ -19,7 +19,7 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value, width }, index) in timeaxisUnits.lowerUnits"
+        v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
@@ -30,7 +30,7 @@
           width
         }"
       >
-        <slot name="timeunit" :label="label" :value="value">
+        <slot name="timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
         <div
