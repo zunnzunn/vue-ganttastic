@@ -1,4 +1,4 @@
-import {ref } from "vue"
+import { ref } from "vue"
 import type { GGanttChartConfig } from "../components/GGanttChart.vue"
 import provideConfig from "../provider/provideConfig.js"
 
