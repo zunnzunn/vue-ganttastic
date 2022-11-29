@@ -2,7 +2,15 @@
   <div
     :id="barConfig.id"
     class="g-gantt-bar"
-    :style="barStyle"
+    :style="{
+      ...barConfig.style,
+      position: 'absolute',
+      top: `${rowHeight * 0.1}px`,
+      left: `${xStart}px`,
+      width: `${xEnd - xStart}px`,
+      height: `${rowHeight * 0.8}px`,
+      zIndex: isDragging ? 3 : 2
+    }"
     @mousedown="onMouseEvent"
     @click="onMouseEvent"
     @dblclick="onMouseEvent"
@@ -107,17 +115,6 @@ onMounted(() => {
   )
 })
 
-const barStyle = computed(() => {
-  return {
-    ...barConfig.value.style,
-    position: "absolute",
-    top: `${rowHeight.value * 0.1}px`,
-    left: `${xStart.value}px`,
-    width: `${xEnd.value - xStart.value}px`,
-    height: `${rowHeight.value * 0.8}px`,
-    zIndex: isDragging.value ? 3 : 2
-  } as CSSProperties
-})
 </script>
 
 <style>
