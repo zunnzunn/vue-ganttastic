@@ -39,7 +39,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: "drop", value: { e: MouseEvent; datetime: string }): void
+  (e: "drop", value: { e: MouseEvent; datetime: string | Date }): void
 }>()
 
 const { rowHeight, colors } = provideConfig()

@@ -15,7 +15,7 @@ export default function useBarDragManagement() {
 
   const movedBarsInDrag = new Map<GanttBarObject, { oldStart: string; oldEnd: string }>()
 
-  const { toDayjs } = useDayjsHelper()
+  const { toDayjs, format } = useDayjsHelper()
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
     const { initDrag } = createBarDrag(bar, onDrag, onEndDrag, config)
@@ -63,17 +63,19 @@ export default function useBarDragManagement() {
       switch (overlapType) {
         case "left":
           minuteDiff = overlapBarEnd.diff(currentBarStart, "minutes", true)
-          overlapBar[barEnd.value] = currentBarStart.format(dateFormat.value)
-          overlapBar[barStart.value] = overlapBarStart
-            .subtract(minuteDiff, "minutes")
-            .format(dateFormat.value)
+          overlapBar[barEnd.value] = format(currentBar[barStart.value], dateFormat.value)
+          overlapBar[barStart.value] = format(
+            overlapBarStart.subtract(minuteDiff, "minutes"),
+            dateFormat.value
+          )
           break
         case "right":
           minuteDiff = currentBarEnd.diff(overlapBarStart, "minutes", true)
-          overlapBar[barStart.value] = currentBarEnd.format(dateFormat.value)
-          overlapBar[barEnd.value] = overlapBarEnd
-            .add(minuteDiff, "minutes")
-            .format(dateFormat.value)
+          overlapBar[barStart.value] = format(currentBarEnd, dateFormat.value)
+          overlapBar[barEnd.value] = format(
+            overlapBarEnd.add(minuteDiff, "minutes"),
+            dateFormat.value
+          )
           break
         default:
           console.warn(
@@ -139,16 +141,21 @@ export default function useBarDragManagement() {
   const moveBarByMinutes = (bar: GanttBarObject, minutes: number, direction: "left" | "right") => {
     switch (direction) {
       case "left":
-        bar[barStart.value] = toDayjs(bar, "start")
-          .subtract(minutes, "minutes")
-          .format(dateFormat.value)
-        bar[barEnd.value] = toDayjs(bar, "end")
-          .subtract(minutes, "minutes")
-          .format(dateFormat.value)
+        bar[barStart.value] = format(
+          toDayjs(bar, "start").subtract(minutes, "minutes"),
+          dateFormat.value
+        )
+        bar[barEnd.value] = format(
+          toDayjs(bar, "end").subtract(minutes, "minutes"),
+          dateFormat.value
+        )
         break
       case "right":
-        bar[barStart.value] = toDayjs(bar, "start").add(minutes, "minutes").format(dateFormat.value)
-        bar[barEnd.value] = toDayjs(bar, "end").add(minutes, "minutes").format(dateFormat.value)
+        bar[barStart.value] = format(
+          toDayjs(bar, "start").add(minutes, "minutes"),
+          dateFormat.value
+        )
+        bar[barEnd.value] = format(toDayjs(bar, "end").add(minutes, "minutes"), dateFormat.value)
     }
     fixOverlaps(bar)
   }

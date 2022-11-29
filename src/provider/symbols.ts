@@ -7,7 +7,7 @@ export type GetChartRows = () => GanttBarObject[][]
 export type EmitBarEvent = (
   e: MouseEvent,
   bar: GanttBarObject,
-  datetime?: string,
+  datetime?: string | Date,
   movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
 ) => void
 

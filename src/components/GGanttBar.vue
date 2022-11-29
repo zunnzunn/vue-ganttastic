@@ -92,10 +92,10 @@ const onMouseEvent = (e: MouseEvent) => {
     prepareForDrag()
   }
   const barContainer = barContainerEl?.value?.getBoundingClientRect()
-  let datetime
-  if (barContainer) {
-    datetime = mapPositionToTime(e.clientX - barContainer.left)
+  if (!barContainer) {
+    return
   }
+  const datetime = mapPositionToTime(e.clientX - barContainer.left)
   emitBarEvent(e, bar.value, datetime)
 }
 
@@ -114,7 +114,6 @@ onMounted(() => {
     { deep: true, immediate: true }
   )
 })
-
 </script>
 
 <style>

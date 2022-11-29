@@ -52,12 +52,12 @@ import type { GanttBarObject } from "../types"
 import { useElementSize } from "@vueuse/core"
 
 export interface GGanttChartProps {
-  chartStart: string
-  chartEnd: string
+  chartStart: string | Date
+  chartEnd: string | Date
   precision?: "hour" | "day" | "month"
   barStart: string
   barEnd: string
-  dateFormat?: string
+  dateFormat: string | false | undefined
   width?: string
   hideTimeaxis?: boolean
   colorScheme?: ColorSchemeKey | ColorScheme
@@ -78,7 +78,6 @@ export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
-  dateFormat: "YYYY-MM-DD HH:mm",
   precision: "day",
   width: "100%",
   hideTimeaxis: false,
@@ -92,10 +91,13 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
 })
 
 const emit = defineEmits<{
-  (e: "click-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
-  (e: "mousedown-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
-  (e: "mouseup-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
-  (e: "dblclick-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
+  (e: "click-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }): void
+  (
+    e: "mousedown-bar",
+    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }
+  ): void
+  (e: "mouseup-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }): void
+  (e: "dblclick-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }): void
   (e: "mouseenter-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
   (e: "mouseleave-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
   (e: "dragstart-bar", value: { bar: GanttBarObject; e: MouseEvent }): void
@@ -108,7 +110,10 @@ const emit = defineEmits<{
       movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
     }
   ): void
-  (e: "contextmenu-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
+  (
+    e: "contextmenu-bar",
+    value: { bar: GanttBarObject; e: MouseEvent; datetime?: string | Date }
+  ): void
 }>()
 
 const { width, font, colorScheme } = toRefs(props)
@@ -168,7 +173,7 @@ const clearTooltip = () => {
 const emitBarEvent = (
   e: MouseEvent,
   bar: GanttBarObject,
-  datetime?: string,
+  datetime?: string | Date,
   movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
 ) => {
   switch (e.type) {
