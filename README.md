@@ -21,7 +21,7 @@
 - **Customization options** (*chart and bar styling, changes in behavior, slots, event handlers etc.*)
 - **[Day.js](https://day.js.org/en/) support**  *(uses Day.js under the hood for date-time manipulation)*
 
-Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/InfectoOne/vue-ganttastic/tree/vue-ganttastic-v1).  
+Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/zunnzunn/vue-ganttastic/tree/vue-ganttastic-v1).  
 
 ## Quickstart
 Install using
@@ -112,12 +112,12 @@ npm install <name_of_the_package>.tgz
 ```
 
 ## Guide and Docs
-For further guides and references, check out the [official docs](https://infectoone.github.io/vue-ganttastic/getting-started.html).  
+For further guides and references, check out the [official docs](https://zunnzunn.github.io/vue-ganttastic/getting-started.html).  
 
 ## About
 **License** [MIT](https://choosealicense.com/licenses/mit/)  
 **Author**: Marko Žunić, BSc  
-[GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)  
+[GitHub Repository](https://github.com/zunnzunn/vue-ganttastic)  
 
 
 ## Screenshots
