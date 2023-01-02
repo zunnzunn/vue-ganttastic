@@ -1,11 +1,11 @@
 import type { GanttBarObject } from "../types"
 
 import { ref } from "vue"
-import createBarDrag from "./createBarDrag"
-import useDayjsHelper from "./useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
-import provideGetChartRows from "../provider/provideGetChartRows"
-import provideEmitBarEvent from "../provider/provideEmitBarEvent"
+import createBarDrag from "./createBarDrag.js"
+import useDayjsHelper from "./useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
+import provideGetChartRows from "../provider/provideGetChartRows.js"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
 
 export default function useBarDragManagement() {
   const config = provideConfig()
@@ -18,12 +18,8 @@ export default function useBarDragManagement() {
   const { toDayjs } = useDayjsHelper()
 
   const initDragOfBar = (bar: GanttBarObject, e: MouseEvent) => {
-    const { initDrag } = createBarDrag(ref(bar), onDrag, onEndDrag, config)
-    const ev = {
-      ...e,
-      type: "dragstart"
-    }
-    emitBarEvent(ev, bar)
+    const { initDrag } = createBarDrag(bar, onDrag, onEndDrag, config)
+    emitBarEvent({ ...e, type: "dragstart" }, bar)
     initDrag(e)
     addBarToMovedBars(bar)
   }
@@ -37,7 +33,7 @@ export default function useBarDragManagement() {
       row.forEach((bar) => {
         if (bar.ganttBarConfig.bundle === bundle) {
           const dragEndHandler = bar === mainBar ? onEndDrag : () => null
-          const { initDrag } = createBarDrag(ref(bar), onDrag, dragEndHandler, config)
+          const { initDrag } = createBarDrag(bar, onDrag, dragEndHandler, config)
           initDrag(e)
           addBarToMovedBars(bar)
         }
@@ -111,8 +107,7 @@ export default function useBarDragManagement() {
         otherBarEnd.isBetween(ganttBarStart, ganttBarEnd)
       return overlapLeft || overlapRight || overlapInBetween
     })
-    let overlapType: "left" | "right" | "between" | null = null
-    overlapType = overlapLeft
+    const overlapType = overlapLeft
       ? "left"
       : overlapRight
       ? "right"
@@ -128,7 +123,7 @@ export default function useBarDragManagement() {
     direction: "left" | "right"
   ) => {
     addBarToMovedBars(pushedBar)
-    if (pushedBar.ganttBarConfig.bundle) {
+    if (!pushedBar.ganttBarConfig.bundle) {
       return
     }
     getChartRows().forEach((row) => {

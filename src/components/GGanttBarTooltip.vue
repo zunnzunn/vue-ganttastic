@@ -23,8 +23,8 @@
 import { computed, toRefs, ref, watch, nextTick } from "vue"
 
 import type { GanttBarObject } from "../types"
-import useDayjsHelper from "../composables/useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
+import useDayjsHelper from "../composables/useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
 
 const TOOLTIP_FORMATS = {
   hour: "HH:mm",
@@ -73,16 +73,13 @@ const { toDayjs } = useDayjsHelper()
 const { precision, font } = config
 const tooltipContent = computed(() => {
   const format = TOOLTIP_FORMATS[precision.value]
-  if (bar && bar.value) {
-    const barStartFormatted = toDayjs(bar.value, "start").format(format)
-    const barEndFormatted = toDayjs(bar.value, "end").format(format)
-    // NOTE: this is not the HYPHEN-MINUS (-) character by intend.
-    // Instead we use the correct typographic sign the en-dash
-    // see: https://en.wikipedia.org/wiki/Dash#Ranges_of_values
-    // return `${barStartFormatted} – ${barEndFormatted}`
-    return bar.value.ganttBarConfig.label
+  if (!bar?.value) {
+    return ""
   }
-  return ""
+  const barStartFormatted = toDayjs(bar.value, "start").format(format)
+  const barEndFormatted = toDayjs(bar.value, "end").format(format)
+  //return `${barStartFormatted} \u2013 ${barEndFormatted}`
+  return bar.value.ganttBarConfig.label
 })
 </script>
 

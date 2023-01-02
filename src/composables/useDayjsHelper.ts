@@ -3,7 +3,7 @@ import { computed } from "vue"
 
 import type { GGanttChartConfig } from "../components/GGanttChart.vue"
 import type { GanttBarObject } from "../types"
-import provideConfig from "../provider/provideConfig"
+import provideConfig from "../provider/provideConfig.js"
 
 export default function useDayjsHelper(config: GGanttChartConfig = provideConfig()) {
   const { chartStart, chartEnd, barStart, barEnd, dateFormat } = config

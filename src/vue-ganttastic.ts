@@ -1,11 +1,14 @@
 import type { Plugin } from "vue"
 import dayjs from "dayjs"
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore"
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
-import isBetween from "dayjs/plugin/isBetween"
-import advancedFormat from "dayjs/plugin/advancedFormat"
-import weekOfYear from "dayjs/plugin/weekOfYear"
-import customParseFormat from "dayjs/plugin/customParseFormat"
+
+import advancedFormat from "dayjs/plugin/advancedFormat.js"
+import weekOfYear from "dayjs/plugin/weekOfYear.js"
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js"
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js"
+import isBetween from "dayjs/plugin/isBetween.js"
+import customParseFormat from "dayjs/plugin/customParseFormat.js"
+import type { GanttBarObject } from "./types"
+import type { ColorScheme } from "./color-schemes"
 
 import GGanttChart from "./components/GGanttChart.vue"
 import GGanttRow from "./components/GGanttRow.vue"
@@ -19,6 +22,7 @@ export function extendDayjs() {
   dayjs.extend(customParseFormat)
 }
 
+export type { ColorScheme, GanttBarObject }
 export { GGanttChart, GGanttRow }
 
 export const ganttastic: Plugin = {

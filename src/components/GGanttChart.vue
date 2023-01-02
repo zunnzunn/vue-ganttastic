@@ -1,23 +1,17 @@
 <template>
   <div
-    ref="gGanttChart"
+    ref="ganttChart"
     class="g-gantt-chart"
     :style="{ width, background: colors.background, fontFamily: font }"
   >
-    <g-gantt-timeaxis
-      v-if="!hideTimeaxis"
-      :chart-start="chartStart"
-      :chart-end="chartEnd"
-      :precision="precision"
-      :colors="colors"
-    >
-      <template #upper-timeunit="{ label, value }">
+    <g-gantt-timeaxis v-if="!hideTimeaxis">
+      <template #upper-timeunit="{ label, value, date }">
         <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
-        <slot name="upper-timeunit" :label="label" :value="value" />
+        <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
       </template>
-      <template #timeunit="{ label, value }">
+      <template #timeunit="{ label, value, date }">
         <!-- expose timeunit slot of g-gantt-timeaxis-->
-        <slot name="timeunit" :label="label" :value="value" />
+        <slot name="timeunit" :label="label" :value="value" :date="date" />
       </template>
     </g-gantt-timeaxis>
 
@@ -51,10 +45,11 @@ import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
-import { colorSchemes, type ColorScheme } from "../color-schemes"
-import type { ColorSchemeKey } from "../color-schemes"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols"
+import { colorSchemes, type ColorScheme } from "../color-schemes.js"
+import type { ColorSchemeKey } from "../color-schemes.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
 import type { GanttBarObject } from "../types"
+import { useElementSize } from "@vueuse/core"
 
 export interface GGanttChartProps {
   chartStart: string
@@ -65,7 +60,7 @@ export interface GGanttChartProps {
   dateFormat?: string
   width?: string
   hideTimeaxis?: boolean
-  colorScheme?: keyof ColorScheme | ColorScheme
+  colorScheme?: ColorSchemeKey | ColorScheme
   grid?: boolean
   pushOnOverlap?: boolean
   noOverlap?: boolean
@@ -76,7 +71,10 @@ export interface GGanttChartProps {
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
   colors: ComputedRef<ColorScheme>
-  gGanttChart: Ref<HTMLElement | null>
+  chartSize: {
+    width: Ref<number>
+    height: Ref<number>
+  }
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
@@ -84,7 +82,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   precision: "day",
   width: "100%",
   hideTimeaxis: false,
-  colorScheme: "default" as keyof ColorScheme,
+  colorScheme: "default",
   grid: false,
   pushOnOverlap: false,
   noOverlap: false,
@@ -113,7 +111,7 @@ const emit = defineEmits<{
   (e: "contextmenu-bar", value: { bar: GanttBarObject; e: MouseEvent; datetime?: string }): void
 }>()
 
-const { chartStart, chartEnd, precision, width, font, colorScheme } = toRefs(props)
+const { width, font, colorScheme } = toRefs(props)
 
 const slots = useSlots()
 const colors = computed(() =>
@@ -151,7 +149,7 @@ const getChartRows = () => {
 const showTooltip = ref(false)
 const isDragging = ref(false)
 const tooltipBar = ref<GanttBarObject | undefined>(undefined)
-let tooltipTimeoutId: number
+let tooltipTimeoutId: ReturnType<typeof setTimeout>
 const initTooltip = (bar: GanttBarObject) => {
   if (tooltipTimeoutId) {
     clearTimeout(tooltipTimeoutId)
@@ -211,12 +209,14 @@ const emitBarEvent = (
   }
 }
 
-const gGanttChart = ref<HTMLElement | null>(null)
+const ganttChart = ref<HTMLElement | null>(null)
+const chartSize = useElementSize(ganttChart)
+
 provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
   colors,
-  gGanttChart
+  chartSize
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 </script>

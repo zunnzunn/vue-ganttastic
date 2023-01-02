@@ -25,23 +25,15 @@
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  ref,
-  toRefs,
-  watch,
-  nextTick,
-  type CSSProperties,
-  onMounted,
-  onUnmounted
-} from "vue"
+import { computed, ref, toRefs, watch, type CSSProperties, onMounted, inject } from "vue"
 
-import useBarDragManagement from "../composables/useBarDragManagement"
-import useTimePositionMapping from "../composables/useTimePositionMapping"
-import useBarDragLimit from "../composables/useBarDragLimit"
+import useBarDragManagement from "../composables/useBarDragManagement.js"
+import useTimePositionMapping from "../composables/useTimePositionMapping.js"
+import useBarDragLimit from "../composables/useBarDragLimit.js"
 import type { GanttBarObject } from "../types"
-import provideEmitBarEvent from "../provider/provideEmitBarEvent"
-import provideConfig from "../provider/provideConfig"
+import provideEmitBarEvent from "../provider/provideEmitBarEvent.js"
+import provideConfig from "../provider/provideConfig.js"
+import { BAR_CONTAINER_KEY } from "../provider/symbols"
 
 const props = defineProps<{
   bar: GanttBarObject
@@ -84,15 +76,14 @@ const prepareForDrag = () => {
   )
 }
 
-const barElement = ref<HTMLElement | null>(null)
+const barContainerEl = inject(BAR_CONTAINER_KEY)
+
 const onMouseEvent = (e: MouseEvent) => {
   e.preventDefault()
   if (e.type === "mousedown") {
     prepareForDrag()
   }
-  const barContainer = barElement.value
-    ?.closest(".g-gantt-row-bars-container")
-    ?.getBoundingClientRect()
+  const barContainer = barContainerEl?.value?.getBoundingClientRect()
   let datetime
   if (barContainer) {
     datetime = mapPositionToTime(e.clientX - barContainer.left)
@@ -100,27 +91,21 @@ const onMouseEvent = (e: MouseEvent) => {
   emitBarEvent(e, bar.value, datetime)
 }
 
-const { barStart, barEnd, width, chartStart, chartEnd } = config
+const { barStart, barEnd, width, chartStart, chartEnd, chartSize } = config
 
 const xStart = ref(0)
 const xEnd = ref(0)
 
-function calculateBarSize() {
-  xStart.value = mapTimeToPosition(bar.value[barStart.value])
-  xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
-}
-
-watch(
-  [bar, width, chartStart, chartEnd],
-  async () => {
-    await nextTick()
-    calculateBarSize()
-  },
-  { deep: true, immediate: true }
-)
-
-onMounted(() => window.addEventListener("resize", calculateBarSize))
-onUnmounted(() => window.removeEventListener("resize", calculateBarSize))
+onMounted(() => {
+  watch(
+    [bar, width, chartStart, chartEnd, chartSize.width],
+    () => {
+      xStart.value = mapTimeToPosition(bar.value[barStart.value])
+      xEnd.value = mapTimeToPosition(bar.value[barEnd.value])
+    },
+    { deep: true, immediate: true }
+  )
+})
 
 const barStyle = computed(() => {
   return {

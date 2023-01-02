@@ -11,7 +11,7 @@
           width,
         }"
       >
-        <slot name="upper-timeunit" :label="label" :value="value">
+        <slot name="upper-timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
       </div>
@@ -30,7 +30,7 @@
           width
         }"
       >
-        <slot name="timeunit" :label="label" :value="value">
+        <slot name="timeunit" :label="label" :value="value" :date="date">
           {{ label }}
         </slot>
         <div
@@ -44,18 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import provideConfig from "../provider/provideConfig"
-import type { ColorScheme } from "../color-schemes"
-import useTimeaxisUnits from "../composables/useTimeaxisUnits"
+import provideConfig from "../provider/provideConfig.js"
+import useTimeaxisUnits from "../composables/useTimeaxisUnits.js"
 import dayjs from "dayjs"
-
-defineProps<{
-  chartStart: string
-  chartEnd: string
-  precision: "hour" | "day" | "week" | "month"
-  colors: ColorScheme
-}>()
-const { precision } = provideConfig()
+const { precision, colors } = provideConfig()
 const { timeaxisUnits } = useTimeaxisUnits()
 
 const isCurrent = (precision, value, date) => {

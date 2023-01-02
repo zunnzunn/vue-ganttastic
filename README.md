@@ -21,7 +21,7 @@
 - **Customization options** (*chart and bar styling, changes in behavior, slots, event handlers etc.*)
 - **[Day.js](https://day.js.org/en/) support**  *(uses Day.js under the hood for date-time manipulation)*
 
-Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/InfectoOne/vue-ganttastic/tree/vue-ganttastic-v1).  
+Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/zunnzunn/vue-ganttastic/tree/vue-ganttastic-v1).  
 
 ## Quickstart
 Install using
@@ -112,17 +112,13 @@ npm install <name_of_the_package>.tgz
 ```
 
 ## Guide and Docs
-For further guides and references, check out the [official docs](https://infectoone.github.io/vue-ganttastic/getting-started.html).  
+For further guides and references, check out the [official docs](https://zunnzunn.github.io/vue-ganttastic/getting-started.html).  
 
 ## About
 **License** [MIT](https://choosealicense.com/licenses/mit/)  
 **Author**: Marko Žunić, BSc  
-[GitHub Repository](https://github.com/InfectoOne/vue-ganttastic)  
-## Support the project
-Vue Ganttastic is a free open-source project I work on in my spare time. Buy me a beer and let's give a toast to open-source developers! :beers:
+[GitHub Repository](https://github.com/zunnzunn/vue-ganttastic)  
 
-
-[<img src="https://pics.paypal.com/00/s/MTdhMWZmNTUtOWQ1Yi00YmRjLWJjMjgtY2Y0NTNhODM0OTJl/file.PNG" height="80">](https://www.paypal.com/donate?hosted_button_id=M63C8DAMV5YDJ)
 
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)

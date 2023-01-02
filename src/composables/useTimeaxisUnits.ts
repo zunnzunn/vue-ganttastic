@@ -1,8 +1,8 @@
 import { computed } from "vue"
 import type { ManipulateType } from "dayjs"
 
-import useDayjsHelper from "./useDayjsHelper"
-import provideConfig from "../provider/provideConfig"
+import useDayjsHelper from "./useDayjsHelper.js"
+import provideConfig from "../provider/provideConfig.js"
 
 export default function useTimeaxisUnits() {
   const { precision } = provideConfig()
@@ -35,8 +35,8 @@ export default function useTimeaxisUnits() {
   }
 
   const timeaxisUnits = computed(() => {
-    const upperUnits: { label: string; value?: string; width?: string; date?: Date }[] = []
-    const lowerUnits: { label: string; value?: string; width?: string; date?: Date }[] = []
+    const upperUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
+    const lowerUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
@@ -66,13 +66,12 @@ export default function useTimeaxisUnits() {
           const start = currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit)
           width = (end.diff(start, "minutes", true) / totalMinutes) * 100
         }
+        const resultDayjs = currentUnit.subtract(1, upperUnit as ManipulateType)
         upperUnits.push({
-          label: currentUnit
-            .subtract(1, upperUnit as ManipulateType)
-            .format(displayFormats[upperUnit]),
+          label: resultDayjs.format(displayFormats[upperUnit]),
           value: String(currentUpperUnitVal),
-          width: String(width) + "%",
-          date: currentUnit.subtract(1, upperUnit as ManipulateType).toDate()
+          date: resultDayjs.toDate(),
+          width: String(width) + "%"
         })
         upperUnitMinutesCount = 0
         currentUpperUnitVal = currentUnit[upperUnit]()
@@ -98,8 +97,8 @@ export default function useTimeaxisUnits() {
       lowerUnits.push({
         label: currentUnit.format(displayFormats[lowerUnit]),
         value: String(currentUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
-        width: String(width) + "%",
-        date: currentUnit.toDate()
+        date: currentUnit.toDate(),
+        width: String(width) + "%"
       })
       const prevUpperUnitUnit = currentUnit
       currentUnit = currentUnit.add(1, lowerUnit)
@@ -122,8 +121,8 @@ export default function useTimeaxisUnits() {
       upperUnits.push({
         label: chartEndDayjs.value.format(displayFormats[upperUnit]),
         value: String(currentUpperUnitVal),
-        width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`,
-        date: currentUnit.subtract(1, lowerUnit).toDate()
+        date: chartEndDayjs.value.toDate(),
+        width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
       })
     }
 
