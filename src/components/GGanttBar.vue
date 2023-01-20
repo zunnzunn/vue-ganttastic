@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRefs, watch, type CSSProperties, onMounted, inject } from "vue"
+import { computed, ref, toRefs, watch, onMounted, inject } from "vue"
 
 import useBarDragManagement from "../composables/useBarDragManagement.js"
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
