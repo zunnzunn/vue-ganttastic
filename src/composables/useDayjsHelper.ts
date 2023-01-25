@@ -27,13 +27,13 @@ export default function useDayjsHelper(config: GGanttChartConfig = provideConfig
     return dayjs(value, format, true)
   }
 
-  const format = (input: string | Date | Dayjs, template?: string | false | undefined) => {
-    if (template === false) {
+  const format = (input: string | Date | Dayjs, pattern?: string | false) => {
+    if (pattern === false) {
       return input instanceof Date ? input : dayjs(input).toDate()
     }
     const inputDayjs = typeof input === "string" || input instanceof Date ? toDayjs(input) : input
 
-    return inputDayjs.format(template)
+    return inputDayjs.format(pattern)
   }
 
   return {

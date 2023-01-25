@@ -49,6 +49,7 @@ import { colorSchemes, type ColorScheme } from "../color-schemes.js"
 import type { ColorSchemeKey } from "../color-schemes.js"
 import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
 import type { GanttBarObject } from "../types"
+import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { useElementSize } from "@vueuse/core"
 
 export interface GGanttChartProps {
@@ -57,7 +58,7 @@ export interface GGanttChartProps {
   precision?: "hour" | "day" | "month"
   barStart: string
   barEnd: string
-  dateFormat: string | false | undefined
+  dateFormat?: string | false
   width?: string
   hideTimeaxis?: boolean
   colorScheme?: ColorSchemeKey | ColorScheme
@@ -78,6 +79,7 @@ export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
+  dateFormat: DEFAULT_DATE_FORMAT,
   precision: "day",
   width: "100%",
   hideTimeaxis: false,
