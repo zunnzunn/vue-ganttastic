@@ -11,7 +11,7 @@
         }"
       >
         <div class="g-gantt-tooltip-color-dot" :style="{ background: dotColor }" />
-        <slot>
+        <slot :bar="bar" :bar-start="barStartRaw" :bar-end="barEndRaw">
           {{ tooltipContent }}
         </slot>
       </div>
@@ -35,12 +35,12 @@ const TOOLTIP_FORMATS = {
 const DEFAULT_DOT_COLOR = "cadetblue"
 
 const props = defineProps<{
-  bar?: GanttBarObject
+  bar: GanttBarObject | undefined
   modelValue: boolean
 }>()
 
 const { bar } = toRefs(props)
-const config = provideConfig()
+const { precision, font, barStart, barEnd, rowHeight } = provideConfig()
 
 const tooltipTop = ref("0px")
 const tooltipLeft = ref("0px")
@@ -59,7 +59,6 @@ watch(
       top: 0,
       left: 0
     }
-    const { rowHeight } = config
     const leftValue = Math.max(left, 10)
     tooltipTop.value = `${top + rowHeight.value - 10}px`
     tooltipLeft.value = `${leftValue}px`
@@ -70,14 +69,17 @@ watch(
 const dotColor = computed(() => bar?.value?.ganttBarConfig.style?.background || DEFAULT_DOT_COLOR)
 
 const { toDayjs } = useDayjsHelper()
-const { precision, font } = config
+
+const barStartRaw = computed(() => bar.value?.[barStart.value])
+const barEndRaw = computed(() => bar.value?.[barEnd.value])
+
 const tooltipContent = computed(() => {
-  const format = TOOLTIP_FORMATS[precision.value]
   if (!bar?.value) {
     return ""
   }
-  const barStartFormatted = toDayjs(bar.value, "start").format(format)
-  const barEndFormatted = toDayjs(bar.value, "end").format(format)
+  const format = TOOLTIP_FORMATS[precision.value]
+  const barStartFormatted = toDayjs(barStartRaw.value).format(format)
+  const barEndFormatted = toDayjs(barEndRaw.value).format(format)
   return `${barStartFormatted} \u2013 ${barEndFormatted}`
 })
 </script>

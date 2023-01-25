@@ -32,8 +32,8 @@ export default function useTimeaxisUnits() {
   }
 
   const timeaxisUnits = computed(() => {
-    const upperUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
-    const lowerUnits: { label: string; value?: string; date?: Date, width?: string }[] = []
+    const upperUnits: { label: string; value?: string; date: Date; width?: string }[] = []
+    const lowerUnits: { label: string; value?: string; date: Date; width?: string }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)

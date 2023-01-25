@@ -6,7 +6,7 @@ import provideConfig from "../provider/provideConfig.js"
 
 export default function useTimePositionMapping(config: GGanttChartConfig = provideConfig()) {
   const { dateFormat, chartSize } = config
-  const { chartStartDayjs, chartEndDayjs, toDayjs } = useDayjsHelper(config)
+  const { chartStartDayjs, chartEndDayjs, toDayjs, format } = useDayjsHelper(config)
 
   const totalNumOfMinutes = computed(() => {
     return chartEndDayjs.value.diff(chartStartDayjs.value, "minutes")
@@ -21,7 +21,7 @@ export default function useTimePositionMapping(config: GGanttChartConfig = provi
   const mapPositionToTime = (xPos: number) => {
     const width = chartSize.width.value || 0
     const diffFromStart = (xPos / width) * totalNumOfMinutes.value
-    return chartStartDayjs.value.add(diffFromStart, "minutes").format(dateFormat.value)
+    return format(chartStartDayjs.value.add(diffFromStart, "minutes"), dateFormat.value)
   }
 
   return {

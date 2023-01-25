@@ -8,7 +8,7 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `precision` | string? | `"hour"` | Display precision of the time-axis. Possible values: `hour`, `day` and `month`. |
 | `bar-start` | string | | Name of the property in bar objects that represents the start date.
 | `bar-end` | string  | | Name of the property in bar objects that represents the end date .
-| `date-format` | string?  | `"YYYY-MM-DD HH:mm"` | Datetime string format of `chart-start`, `chart-end` and the values of the `bar-start`, `bar-end` properties in bar objects. See [Day.js format tokens](https://day.js.org/docs/en/parse/string-format).
+| `date-format` | string \| false  | `"YYYY-MM-DD HH:mm"` | Datetime string format of `chart-start`, `chart-end` and the values of the `bar-start`, `bar-end` properties in bar objects. See [Day.js format tokens](https://day.js.org/docs/en/parse/string-format). If the aforementioned properties are native JavaScript [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) objects in your use case, pass `false`.
 | `width` | string? | `"100%"` | Width of the chart (e.g. `80%` or `800px`)
 | `hide-timeaxis` | boolean? | `false` | Toggle visibility of the time axis.
 | `color-scheme` | string \| ColorScheme | `"default"` | Color scheme (theme) of the chart. Either use the name of one of the predefined schemes or pass a color-scheme-object of your own. See [color schemes](#color-schemes).

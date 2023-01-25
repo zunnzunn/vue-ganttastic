@@ -2,7 +2,15 @@
   <div
     :id="barConfig.id"
     class="g-gantt-bar"
-    :style="barStyle"
+    :style="{
+      ...barConfig.style,
+      position: 'absolute',
+      top: `${rowHeight * 0.1}px`,
+      left: `${xStart}px`,
+      width: `${xEnd - xStart}px`,
+      height: `${rowHeight * 0.8}px`,
+      zIndex: isDragging ? 3 : 2
+    }"
     @mousedown="onMouseEvent"
     @click="onMouseEvent"
     @dblclick="onMouseEvent"
@@ -25,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toRefs, watch, type CSSProperties, onMounted, inject } from "vue"
+import { computed, ref, toRefs, watch, onMounted, inject } from "vue"
 
 import useBarDragManagement from "../composables/useBarDragManagement.js"
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
@@ -84,10 +92,10 @@ const onMouseEvent = (e: MouseEvent) => {
     prepareForDrag()
   }
   const barContainer = barContainerEl?.value?.getBoundingClientRect()
-  let datetime
-  if (barContainer) {
-    datetime = mapPositionToTime(e.clientX - barContainer.left)
+  if (!barContainer) {
+    return
   }
+  const datetime = mapPositionToTime(e.clientX - barContainer.left)
   emitBarEvent(e, bar.value, datetime)
 }
 
@@ -105,18 +113,6 @@ onMounted(() => {
     },
     { deep: true, immediate: true }
   )
-})
-
-const barStyle = computed(() => {
-  return {
-    ...barConfig.value.style,
-    position: "absolute",
-    top: `${rowHeight.value * 0.1}px`,
-    left: `${xStart.value}px`,
-    width: `${xEnd.value - xStart.value}px`,
-    height: `${rowHeight.value * 0.8}px`,
-    zIndex: isDragging.value ? 3 : 2
-  } as CSSProperties
 })
 </script>
 
