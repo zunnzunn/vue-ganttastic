@@ -119,6 +119,14 @@ For further guides and references, check out the [official docs](https://zunnzun
 **Author**: Marko Žunić, BSc  
 [GitHub Repository](https://github.com/zunnzunn/vue-ganttastic)  
 
+## Donate
+In case you found the library useful, a little tip would be much appreciated!
+
+![image](https://user-images.githubusercontent.com/28678851/233090745-a0a6d8a4-6df6-4b82-ac0c-90e69551786e.png)  
+BTC address: bc1qmz4gcewnarl6ldfz78x2htrf7ux6yvl3p2aqje    
+
+
+
 
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/28678851/148191571-76bd8d61-4583-4538-8c59-cc2915494890.png)
