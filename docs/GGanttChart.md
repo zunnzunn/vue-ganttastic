@@ -1,4 +1,4 @@
-# Reference: GGanttChart
+# API: GGanttChart
 The main component of Vue Ganttastic. Represents an entire chart and is meant to have at least one `g-gantt-row` child component.
 ## Props
 | Prop        | Type    | Default | Description                  |

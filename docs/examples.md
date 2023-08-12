@@ -20,7 +20,7 @@
 - `color-scheme` : `dark`
 
 Used slots:
-`g-gantt-row` --  `label`, `bar-label`
+`g-gantt-row` >  `label`, `bar-label`
 <g-gantt-chart chart-start="30.10.2022 12:00" chart-end="02.11.2022 13:00" precision="day" grid width="100%" :row-height="70" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="dark" no-overlap>
 <g-gantt-row label="Row label" :bars="dayBarList1" highlight-on-hover>
 <template #bar-label="{bar}">
@@ -30,8 +30,8 @@ Used slots:
 </g-gantt-row>
 <g-gantt-row label="My row 2" :bars="[]" highlight-on-hover>
 <template #label>
-<img src='https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png' height="20" widht="20" style="padding-right:10px"/>
-Look, an image!
+<img src='https://user-images.githubusercontent.com/28678851/148047714-301f07df-4101-48b8-9e47-1f272b290e80.png' height="30" width="30" style="padding-right:10px"/>
+Label with image
 </template>
 </g-gantt-row>
 </g-gantt-chart>
@@ -42,8 +42,8 @@ Look, an image!
 - `precision`: `month`
 - `push-on-overlap`
 - `color-scheme` : `vue`
-- `font` : `Calibri`
-<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="15.03.2022 03:00" precision="month" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="vue" font="Calibri" push-on-overlap>
+- `font` : `Courier`
+<g-gantt-chart chart-start="01.01.2022 12:00" chart-end="15.03.2022 03:00" precision="month" grid width="100%" bar-start="beginDate" bar-end="endDate" date-format="DD.MM.YYYY HH:mm" color-scheme="vue" font="Courier" push-on-overlap>
 <g-gantt-row label="My row 1" :bars="monthBarList1" highlight-on-hover/>
 <g-gantt-row label="My row 2" :bars="monthBarList2" highlight-on-hover/>
 <g-gantt-row label="Look at me!" :bars="monthBarList3" highlight-on-hover/>

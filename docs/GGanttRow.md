@@ -1,4 +1,4 @@
-# Reference: GGanttRow
+# API: GGanttRow
 Represents a single row of the chart. It is meant to be a child component of `g-gantt-chart`.  
 
 ## Props
