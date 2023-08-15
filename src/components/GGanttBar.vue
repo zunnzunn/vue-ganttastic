@@ -1,7 +1,7 @@
 <template>
   <div
     :id="barConfig.id"
-    :class="['g-gantt-bar', barConfig.class || '']"
+    class="g-gantt-bar"
     :style="{
       ...barConfig.style,
       position: 'absolute',
