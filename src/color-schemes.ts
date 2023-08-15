@@ -1,4 +1,6 @@
-import type { Color } from "csstype"
+import type * as CSS from "csstype"
+
+type Color = CSS.DataType.Color
 
 export type ColorScheme = {
   primary: Color
@@ -11,7 +13,7 @@ export type ColorScheme = {
   toast?: Color
 }
 
-export const colorSchemes = {
+export const colorSchemes: Record<string, ColorScheme> = {
   default: {
     primary: "#eeeeee",
     secondary: "#E0E0E0",
@@ -123,7 +125,7 @@ export const colorSchemes = {
     text: "white",
     background: "white"
   }
-} as Record<string, ColorScheme>
+}
 
 export type ColorSchemeKey = keyof typeof colorSchemes
 
