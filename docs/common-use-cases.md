@@ -50,6 +50,7 @@ For further configuration, you can add some optional properties to the nested `g
 |-----------------------|---------|-----------------------|
 | `id` | `string` | A unique string identifier for the bar.  (**mandatory**) 
 | `label` | `string?`  | Text displayed on the bar.
+| `label` | `string?`  | Optional HTML Code that will be rendered after the label (e.g. for tags). Please sanitize user input to avoid cross site scripting, if applicable.
 | `hasHandles` | `boolean?`  | Used to toggle handles on the left and right side of the bar that can be dragged to change the width of the bar. |
 | `immobile` | `boolean?`  | Used to toggle whether bar can be moved (dragged).
 | `bundle` | `string?`  | A string identifier for a bundle. A bundle is a collection of bars that are dragged simultaneously.
