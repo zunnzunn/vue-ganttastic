@@ -67,6 +67,7 @@ export interface GGanttChartProps {
   noOverlap?: boolean
   rowHeight?: number
   highlightedUnits?: number[]
+  highlightSundays?: boolean
   font?: string
 }
 
@@ -89,6 +90,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   noOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => [],
+  highlightSundays: false,
   font: "inherit"
 })
 
@@ -242,5 +244,9 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 
 .g-gantt-rows-container {
   position: relative;
+}
+
+.highlighted-day {
+  color: darkred;
 }
 </style>

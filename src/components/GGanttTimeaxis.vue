@@ -19,12 +19,12 @@
 
     <div class="g-timeunits-container">
       <div
-        v-for="({ label, value, date, width }, index) in timeaxisUnits.lowerUnits"
+        v-for="({ label, value, date, highlight, width }, index) in timeaxisUnits.lowerUnits"
         :key="label"
         class="g-timeunit"
         :style="{
           background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-          color: colors.text,
+          color: highlight ? 'darkred' : colors.text,
           flexDirection: precision === 'hour' ? 'column' : 'row',
           alignItems: precision === 'hour' ? '' : 'center',
           width
