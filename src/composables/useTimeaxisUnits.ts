@@ -5,7 +5,7 @@ import useDayjsHelper from "./useDayjsHelper.js"
 import provideConfig from "../provider/provideConfig.js"
 
 export default function useTimeaxisUnits() {
-  const { precision } = provideConfig()
+  const { precision, highlightSundays } = provideConfig()
   const { chartStartDayjs, chartEndDayjs } = useDayjsHelper()
 
   const upperPrecision = computed(() => {
@@ -33,7 +33,7 @@ export default function useTimeaxisUnits() {
 
   const timeaxisUnits = computed(() => {
     const upperUnits: { label: string; value?: string; date: Date; width?: string }[] = []
-    const lowerUnits: { label: string; value?: string; date: Date; width?: string }[] = []
+    const lowerUnits: { label: string; value?: string; date: Date; width?: string, highlight?: boolean }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
     const lowerUnit = precision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
@@ -95,6 +95,7 @@ export default function useTimeaxisUnits() {
         label: currentUnit.format(displayFormats[lowerUnit]),
         value: String(currentUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
         date: currentUnit.toDate(),
+        highlight: highlightSundays?.value && currentUnit.day() == 0,
         width: String(width) + "%"
       })
       const prevUpperUnitUnit = currentUnit
