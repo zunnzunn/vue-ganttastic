@@ -245,8 +245,4 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
 .g-gantt-rows-container {
   position: relative;
 }
-
-.highlighted-day {
-  color: darkred;
-}
 </style>
