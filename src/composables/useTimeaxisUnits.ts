@@ -14,19 +14,25 @@ export default function useTimeaxisUnits() {
         return "day"
       case "day":
         return "month"
+      case "date":
+      case "week":
+        return "month"
       case "month":
         return "year"
       default:
-        throw new Error(
-          "Precision prop incorrect. Must be one of the following: 'hour', 'day', 'month'"
-        )
+        throw new Error("Precision prop incorrect. Must be one of the following: 'hour', 'day', 'date', 'week', 'month'")
     }
+  })
+
+  const lowerPrecision = computed(() => {
+    return precision?.value === "date" ? "day" : precision?.value
   })
 
   const displayFormats = {
     hour: "HH",
-    date: "DD.MMM ",
-    day: "DD.MMM ",
+    date: "DD",
+    day: "DD.MMM",
+    week: "ww",
     month: "MMMM YYYY",
     year: "YYYY"
   }
@@ -35,7 +41,7 @@ export default function useTimeaxisUnits() {
     const upperUnits: { label: string; value?: string; date: Date; width?: string }[] = []
     const lowerUnits: { label: string; value?: string; date: Date; width?: string }[] = []
     const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
-    const lowerUnit = precision.value
+    const lowerUnit = lowerPrecision.value
     let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
     const totalMinutes = chartEndDayjs.value.diff(chartStartDayjs.value, "minutes", true)
     let upperUnitMinutesCount = 0
@@ -46,19 +52,19 @@ export default function useTimeaxisUnits() {
         let width = 0
         if (upperUnits.length === 0) {
           width =
-            (currentUnit.startOf(upperUnit).diff(chartStartDayjs.value, "minutes", true) /
-              totalMinutes) *
-            100
+          (currentUnit.startOf(upperUnit).diff(chartStartDayjs.value, "minutes", true) /
+          totalMinutes) *
+          100
         } else if (currentUnit.isSameOrAfter(chartEndDayjs.value)) {
           width =
-            (chartEndDayjs.value.diff(
-              currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit),
-              "minutes",
-              true
+          (chartEndDayjs.value.diff(
+            currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit),
+            "minutes",
+            true
             ) /
-              totalMinutes) *
+            totalMinutes) *
             100
-        } else {
+          } else {
           const end = currentUnit.startOf(upperUnit)
           const start = currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit)
           width = (end.diff(start, "minutes", true) / totalMinutes) * 100
@@ -92,7 +98,7 @@ export default function useTimeaxisUnits() {
           100
       }
       lowerUnits.push({
-        label: currentUnit.format(displayFormats[lowerUnit]),
+        label: currentUnit.subtract(precision?.value === 'week' ? 1 : 0, 'week').format(displayFormats[precision?.value]),
         value: String(currentUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
         date: currentUnit.toDate(),
         width: String(width) + "%"

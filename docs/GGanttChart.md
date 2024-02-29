@@ -5,7 +5,7 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 |-------------|---------|---------|------------------------------|
 | `chart-start` | string | | Start date-time of the chart.
 | `chart-end` | string  | | End date-time of the chart.
-| `precision` | string? | `"hour"` | Display precision of the time-axis. Possible values: `hour`, `day` and `month`. |
+| `precision` | string? | `"hour"` | Display precision of the time-axis. Possible values: `hour`, `day`, `date`, `week` and `month`. |
 | `bar-start` | string | | Name of the property in bar objects that represents the start date.
 | `bar-end` | string  | | Name of the property in bar objects that represents the end date .
 | `date-format` | string \| false  | `"YYYY-MM-DD HH:mm"` | Datetime string format of `chart-start`, `chart-end` and the values of the `bar-start`, `bar-end` properties in bar objects. See [Day.js format tokens](https://day.js.org/docs/en/parse/string-format). If the aforementioned properties are native JavaScript [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) objects in your use case, pass `false`.

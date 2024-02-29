@@ -55,7 +55,7 @@ import { useElementSize } from "@vueuse/core"
 export interface GGanttChartProps {
   chartStart: string | Date
   chartEnd: string | Date
-  precision?: "hour" | "day" | "month"
+  precision?: "hour" | "day" | "date" | "week" | "month"
   barStart: string
   barEnd: string
   dateFormat?: string | false
