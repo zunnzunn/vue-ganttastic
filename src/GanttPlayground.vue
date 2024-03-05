@@ -31,8 +31,8 @@
 import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
 
-const chartStart = ref("21.07.2020 12:00")
-const chartEnd = ref("15.07.2021 12:00")
+const chartStart = ref("21.06.2020 12:00")
+const chartEnd = ref("15.09.2021 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
 
 const bars1 = ref<GanttBarObject[]>([
