@@ -16,6 +16,7 @@
     </g-gantt-timeaxis>
 
     <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
+    <g-gantt-current-time v-if="currentTime" />
 
     <div class="g-gantt-rows-container">
       <slot />
@@ -43,6 +44,7 @@ import {
 } from "vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttGrid from "./GGanttGrid.vue"
+import GGanttCurrentTime from "./GGanttCurrentTime.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
@@ -58,6 +60,7 @@ export interface GGanttChartProps {
   precision?: "hour" | "day" | "date" | "week" | "month"
   barStart: string
   barEnd: string
+  currentTime?: boolean
   dateFormat?: string | false
   width?: string
   hideTimeaxis?: boolean

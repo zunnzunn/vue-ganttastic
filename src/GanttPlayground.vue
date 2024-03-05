@@ -5,6 +5,7 @@
     precision="week"
     :row-height="40"
     grid
+    current-time
     width="100%"
     bar-start="beginDate"
     bar-end="endDate"
@@ -31,14 +32,14 @@
 import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
 
-const chartStart = ref("21.06.2020 12:00")
-const chartEnd = ref("15.09.2021 12:00")
+const chartStart = ref("21.06.2023 12:00")
+const chartEnd = ref("15.09.2024 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
 
 const bars1 = ref<GanttBarObject[]>([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: "24.04.2024 13:00",
+    endDate: "25.05.2024 19:00",
     ganttBarConfig: {
       id: "8621987329",
       label: "I'm in a bundle",
@@ -49,8 +50,8 @@ const bars1 = ref<GanttBarObject[]>([
 
 const bars2 = ref([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: "24.04.2024 13:00",
+    endDate: "25.05.2024 19:00",
     ganttBarConfig: {
       id: "1592311887",
       label: "I'm in a bundle",
@@ -61,8 +62,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "01.01.2021 00:00",
-    endDate: "01.03.2021 00:00",
+    beginDate: "01.01.2024 00:00",
+    endDate: "01.03.2024 00:00",
     ganttBarConfig: {
       id: "7716981641",
       label: "Lorem ipsum dolor",
@@ -73,8 +74,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "15.06.2021 00:00",
-    endDate: "10.07.2021 00:00",
+    beginDate: "15.06.2024 00:00",
+    endDate: "10.07.2024 00:00",
     ganttBarConfig: {
       id: "9716981641",
       label: "Oh hey",
@@ -92,8 +93,8 @@ const addBar = () => {
     return
   }
   const bar = {
-    beginDate: "26.02.2021 00:00",
-    endDate: "26.03.2021 02:00",
+    beginDate: "26.02.2024 00:00",
+    endDate: "26.03.2024 02:00",
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,
