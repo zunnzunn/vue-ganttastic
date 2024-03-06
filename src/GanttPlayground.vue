@@ -30,10 +30,11 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
+import dayjs from "dayjs";
 
-const chartStart = ref("21.06.2020 12:00")
-const chartEnd = ref("15.09.2021 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
+const chartStart = ref(dayjs().subtract(2,'month').format("DD.MM.YYYY HH:mm"))
+const chartEnd = ref(dayjs().add(2,'month').format("DD.MM.YYYY HH:mm"))
 
 const bars1 = ref<GanttBarObject[]>([
   {
