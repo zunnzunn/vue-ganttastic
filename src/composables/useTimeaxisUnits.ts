@@ -42,100 +42,46 @@ export default function useTimeaxisUnits() {
   const timeaxisUnits = computed(() => {
     const upperUnits: { label: string; value?: string; date: Date; width?: string }[] = []
     const lowerUnits: { label: string; value?: string; date: Date; width?: string }[] = []
-    const upperUnit = upperPrecision.value === "day" ? "date" : upperPrecision.value
-    const lowerUnit = lowerPrecision.value
-    let currentUnit = chartStartDayjs.value.startOf(lowerUnit)
     const totalMinutes = chartEndDayjs.value.diff(chartStartDayjs.value, "minutes", true)
-    let upperUnitMinutesCount = 0
-    let currentUpperUnitVal = currentUnit[upperUnit]()
+    const upperUnit = upperPrecision.value
+    const lowerUnit = lowerPrecision.value
+    let currentUpperUnit = chartStartDayjs.value
+    let currentLowerUnit = chartStartDayjs.value
 
-    while (currentUnit.isSameOrBefore(chartEndDayjs.value)) {
-      if (currentUnit[upperUnit]() !== currentUpperUnitVal) {
-        // when upper unit changes:
-        let width = 0
-        if (upperUnits.length === 0) {
-          width =
-            (currentUnit.startOf(upperUnit).diff(chartStartDayjs.value, "minutes", true) /
-              totalMinutes) *
-            100
-        } else if (currentUnit.isSameOrAfter(chartEndDayjs.value)) {
-          width =
-            (chartEndDayjs.value.diff(
-              currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit),
-              "minutes",
-              true
-            ) /
-              totalMinutes) *
-            100
-        } else {
-          const end = currentUnit.startOf(upperUnit)
-          const start = currentUnit.subtract(1, upperUnit as ManipulateType).startOf(upperUnit)
-          width = (end.diff(start, "minutes", true) / totalMinutes) * 100
-        }
-        const resultDayjs = currentUnit.subtract(1, upperUnit as ManipulateType)
-        upperUnits.push({
-          label: resultDayjs.format(displayFormats[upperUnit]),
-          value: String(currentUpperUnitVal),
-          date: resultDayjs.toDate(),
-          width: String(width) + "%"
-        })
-        upperUnitMinutesCount = 0
-        currentUpperUnitVal = currentUnit[upperUnit]()
-      }
-      let width = 0
-      // create and push lower unit:
-      const currentLowerUnit = currentUnit.subtract(precision?.value === "week" ? 1 : 0, "week")
-      if (lowerUnits.length === 0) {
-        width =
-          (currentLowerUnit.endOf(lowerUnit).diff(chartStartDayjs.value, "minutes", true) /
-            totalMinutes) *
-          100
-      } else if (currentLowerUnit.add(1, lowerUnit).isSameOrAfter(chartEndDayjs.value)) {
-        width =
-          (chartEndDayjs.value.diff(currentLowerUnit.startOf(lowerUnit), "minutes", true) /
-            totalMinutes) *
-          100
-      } else {
-        width =
-          (currentLowerUnit
-            .endOf(lowerUnit)
-            .diff(currentLowerUnit.startOf(lowerUnit), "minutes", true) /
-            totalMinutes) *
-          100
-      }
+    while (currentLowerUnit.isSameOrBefore(chartEndDayjs.value)) {
+      const endCurrentLowerUnit = currentLowerUnit.endOf(lowerUnit);
+      const isLastItem = endCurrentLowerUnit.isAfter(chartEndDayjs.value);
 
-      const prevUpperUnitUnit = currentUnit
-      currentUnit = currentUnit.add(1, lowerUnit)
-      if (currentUnit.isBefore(chartEndDayjs.value) || currentUnit.isSame(chartEndDayjs.value)) {
-        upperUnitMinutesCount += currentUnit.diff(prevUpperUnitUnit, "minutes", true)
-        width =
-          (currentLowerUnit
-            .endOf(lowerUnit)
-            .diff(currentLowerUnit.startOf(lowerUnit), "minutes", true) /
-            totalMinutes) *
-          100
-      }
+      const lowerWidth = isLastItem
+        ? (chartEndDayjs.value.diff(currentLowerUnit, "minutes", true) / totalMinutes) * 100
+        : (endCurrentLowerUnit.diff(currentLowerUnit, "minutes", true) / totalMinutes) * 100;
+
       lowerUnits.push({
         label: currentLowerUnit.format(displayFormats[precision?.value]),
-        value: String(currentLowerUnit[lowerUnit === "day" ? "date" : lowerUnit]()),
+        value: String(currentLowerUnit),
         date: currentLowerUnit.toDate(),
-        width: String(width) + "%"
-      })
+        width: String(lowerWidth) + "%"
+      });
+
+      currentLowerUnit = endCurrentLowerUnit.add(1, lowerUnit).startOf(lowerUnit);
     }
+    while (currentUpperUnit.isSameOrBefore(chartEndDayjs.value)) {
+      const endCurrentUpperUnit = currentUpperUnit.endOf(upperUnit);
+      const isLastItem = endCurrentUpperUnit.isAfter(chartEndDayjs.value);
 
-    // for the very last upper unit :
+      const upperWidth = isLastItem
+        ? (chartEndDayjs.value.diff(currentUpperUnit, "minutes", true) / totalMinutes) * 100
+        : (endCurrentUpperUnit.diff(currentUpperUnit, "minutes", true) / totalMinutes) * 100;
 
-    upperUnitMinutesCount += chartEndDayjs.value.diff(
-      currentUnit.subtract(1, lowerUnit),
-      "minutes",
-      true
-    )
-    upperUnits.push({
-      label: chartEndDayjs.value.format(displayFormats[upperUnit]),
-      value: String(currentUpperUnitVal),
-      date: chartEndDayjs.value.toDate(),
-      width: `${(upperUnitMinutesCount / totalMinutes) * 100}%`
-    })
+        upperUnits.push({
+        label: currentUpperUnit.format(displayFormats[upperUnit]),
+        value: String(currentUpperUnit),
+        date: currentUpperUnit.toDate(),
+        width: String(upperWidth) + "%"
+      });
+
+      currentUpperUnit = endCurrentUpperUnit.add(1, upperUnit).startOf(upperUnit);
+    }
     return { upperUnits, lowerUnits }
   })
 
