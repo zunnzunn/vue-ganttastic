@@ -1,5 +1,5 @@
 <template>
-  <div class="g-gantt-column" :style="{ fontFamily: font }">
+  <div class="g-gantt-column" :style="{ fontFamily: font, color: colors.text }">
     <span class="g-gantt-header" :style="{ background: colors.primary }">{{ columnTitle }}</span>
     <div class="g-gantt-labels">
       <div
@@ -60,7 +60,6 @@ const { font, colors, labels, columnTitle } = provideConfig()
   width: 100%;
   height: 100%;
   display: flex;
-  max-height: 3em;
   padding: 0.1rem 0.3rem;
   overflow: hidden;
   white-space: normal;
