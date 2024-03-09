@@ -19,6 +19,9 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `row-height` | number? | `40` |Height of each row in pixels.
 | `highlighted-units` | number[]? | `[]` | The time units specified here will be visually highlighted in the chart with a mild opaque color.
 | `font` | `string` | `"Helvetica"`| Font family of the chart.
+| `column-title` | string? |  `false` | If `column-title` is setted, the row labels will be on the left side of the graph.
+| `column-width` | string? |  `false` |If `column-width` is set, the column width will be given the specified value (e.g. `10%` or `50px`).
+
 
 ## Custom Events
 | Event name                 | Event data                                                 |
@@ -33,7 +36,6 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `drag-bar`            |  `{bar: GanttBarObject, e: MouseEvent}` |
 | `dragend-bar`            |  `{bar: GanttBarObject, e: MouseEvent, movedBars?: Map<GanttBarObject, {oldStart: string, oldEnd: string}>}` |
 | `contextmenu-bar`            |  `{bar: GanttBarObject, e: MouseEvent, datetime?: string}` |
-  
 
 
 ## Slots
@@ -66,6 +68,7 @@ You can also provide your own color scheme. Your custom color scheme should be a
   ternary: string,
   quartenary: string,
   hoverHighlight: string,
+  markerCurrentTime: string,
   text: string,
   background: string,
   toast?: string
