@@ -2,14 +2,10 @@
   <div class="g-gantt-column" :style="{ fontFamily: font, color: colors.text }">
     <span class="g-gantt-header" :style="{ background: colors.primary }">{{ columnTitle }}</span>
     <div class="g-gantt-labels">
-      <div
-        v-for="(label, index) in labels"
-        :key="index"
-        class="g-gantt-label"
-        :style="{
-          background: index % 2 === 0 ? colors.ternary : colors.quartenary
-        }"
-      >
+      <div v-for="(label, index) in labels" :key="index" class="g-gantt-label" :style="{
+        background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+        height: `${rowHeight}px`,
+      }">
         <span>{{ label }}</span>
       </div>
     </div>
@@ -19,7 +15,7 @@
 <script setup lang="ts">
 import provideConfig from "../provider/provideConfig.js"
 
-const { font, colors, labels, columnTitle } = provideConfig()
+const { font, colors, labels, columnTitle, rowHeight } = provideConfig()
 </script>
 
 <style>
@@ -63,8 +59,6 @@ const { font, colors, labels, columnTitle } = provideConfig()
   padding: 0.1rem 0.3rem;
   overflow: hidden;
   white-space: normal;
-  border: 2px solid #eaeaea;
-  border-bottom: none !important;
   box-sizing: border-box;
   align-items: flex-start;
   justify-content: center;
