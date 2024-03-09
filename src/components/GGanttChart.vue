@@ -1,28 +1,35 @@
 <template>
-  <div
-    ref="ganttChart"
-    class="g-gantt-chart"
-    :style="{ width, background: colors.background, fontFamily: font }"
-  >
-    <g-gantt-timeaxis v-if="!hideTimeaxis">
-      <template #upper-timeunit="{ label, value, date }">
-        <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
-        <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
-      </template>
-      <template #timeunit="{ label, value, date }">
-        <!-- expose timeunit slot of g-gantt-timeaxis-->
-        <slot name="timeunit" :label="label" :value="value" :date="date" />
-      </template>
-    </g-gantt-timeaxis>
-
-    <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-    <g-gantt-current-time v-if="currentTime" />
-
-    <div class="g-gantt-rows-container">
-      <slot />
-      <!-- the g-gantt-row components go here -->
+  <div>
+    <div :class="[{ 'labels-in-column': columnTitle }]">
+      <g-gantt-column
+        v-if="columnTitle"
+        :style="{
+          width: columnWidth
+        }"
+      />
+      <div
+        ref="ganttChart"
+        :class="['g-gantt-chart', { 'with-column': columnTitle }]"
+        :style="{ width, background: colors.background, fontFamily: font }"
+      >
+        <g-gantt-timeaxis v-if="!hideTimeaxis">
+          <template #upper-timeunit="{ label, value, date }">
+            <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
+            <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
+          </template>
+          <template #timeunit="{ label, value, date }">
+            <!-- expose timeunit slot of g-gantt-timeaxis-->
+            <slot name="timeunit" :label="label" :value="value" :date="date" />
+          </template>
+        </g-gantt-timeaxis>
+        <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
+        <g-gantt-current-time v-if="currentTime" />
+        <div class="g-gantt-rows-container">
+          <slot />
+          <!-- the g-gantt-row components go here -->
+        </div>
+      </div>
     </div>
-
     <g-gantt-bar-tooltip :model-value="showTooltip || isDragging" :bar="tooltipBar">
       <template #default>
         <slot name="bar-tooltip" :bar="tooltipBar" />
@@ -42,17 +49,20 @@ import {
   type Ref,
   type ToRefs
 } from "vue"
-import GGanttTimeaxis from "./GGanttTimeaxis.vue"
-import GGanttGrid from "./GGanttGrid.vue"
-import GGanttCurrentTime from "./GGanttCurrentTime.vue"
-import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
-import { colorSchemes, type ColorScheme } from "../color-schemes.js"
-import type { ColorSchemeKey } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
+import GGanttGrid from "./GGanttGrid.vue"
+import GGanttColumn from "./GGanttColumn.vue"
+import GGanttTimeaxis from "./GGanttTimeaxis.vue"
+import GGanttBarTooltip from "./GGanttBarTooltip.vue"
+import GGanttCurrentTime from "./GGanttCurrentTime.vue"
+
 import type { GanttBarObject } from "../types"
-import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
+import type { ColorSchemeKey } from "../color-schemes.js"
+
 import { useElementSize } from "@vueuse/core"
+import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
+import { colorSchemes, type ColorScheme } from "../color-schemes.js"
+import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
 
 export interface GGanttChartProps {
   chartStart: string | Date
@@ -71,6 +81,9 @@ export interface GGanttChartProps {
   rowHeight?: number
   highlightedUnits?: number[]
   font?: string
+  columnTitle?: string
+  labels?: string[]
+  columnWidth?: string
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
@@ -88,11 +101,14 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   hideTimeaxis: false,
   colorScheme: "default",
   grid: false,
+  labels: () => [],
   pushOnOverlap: false,
   noOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => [],
-  font: "inherit"
+  font: "inherit",
+  columnTitle: "",
+  columnWidth: "150px"
 })
 
 const emit = defineEmits<{
@@ -138,10 +154,12 @@ const getChartRows = () => {
   }
   defaultSlot.forEach((child) => {
     if (child.props?.bars) {
+      console.log(child)
       const bars = child.props.bars as GanttBarObject[]
       allBars.push(bars)
       // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
     } else if (Array.isArray(child.children)) {
+      console.log("child: ", child)
       child.children.forEach((grandchild) => {
         const granchildNode = grandchild as {
           props?: { bars?: GanttBarObject[] }
@@ -155,6 +173,32 @@ const getChartRows = () => {
   })
   return allBars
 }
+
+const labels = computed(() => {
+  const defaultSlot = slots.default?.()
+  const allLabels: string[] = []
+
+  if (!defaultSlot) {
+    return allLabels
+  }
+  defaultSlot.forEach((child) => {
+    if (child.props?.label) {
+      const label = child.props.label as string
+      allLabels.push(label)
+    } else if (Array.isArray(child.children)) {
+      child.children.forEach((grandchild) => {
+        const grandchildNode = grandchild as {
+          props?: { label?: string }
+        }
+        if (grandchildNode?.props?.label) {
+          const label = grandchildNode.props.label as string
+          allLabels.push(label)
+        }
+      })
+    }
+  })
+  return allLabels
+})
 
 const showTooltip = ref(false)
 const isDragging = ref(false)
@@ -226,6 +270,7 @@ provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
   colors,
+  labels,
   chartSize
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
@@ -239,11 +284,23 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
   overflow-x: hidden;
   -webkit-touch-callout: none;
   user-select: none;
-  border-radius: 5px;
   font-variant-numeric: tabular-nums;
+  border-radius: 5px;
+}
+
+.with-column {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .g-gantt-rows-container {
   position: relative;
+}
+
+.labels-in-column {
+  display: flex;
+  flex-direction: row;
 }
 </style>

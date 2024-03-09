@@ -49,38 +49,38 @@ export default function useTimeaxisUnits() {
     let currentLowerUnit = chartStartDayjs.value
 
     while (currentLowerUnit.isSameOrBefore(chartEndDayjs.value)) {
-      const endCurrentLowerUnit = currentLowerUnit.endOf(lowerUnit);
-      const isLastItem = endCurrentLowerUnit.isAfter(chartEndDayjs.value);
+      const endCurrentLowerUnit = currentLowerUnit.endOf(lowerUnit)
+      const isLastItem = endCurrentLowerUnit.isAfter(chartEndDayjs.value)
 
       const lowerWidth = isLastItem
         ? (chartEndDayjs.value.diff(currentLowerUnit, "minutes", true) / totalMinutes) * 100
-        : (endCurrentLowerUnit.diff(currentLowerUnit, "minutes", true) / totalMinutes) * 100;
+        : (endCurrentLowerUnit.diff(currentLowerUnit, "minutes", true) / totalMinutes) * 100
 
       lowerUnits.push({
         label: currentLowerUnit.format(displayFormats[precision?.value]),
         value: String(currentLowerUnit),
         date: currentLowerUnit.toDate(),
         width: String(lowerWidth) + "%"
-      });
+      })
 
-      currentLowerUnit = endCurrentLowerUnit.add(1, lowerUnit).startOf(lowerUnit);
+      currentLowerUnit = endCurrentLowerUnit.add(1, lowerUnit).startOf(lowerUnit)
     }
     while (currentUpperUnit.isSameOrBefore(chartEndDayjs.value)) {
-      const endCurrentUpperUnit = currentUpperUnit.endOf(upperUnit);
-      const isLastItem = endCurrentUpperUnit.isAfter(chartEndDayjs.value);
+      const endCurrentUpperUnit = currentUpperUnit.endOf(upperUnit)
+      const isLastItem = endCurrentUpperUnit.isAfter(chartEndDayjs.value)
 
       const upperWidth = isLastItem
         ? (chartEndDayjs.value.diff(currentUpperUnit, "minutes", true) / totalMinutes) * 100
-        : (endCurrentUpperUnit.diff(currentUpperUnit, "minutes", true) / totalMinutes) * 100;
+        : (endCurrentUpperUnit.diff(currentUpperUnit, "minutes", true) / totalMinutes) * 100
 
-        upperUnits.push({
+      upperUnits.push({
         label: currentUpperUnit.format(displayFormats[upperUnit]),
         value: String(currentUpperUnit),
         date: currentUpperUnit.toDate(),
         width: String(upperWidth) + "%"
-      });
+      })
 
-      currentUpperUnit = endCurrentUpperUnit.add(1, upperUnit).startOf(upperUnit);
+      currentUpperUnit = endCurrentUpperUnit.add(1, upperUnit).startOf(upperUnit)
     }
     return { upperUnits, lowerUnits }
   })

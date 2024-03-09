@@ -60,7 +60,6 @@ const { timeaxisUnits } = useTimeaxisUnits()
   min-height: 75px;
   background: white;
   z-index: 4;
-  box-shadow: 0px 1px 3px 2px rgba(50, 50, 50, 0.5);
   display: flex;
   flex-direction: column;
 }

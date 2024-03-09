@@ -10,6 +10,8 @@
     bar-start="beginDate"
     bar-end="endDate"
     :date-format="format"
+    :column-title="'Column Test'"
+    :column-width="'150px'"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -20,8 +22,14 @@
     @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
     @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
   >
-    <g-gantt-row label="My row 1" :bars="bars1" highlight-on-hover />
-    <g-gantt-row label="My row 2" highlight-on-hover :bars="bars2" />
+    <g-gantt-row label="My row to test" :bars="bars1" highlight-on-hover />
+    <g-gantt-row label="My another new row to test" highlight-on-hover :bars="bars2" />
+    <g-gantt-row label="just another row to test gantt" highlight-on-hover :bars="bars3" />
+    <g-gantt-row
+      label="errors teach us, and debugging makes us stronger!"
+      highlight-on-hover
+      :bars="bars4"
+    />
   </g-gantt-chart>
 
   <button type="button" @click="addBar()">Add bar</button>
@@ -31,11 +39,11 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import type { GanttBarObject } from "./types.js"
-import dayjs from "dayjs";
+import dayjs from "dayjs"
 
 const format = ref("DD.MM.YYYY HH:mm")
-const chartStart = ref(dayjs().subtract(2,'month').format("DD.MM.YYYY HH:mm"))
-const chartEnd = ref(dayjs().add(2,'month').format("DD.MM.YYYY HH:mm"))
+const chartStart = ref(dayjs().subtract(2, "month").format("DD.MM.YYYY HH:mm"))
+const chartEnd = ref(dayjs().add(2, "month").format("DD.MM.YYYY HH:mm"))
 
 const bars1 = ref<GanttBarObject[]>([
   {
@@ -89,6 +97,77 @@ const bars2 = ref([
     }
   }
 ])
+
+const bars3 = [
+  {
+    beginDate: "15.01.2024 08:30",
+    endDate: "20.02.2024 16:45",
+    ganttBarConfig: {
+      id: "9876543210",
+      label: "Updated Bundle",
+      bundle: "bundle3",
+      style: {
+        background: "cyan"
+      }
+    }
+  },
+  {
+    beginDate: "20.02.2024 12:00",
+    endDate: "10.03.2024 18:30",
+    ganttBarConfig: {
+      id: "1234567890",
+      label: "New Task",
+      hasHandles: true,
+      style: {
+        background: "#f79466"
+      }
+    }
+  },
+  {
+    beginDate: "25.04.2024 09:15",
+    endDate: "30.04.2024 21:00",
+    ganttBarConfig: {
+      id: "2468135790",
+      label: "Greetings",
+      style: {
+        background: "#aabbcc",
+        borderRadius: "8px",
+        color: "white",
+        fontSize: "12px"
+      }
+    }
+  }
+]
+
+const bars4 = [
+  {
+    beginDate: "10.01.2024 08:00",
+    endDate: "15.03.2024 16:30",
+    ganttBarConfig: {
+      id: "9876543210",
+      label: "Novo Pacote",
+      bundle: "pacote3",
+      style: {
+        background: "pink"
+      }
+    }
+  },
+  {
+    beginDate: "05.03.2024 10:00",
+    endDate: "15.04.2024 22:15",
+    ganttBarConfig: {
+      id: "2468135790",
+      label: "hello folks",
+      style: {
+        background: "#ffd700",
+        borderRadius: "10px",
+        color: "black",
+        fontSize: "14px"
+      }
+    }
+  }
+]
+
 const addBar = () => {
   if (bars1.value.some((bar) => bar.ganttBarConfig.id === "test1")) {
     return

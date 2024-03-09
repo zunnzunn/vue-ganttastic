@@ -23,13 +23,11 @@ import provideConfig from "../provider/provideConfig.js"
 
 const { mapTimeToPosition } = useTimePositionMapping()
 const currentMoment = ref(dayjs())
-const { colors, dateFormat } = provideConfig();
+const { colors, dateFormat } = provideConfig()
 const xDist = computed(() => {
-  const format = dateFormat.value || 'YYYY-MM-DD HH:mm';
-  return mapTimeToPosition(
-    dayjs(currentMoment.value, format).format(format)
-  );
-});
+  const format = dateFormat.value || "YYYY-MM-DD HH:mm"
+  return mapTimeToPosition(dayjs(currentMoment.value, format).format(format))
+})
 </script>
 
 <style>
