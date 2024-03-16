@@ -9,7 +9,7 @@
     @mouseleave="isHovering = false"
   >
     <div
-      v-if="!columnTitle"
+      v-if="!labelColumnTitle"
       class="g-gantt-row-label"
       :style="{ background: colors.primary, color: colors.text }"
     >
@@ -46,7 +46,7 @@ const emit = defineEmits<{
   (e: "drop", value: { e: MouseEvent; datetime: string | Date }): void
 }>()
 
-const { rowHeight, colors, columnTitle } = provideConfig()
+const { rowHeight, colors, labelColumnTitle } = provideConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
 

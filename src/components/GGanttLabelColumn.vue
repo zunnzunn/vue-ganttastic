@@ -1,21 +1,32 @@
 <template>
   <div class="g-gantt-column" :style="{ fontFamily: font, color: colors.text }">
-    <span class="g-gantt-header" :style="{ background: colors.primary }">{{ columnTitle }}</span>
-    <div class="g-gantt-labels">
-      <div v-for="(label, index) in labels" :key="index" class="g-gantt-label" :style="{
-        background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-        height: `${rowHeight}px`,
-      }">
-        <span>{{ label }}</span>
+    <slot name="column-title">
+      <span class="g-gantt-header" :style="{ background: colors.primary }">
+        {{ labelColumnTitle }}
+      </span>
+    </slot>
+    <slot name="column-labels">
+      <div class="g-gantt-labels">
+        <div
+          v-for="(label, index) in labels"
+          :key="index"
+          class="g-gantt-label"
+          :style="{
+            background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+            height: `${rowHeight}px`
+          }"
+        >
+          <span>{{ label }}</span>
+        </div>
       </div>
-    </div>
+    </slot>
   </div>
 </template>
 
 <script setup lang="ts">
 import provideConfig from "../provider/provideConfig.js"
 
-const { font, colors, labels, columnTitle, rowHeight } = provideConfig()
+const { font, colors, labels, labelColumnTitle, rowHeight } = provideConfig()
 </script>
 
 <style>
@@ -26,6 +37,7 @@ const { font, colors, labels, columnTitle, rowHeight } = provideConfig()
   color: rgb(64, 64, 64);
   justify-content: flex-start;
   font-variant-numeric: tabular-nums;
+  font-size: 0.9em;
 }
 
 .g-gantt-header {
@@ -37,7 +49,7 @@ const { font, colors, labels, columnTitle, rowHeight } = provideConfig()
   padding: 0.2rem 0.7rem;
   box-sizing: border-box;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   border-top-left-radius: 5px;
 }
@@ -60,7 +72,7 @@ const { font, colors, labels, columnTitle, rowHeight } = provideConfig()
   overflow: hidden;
   white-space: normal;
   box-sizing: border-box;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 
