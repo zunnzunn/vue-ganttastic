@@ -7,6 +7,9 @@
           <template #column-title>
             <slot name="column-title"/>
           </template>
+          <template #column-labels>
+            <slot name="column-labels"/>
+          </template>
       </g-gantt-label-column>
       <div ref="ganttChart" :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
         :style="{ width, background: colors.background, fontFamily: font }">

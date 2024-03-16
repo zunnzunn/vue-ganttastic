@@ -3,14 +3,16 @@
     <slot name="column-title">
       <span class="g-gantt-header" :style="{ background: colors.primary }">{{ labelColumnTitle }}</span>
     </slot>
-    <div class="g-gantt-labels">
-      <div v-for="(label, index) in labels" :key="index" class="g-gantt-label" :style="{
-        background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-        height: `${rowHeight}px`,
-      }">
-        <span>{{ label }}</span>
+    <slot name="column-labels">
+      <div class="g-gantt-labels">
+        <div v-for="(label, index) in labels" :key="index" class="g-gantt-label" :style="{
+          background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+          height: `${rowHeight}px`,
+        }">
+          <span>{{ label }}</span>
+        </div>
       </div>
-    </div>
+    </slot>
   </div>
 </template>
 
