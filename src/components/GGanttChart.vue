@@ -1,18 +1,24 @@
 <template>
   <div>
     <div :class="[{ 'labels-in-column': labelColumnTitle }]">
-      <g-gantt-label-column v-if="labelColumnTitle" :style="{
+      <g-gantt-label-column
+        v-if="labelColumnTitle"
+        :style="{
           width: labelColumnWidth
-        }">
-          <template #column-title>
-            <slot name="column-title"/>
-          </template>
-          <template #column-labels>
-            <slot name="column-labels"/>
-          </template>
+        }"
+      >
+        <template #column-title>
+          <slot name="column-title" />
+        </template>
+        <template #column-labels>
+          <slot name="column-labels" />
+        </template>
       </g-gantt-label-column>
-      <div ref="ganttChart" :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
-        :style="{ width, background: colors.background, fontFamily: font }">
+      <div
+        ref="ganttChart"
+        :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
+        :style="{ width, background: colors.background, fontFamily: font }"
+      >
         <g-gantt-timeaxis v-if="!hideTimeaxis">
           <template #upper-timeunit="{ label, value, date }">
             <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
@@ -25,9 +31,8 @@
         </g-gantt-timeaxis>
         <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
         <g-gantt-current-time v-if="currentTime">
-
           <template #current-time>
-            <slot name="current-time"/>
+            <slot name="current-time" />
           </template>
         </g-gantt-current-time>
         <div class="g-gantt-rows-container">

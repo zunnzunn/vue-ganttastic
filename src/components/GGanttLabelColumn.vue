@@ -1,14 +1,21 @@
 <template>
   <div class="g-gantt-column" :style="{ fontFamily: font, color: colors.text }">
     <slot name="column-title">
-      <span class="g-gantt-header" :style="{ background: colors.primary }">{{ labelColumnTitle }}</span>
+      <span class="g-gantt-header" :style="{ background: colors.primary }">
+        {{ labelColumnTitle }}
+      </span>
     </slot>
     <slot name="column-labels">
       <div class="g-gantt-labels">
-        <div v-for="(label, index) in labels" :key="index" class="g-gantt-label" :style="{
-          background: index % 2 === 0 ? colors.ternary : colors.quartenary,
-          height: `${rowHeight}px`,
-        }">
+        <div
+          v-for="(label, index) in labels"
+          :key="index"
+          class="g-gantt-label"
+          :style="{
+            background: index % 2 === 0 ? colors.ternary : colors.quartenary,
+            height: `${rowHeight}px`
+          }"
+        >
           <span>{{ label }}</span>
         </div>
       </div>

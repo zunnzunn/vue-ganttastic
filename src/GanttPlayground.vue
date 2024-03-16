@@ -1,17 +1,35 @@
 <template>
-  <g-gantt-chart :chart-start="chartStart" :chart-end="chartEnd" precision="week" :row-height="40" grid current-time
-    width="100%" bar-start="beginDate" bar-end="endDate" :date-format="format" :label-column-title="'Column Test'"
-    :label-column-width="'150px'" @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
+  <g-gantt-chart
+    :chart-start="chartStart"
+    :chart-end="chartEnd"
+    precision="week"
+    :row-height="40"
+    grid
+    current-time
+    width="100%"
+    bar-start="beginDate"
+    bar-end="endDate"
+    :date-format="format"
+    :column-title="'Column Test'"
+    :column-width="'150px'"
+    @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
-    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)" @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
-    @dragstart-bar="onDragstartBar($event.bar, $event.e)" @drag-bar="onDragBar($event.bar, $event.e)"
+    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
+    @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
+    @dragstart-bar="onDragstartBar($event.bar, $event.e)"
+    @drag-bar="onDragBar($event.bar, $event.e)"
     @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
-    @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)">
+    @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
+  >
     <g-gantt-row label="My row to test" :bars="bars1" highlight-on-hover />
     <g-gantt-row label="My another new row to test" highlight-on-hover :bars="bars2" />
     <g-gantt-row label="just another row to test gantt" highlight-on-hover :bars="bars3" />
-    <g-gantt-row label="errors teach us, and debugging makes us stronger!" highlight-on-hover :bars="bars4" />
+    <g-gantt-row
+      label="errors teach us, and debugging makes us stronger!"
+      highlight-on-hover
+      :bars="bars4"
+    />
   </g-gantt-chart>
 
   <button type="button" @click="addBar()">Add bar</button>
