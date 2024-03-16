@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div :class="[{ 'labels-in-column': columnTitle }]">
-      <g-gantt-column
-        v-if="columnTitle"
-        :style="{
-          width: columnWidth
-        }"
-      />
-      <div
-        ref="ganttChart"
-        :class="['g-gantt-chart', { 'with-column': columnTitle }]"
-        :style="{ width, background: colors.background, fontFamily: font }"
-      >
+    <div :class="[{ 'labels-in-column': labelColumnTitle }]">
+      <g-gantt-label-column v-if="labelColumnTitle" :style="{
+          width: labelColumnWidth
+        }">
+          <template #column-title>
+            <slot name="column-title"/>
+          </template>
+      </g-gantt-label-column>
+      <div ref="ganttChart" :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
+        :style="{ width, background: colors.background, fontFamily: font }">
         <g-gantt-timeaxis v-if="!hideTimeaxis">
           <template #upper-timeunit="{ label, value, date }">
             <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
@@ -23,7 +21,12 @@
           </template>
         </g-gantt-timeaxis>
         <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-        <g-gantt-current-time v-if="currentTime" />
+        <g-gantt-current-time v-if="currentTime">
+
+          <template #current-time>
+            <slot name="current-time"/>
+          </template>
+        </g-gantt-current-time>
         <div class="g-gantt-rows-container">
           <slot />
           <!-- the g-gantt-row components go here -->
@@ -51,7 +54,7 @@ import {
 } from "vue"
 
 import GGanttGrid from "./GGanttGrid.vue"
-import GGanttColumn from "./GGanttColumn.vue"
+import GGanttLabelColumn from "./GGanttLabelColumn.vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import GGanttCurrentTime from "./GGanttCurrentTime.vue"
@@ -81,9 +84,9 @@ export interface GGanttChartProps {
   rowHeight?: number
   highlightedUnits?: number[]
   font?: string
-  columnTitle?: string
   labels?: string[]
-  columnWidth?: string
+  labelColumnTitle?: string
+  labelColumnWidth?: string
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
@@ -107,8 +110,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   rowHeight: 40,
   highlightedUnits: () => [],
   font: "inherit",
-  columnTitle: "",
-  columnWidth: "150px"
+  labelColumnTitle: "",
+  labelColumnWidth: "150px"
 })
 
 const emit = defineEmits<{
@@ -154,7 +157,6 @@ const getChartRows = () => {
   }
   defaultSlot.forEach((child) => {
     if (child.props?.bars) {
-      console.log(child)
       const bars = child.props.bars as GanttBarObject[]
       allBars.push(bars)
       // if using v-for to generate rows, rows will be children of a single "fragment" v-node:

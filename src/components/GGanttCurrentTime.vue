@@ -5,13 +5,15 @@
       left: `${xDist}px`
     }"
   >
-    <div
-      class="g-grid-current-time-marker"
-      :style="{
-        border: `1px dashed ${colors.markerCurrentTime}`
-      }"
-    />
-    <span class="g-grid-current-time-text" :style="{ color: colors.markerCurrentTime }">TODAY</span>
+    <slot name="current-time">
+      <div
+        class="g-grid-current-time-marker"
+        :style="{
+          border: `1px dashed ${colors.markerCurrentTime}`
+        }"
+      />
+      <span class="g-grid-current-time-text" :style="{ color: colors.markerCurrentTime }">NOW</span>
+    </slot>
   </div>
 </template>
 
@@ -42,7 +44,7 @@ const xDist = computed(() => {
 
 .g-grid-current-time-marker {
   width: 0px;
-  height: 99%;
+  height: calc(100% - 2px);
   display: flex;
 }
 
