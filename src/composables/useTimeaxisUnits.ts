@@ -1,6 +1,4 @@
 import { computed } from "vue"
-import type { ManipulateType } from "dayjs"
-
 import useDayjsHelper from "./useDayjsHelper.js"
 import provideConfig from "../provider/provideConfig.js"
 
@@ -27,7 +25,14 @@ export default function useTimeaxisUnits() {
   })
 
   const lowerPrecision = computed(() => {
-    return precision?.value === "date" ? "day" : precision?.value
+    switch (precision.value) {
+      case "date":
+        return "day"
+      case "week":
+        return "isoWeek"
+      default:
+        return precision.value
+    }
   })
 
   const displayFormats = {
@@ -62,8 +67,9 @@ export default function useTimeaxisUnits() {
         date: currentLowerUnit.toDate(),
         width: String(lowerWidth) + "%"
       })
-
-      currentLowerUnit = endCurrentLowerUnit.add(1, lowerUnit).startOf(lowerUnit)
+      currentLowerUnit = endCurrentLowerUnit
+        .add(1, lowerUnit === "isoWeek" ? "week" : lowerUnit)
+        .startOf(lowerUnit)
     }
     while (currentUpperUnit.isSameOrBefore(chartEndDayjs.value)) {
       const endCurrentUpperUnit = currentUpperUnit.endOf(upperUnit)

@@ -31,7 +31,7 @@ const TOOLTIP_FORMATS = {
   day: "DD. MMM HH:mm",
   date: "DD. MMMM YYYY",
   month: "DD. MMMM YYYY",
-  week: "wo MMMM YYYY"
+  week: "DD. MMMM YYYY (WW)"
 } as const
 
 const DEFAULT_DOT_COLOR = "cadetblue"
