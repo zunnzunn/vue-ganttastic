@@ -40,8 +40,8 @@ import type { GanttBarObject } from "./types.js"
 import dayjs from "dayjs"
 
 const format = ref("DD.MM.YYYY HH:mm")
-const chartStart = ref(dayjs().subtract(2, "day").format("DD.MM.YYYY HH:mm"))
-const chartEnd = ref(dayjs().add(2, "day").format("DD.MM.YYYY HH:mm"))
+const chartStart = ref(dayjs().subtract(3, "months").format("DD.MM.YYYY HH:mm"))
+const chartEnd = ref(dayjs().add(2, "months").format("DD.MM.YYYY HH:mm"))
 
 const bars1 = ref<GanttBarObject[]>([
   {

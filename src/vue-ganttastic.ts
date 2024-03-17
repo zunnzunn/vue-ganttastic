@@ -1,5 +1,6 @@
 import type { Plugin } from "vue"
 import dayjs from "dayjs"
+import isoWeek from "dayjs/plugin/isoWeek"
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js"
 import isBetween from "dayjs/plugin/isBetween.js"
@@ -19,6 +20,7 @@ export function extendDayjs() {
   dayjs.extend(isBetween)
   dayjs.extend(customParseFormat)
   dayjs.extend(weekOfYear)
+  dayjs.extend(isoWeek)
   dayjs.extend(advancedFormat)
 }
 
