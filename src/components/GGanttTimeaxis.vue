@@ -56,8 +56,7 @@ const { timeaxisUnits } = useTimeaxisUnits()
   position: sticky;
   top: 0;
   width: 100%;
-  height: 8vh;
-  min-height: 75px;
+  height: 80px;
   background: white;
   z-index: 4;
   display: flex;

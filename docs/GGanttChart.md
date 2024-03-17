@@ -14,11 +14,12 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `color-scheme` | string \| ColorScheme | `"default"` | Color scheme (theme) of the chart. Either use the name of one of the predefined schemes or pass a color-scheme-object of your own. See [color schemes](#color-schemes).
 | `grid` | string? | `false` | Toggle visibility of background grid.
 | `current-time` | boolean? | `false` | Toggle visibility of current time marker.
+| `current-time-label` | string? |  | Text to be displayed next to the current time marker.
 | `push-on-overlap` | boolean? | `false` | Specifies whether bars "push one another" when dragging and overlaping.
 | `no-overlap` | boolean? |  `false` | If `push-on-overlap` is `false`, toggle this to prevent overlaps after drag by snapping the dragged bar back to its original position.
 | `row-height` | number? | `40` |Height of each row in pixels.
 | `highlighted-units` | number[]? | `[]` | The time units specified here will be visually highlighted in the chart with a mild opaque color.
-| `font` | `string` | `"Helvetica"`| Font family of the chart.
+| `font` | string | `"Helvetica"`| Font family of the chart.
 | `column-title` | string? |  `false` | If `column-title` is set, the row labels will be on the left side of the graph.
 | `column-width` | string? |  `false` |If `column-width` is set, the column width will be given the specified value (e.g. `10%` or `50px`).
 
@@ -44,6 +45,9 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `upper-timeunit`           |  `{label: string, value: string}` | Content of an upper time-unit section in the time axis. |
 | `timeunit`           |  `{label: string, value: string}` | Content of a time-unit section in the time axis. |
 | `bar-tooltip`        |  `{bar: GanttBarObject}` | Slot for the tooltip which appears when hovering over a bar. |
+| `current-time-label`        |  | Slot for the text shown next to the current time marker when the prop `current-time` is set to `true`. |
+| `label-column-title`        |  | Slot for the title of the extra column to the left where the row labels are shown if the prop `label-column-title` is set. |
+| `label-column-row`       | `{ label: string } ` | Slot for the label of a row if `label-column-title` is set.  |
 
 ## Color Schemes  
 
@@ -61,7 +65,7 @@ List of pre-defined color schemes:
 - `vue`
 
 You can also provide your own color scheme. Your custom color scheme should be an object of the following shape:
-```javascript
+```typescript
 {
   primary: string,
   secondary: string,

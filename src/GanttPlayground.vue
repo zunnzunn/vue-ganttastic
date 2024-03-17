@@ -10,8 +10,6 @@
     bar-start="beginDate"
     bar-end="endDate"
     :date-format="format"
-    :column-title="'Column Test'"
-    :column-width="'150px'"
     @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
     @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
     @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
@@ -42,8 +40,8 @@ import type { GanttBarObject } from "./types.js"
 import dayjs from "dayjs"
 
 const format = ref("DD.MM.YYYY HH:mm")
-const chartStart = ref(dayjs().subtract(2, "month").format("DD.MM.YYYY HH:mm"))
-const chartEnd = ref(dayjs().add(2, "month").format("DD.MM.YYYY HH:mm"))
+const chartStart = ref(dayjs().subtract(2, "day").format("DD.MM.YYYY HH:mm"))
+const chartEnd = ref(dayjs().add(2, "day").format("DD.MM.YYYY HH:mm"))
 
 const bars1 = ref<GanttBarObject[]>([
   {

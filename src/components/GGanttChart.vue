@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div :class="[{ 'labels-in-column': labelColumnTitle }]">
+    <div :class="[{ 'labels-in-column': !!labelColumnTitle }]">
       <g-gantt-label-column
         v-if="labelColumnTitle"
         :style="{
           width: labelColumnWidth
         }"
       >
-        <template #column-title>
-          <slot name="column-title" />
+        <template #label-column-title>
+          <slot name="label-column-title" />
         </template>
-        <template #column-labels>
-          <slot name="column-labels" />
+        <template #label-column-row="{ label }">
+          <slot name="label-column-row" :label="label" />
         </template>
       </g-gantt-label-column>
       <div
@@ -31,8 +31,8 @@
         </g-gantt-timeaxis>
         <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
         <g-gantt-current-time v-if="currentTime">
-          <template #current-time>
-            <slot name="current-time" />
+          <template #current-time-label>
+            <slot name="current-time-label" />
           </template>
         </g-gantt-current-time>
         <div class="g-gantt-rows-container">
@@ -73,7 +73,12 @@ import type { ColorSchemeKey } from "../color-schemes.js"
 import { useElementSize } from "@vueuse/core"
 import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
 import { colorSchemes, type ColorScheme } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
+import {
+  CHART_ROWS_KEY,
+  CONFIG_KEY,
+  EMIT_BAR_EVENT_KEY,
+  type ChartRow
+} from "../provider/symbols.js"
 
 export interface GGanttChartProps {
   chartStart: string | Date
@@ -82,6 +87,7 @@ export interface GGanttChartProps {
   barStart: string
   barEnd: string
   currentTime?: boolean
+  currentTimeLabel?: string
   dateFormat?: string | false
   width?: string
   hideTimeaxis?: boolean
@@ -92,7 +98,6 @@ export interface GGanttChartProps {
   rowHeight?: number
   highlightedUnits?: number[]
   font?: string
-  labels?: string[]
   labelColumnTitle?: string
   labelColumnWidth?: string
 }
@@ -106,13 +111,13 @@ export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
+  currentTimeLabel: "",
   dateFormat: DEFAULT_DATE_FORMAT,
   precision: "day",
   width: "100%",
   hideTimeaxis: false,
   colorScheme: "default",
   grid: false,
-  labels: () => [],
   pushOnOverlap: false,
   noOverlap: false,
   rowHeight: 40,
@@ -158,57 +163,30 @@ const colors = computed(() =>
 )
 const getChartRows = () => {
   const defaultSlot = slots.default?.()
-  const allBars: GanttBarObject[][] = []
+  const allBars: ChartRow[] = []
 
   if (!defaultSlot) {
     return allBars
   }
   defaultSlot.forEach((child) => {
     if (child.props?.bars) {
-      const bars = child.props.bars as GanttBarObject[]
-      allBars.push(bars)
+      const { label, bars } = child.props
+      allBars.push({ label, bars })
       // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
     } else if (Array.isArray(child.children)) {
-      console.log("child: ", child)
       child.children.forEach((grandchild) => {
         const granchildNode = grandchild as {
-          props?: { bars?: GanttBarObject[] }
+          props?: ChartRow
         }
         if (granchildNode?.props?.bars) {
-          const bars = granchildNode.props.bars as GanttBarObject[]
-          allBars.push(bars)
+          const { label, bars } = granchildNode.props
+          allBars.push({ label, bars })
         }
       })
     }
   })
   return allBars
 }
-
-const labels = computed(() => {
-  const defaultSlot = slots.default?.()
-  const allLabels: string[] = []
-
-  if (!defaultSlot) {
-    return allLabels
-  }
-  defaultSlot.forEach((child) => {
-    if (child.props?.label) {
-      const label = child.props.label as string
-      allLabels.push(label)
-    } else if (Array.isArray(child.children)) {
-      child.children.forEach((grandchild) => {
-        const grandchildNode = grandchild as {
-          props?: { label?: string }
-        }
-        if (grandchildNode?.props?.label) {
-          const label = grandchildNode.props.label as string
-          allLabels.push(label)
-        }
-      })
-    }
-  })
-  return allLabels
-})
 
 const showTooltip = ref(false)
 const isDragging = ref(false)
@@ -280,7 +258,6 @@ provide(CHART_ROWS_KEY, getChartRows)
 provide(CONFIG_KEY, {
   ...toRefs(props),
   colors,
-  labels,
   chartSize
 })
 provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
