@@ -5,15 +5,17 @@
       left: `${xDist}px`
     }"
   >
-    <slot name="current-time">
-      <div
-        class="g-grid-current-time-marker"
-        :style="{
-          border: `1px dashed ${colors.markerCurrentTime}`
-        }"
-      />
-      <span class="g-grid-current-time-text" :style="{ color: colors.markerCurrentTime }">NOW</span>
-    </slot>
+    <div
+      class="g-grid-current-time-marker"
+      :style="{
+        border: `1px dashed ${colors.markerCurrentTime}`
+      }"
+    />
+    <span class="g-grid-current-time-text" :style="{ color: colors.markerCurrentTime }">
+      <slot name="current-time-label">
+        {{ currentTimeLabel }}
+      </slot>
+    </span>
   </div>
 </template>
 
@@ -25,7 +27,7 @@ import provideConfig from "../provider/provideConfig.js"
 
 const { mapTimeToPosition } = useTimePositionMapping()
 const currentMoment = ref(dayjs())
-const { colors, dateFormat } = provideConfig()
+const { colors, dateFormat, currentTimeLabel } = provideConfig()
 const xDist = computed(() => {
   const format = dateFormat.value || "YYYY-MM-DD HH:mm"
   return mapTimeToPosition(dayjs(currentMoment.value, format).format(format))
@@ -38,8 +40,6 @@ const xDist = computed(() => {
   height: 100%;
   display: flex;
   z-index: 5;
-  flex-direction: row;
-  align-items: flex-start;
 }
 
 .g-grid-current-time-marker {

@@ -10,7 +10,7 @@ export default function useBarDragLimit() {
     const res: GanttBarObject[] = []
     if (bundle != null) {
       getChartRows().forEach((row) => {
-        row.forEach((bar) => {
+        row.bars.forEach((bar) => {
           if (bar.ganttBarConfig.bundle === bundle) {
             res.push(bar)
           }
@@ -128,7 +128,7 @@ export default function useBarDragLimit() {
 
   const getNextGanttBar = (bar: GanttBarObject, side: "left" | "right") => {
     const barElem = document.getElementById(bar.ganttBarConfig.id) as HTMLElement
-    const allBarsInRow = getChartRows().find((row) => row.includes(bar)) || []
+    const allBarsInRow = getChartRows().find((row) => row.bars.includes(bar))?.bars ?? []
     let allBarsLeftOrRight = []
     if (side === "left") {
       allBarsLeftOrRight = allBarsInRow.filter((otherBar) => {
