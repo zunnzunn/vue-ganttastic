@@ -14,14 +14,14 @@ The main component of Vue Ganttastic. Represents an entire chart and is meant to
 | `color-scheme` | string \| ColorScheme | `"default"` | Color scheme (theme) of the chart. Either use the name of one of the predefined schemes or pass a color-scheme-object of your own. See [color schemes](#color-schemes).
 | `grid` | string? | `false` | Toggle visibility of background grid.
 | `current-time` | boolean? | `false` | Toggle visibility of current time marker.
-| `current-time-label` | string? |  | Text to be displayed next to the current time marker.
+| `current-time-label` | string? | `''` | Text to be displayed next to the current time marker.
 | `push-on-overlap` | boolean? | `false` | Specifies whether bars "push one another" when dragging and overlaping.
 | `no-overlap` | boolean? |  `false` | If `push-on-overlap` is `false`, toggle this to prevent overlaps after drag by snapping the dragged bar back to its original position.
-| `row-height` | number? | `40` |Height of each row in pixels.
+| `row-height` | number? | `40` | Height of each row in pixels.
 | `highlighted-units` | number[]? | `[]` | The time units specified here will be visually highlighted in the chart with a mild opaque color.
 | `font` | string | `"Helvetica"`| Font family of the chart.
-| `column-title` | string? |  `false` | If `column-title` is set, the row labels will be on the left side of the graph.
-| `column-width` | string? |  `false` |If `column-width` is set, the column width will be given the specified value (e.g. `10%` or `50px`).
+| `label-column-title` | string? | `''` | If specified, a dedicated column for the row labels will be rendered on the left side of the graph. The specified title is displayed in the upper left corner, as the column's header.
+| `label-column-width` | string? | `150px` | Width of the column containing the row labels (if `label-column-title` specified)
 
 
 ## Custom Events
