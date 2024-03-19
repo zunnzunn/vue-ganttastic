@@ -23,6 +23,10 @@
 
 Using Vue 2? Check out [Vue-Ganttastic v1](https://github.com/zunnzunn/vue-ganttastic/tree/vue-ganttastic-v1).
 
+## Guide and Docs
+
+For further guides and references, check out the [official docs](https://zunnzunn.github.io/vue-ganttastic/getting-started.html).
+
 ## Quickstart
 
 Install using
@@ -117,9 +121,6 @@ Then, place the tarball in some other test project and install the package from 
 npm install <name_of_the_package>.tgz
 ```
 
-## Guide and Docs
-
-For further guides and references, check out the [official docs](https://zunnzunn.github.io/vue-ganttastic/getting-started.html).
 
 ## About
 
