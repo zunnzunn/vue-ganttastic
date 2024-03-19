@@ -46,14 +46,15 @@ Your bar objects can be of any type and contain any properties you want. The onl
 
 For further configuration, you can add some optional properties to the nested `ganttBarConfig` object:
 
-| Property name         | Type    | Description           |
-|-----------------------|---------|-----------------------|
-| `id` | `string` | A unique string identifier for the bar.  (**mandatory**) 
-| `label` | `string?`  | Text displayed on the bar.
-| `hasHandles` | `boolean?`  | Used to toggle handles on the left and right side of the bar that can be dragged to change the width of the bar. |
-| `immobile` | `boolean?`  | Used to toggle whether bar can be moved (dragged).
-| `bundle` | `string?`  | A string identifier for a bundle. A bundle is a collection of bars that are dragged simultaneously.
-| `style` | `CSSStyleSheet?`  | CSS-based styling for your bar (e.g `background`, `fontSize`, `borderRadius` etc.).
+| Property name | Type    | Description           |
+|---------------|---------|-----------------------|
+| `id`          | `string` | A unique string identifier for the bar.  (**mandatory**) 
+| `label`       | `string?`  | Text displayed on the bar.
+| `html`        | `string?`  | Optional HTML Code that will be rendered after the label (e.g. for tags). Please sanitize user input to avoid cross site scripting, if applicable.
+| `hasHandles`  | `boolean?`  | Used to toggle handles on the left and right side of the bar that can be dragged to change the width of the bar. |
+| `immobile`    | `boolean?`  | Used to toggle whether bar can be moved (dragged).
+| `bundle`      | `string?`  | A string identifier for a bundle. A bundle is a collection of bars that are dragged simultaneously.
+| `style`       | `CSSStyleSheet?`  | CSS-based styling for your bar (e.g `background`, `fontSize`, `borderRadius` etc.).
 
 ## Extending the width of a bar
 Simply add `hasHandles: true` to the `ganttBarConfig` to make the bar extendable by dragging the handles on its left or right side.  
@@ -121,7 +122,7 @@ const onDrop = (e: MouseEvent, datetime?: string) => {
 ```
 
 ## Time axis precision
-If the time-range (`chart-start` to `chart-end`) of your chart is very large, the displayed time units in the time axis might be too dense if the chart is not wide enough. You might want to specify the precision of the time axis accordingly. Use the `precision` prop of `g-gantt-chart` for this. Possible values are `hour`, `day` and `month`.
+If the time-range (`chart-start` to `chart-end`) of your chart is very large, the displayed time units in the time axis might be too dense if the chart is not wide enough. You might want to specify the precision of the time axis accordingly. Use the `precision` prop of `g-gantt-chart` for this. Possible values are `hour`, `day`, `week` and `month`.
 
 ## Chart themes
 Vue Ganttastic ships with several pre-made color schemes that you may specify using the `color-scheme` prop of `g-gantt-chart`. [List of available color-schemes](https://infectoone.github.io/vue-ganttastic/GGanttChart.html#color-schemes)

@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
-/dist
+/lib
+/lib_types
 
 
 # local env files
@@ -23,6 +24,8 @@ pnpm-debug.log*
 *.sw?
 
 # Docs dist directory
-docs/.vuepress/.cache
-docs/.vuepress/.temp
-docs/.vuepress/dist
+docs/.vitepress/cache
+docs/.vitepress/temp
+docs/.vitepress/dist
+
+*.tgz
