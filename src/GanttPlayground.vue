@@ -2,7 +2,8 @@
   <g-gantt-chart
     :chart-start="chartStart"
     :chart-end="chartEnd"
-    precision="month"
+    precision="day"
+    current-time
     :row-height="40"
     grid
     width="100%"
@@ -29,16 +30,20 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import type { GanttBarObject } from "./types.js"
+import type { GanttBarObject } from "./types"
+import dayjs from "dayjs"
 
-const chartStart = ref("21.03.2021 12:00")
-const chartEnd = ref("15.07.2021 12:00")
 const format = ref("DD.MM.YYYY HH:mm")
+
+const chartStart = ref(dayjs().startOf("day").format(format.value))
+const chartEnd = ref(
+  dayjs(chartStart.value, format.value).add(3, "days").hour(12).format(format.value)
+)
 
 const bars1 = ref<GanttBarObject[]>([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: dayjs().hour(13).startOf("hour").format(format.value),
+    endDate: dayjs().hour(19).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "8621987329",
       label: "I'm in a bundle",
@@ -49,8 +54,8 @@ const bars1 = ref<GanttBarObject[]>([
 
 const bars2 = ref([
   {
-    beginDate: "24.04.2021 13:00",
-    endDate: "25.05.2021 19:00",
+    beginDate: dayjs().hour(13).startOf("hour").format(format.value),
+    endDate: dayjs().hour(19).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "1592311887",
       label: "I'm in a bundle",
@@ -61,8 +66,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "01.01.2021 00:00",
-    endDate: "01.03.2021 00:00",
+    beginDate: dayjs().add(2, "day").hour(0).startOf("hour").format(format.value),
+    endDate: dayjs().add(2, "day").hour(19).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "7716981641",
       label: "Lorem ipsum dolor",
@@ -73,8 +78,8 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: "15.06.2021 00:00",
-    endDate: "10.07.2021 00:00",
+    beginDate: dayjs().add(1, "day").hour(4).startOf("hour").format(format.value),
+    endDate: dayjs().add(1, "day").hour(16).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "9716981641",
       label: "Oh hey",
@@ -92,8 +97,8 @@ const addBar = () => {
     return
   }
   const bar = {
-    beginDate: "26.02.2021 00:00",
-    endDate: "26.03.2021 02:00",
+    beginDate: dayjs().add(1, "day").hour(4).startOf("hour").format(format.value),
+    endDate: dayjs().add(2, "day").hour(4).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "test1",
       hasHandles: true,

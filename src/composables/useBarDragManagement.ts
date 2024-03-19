@@ -29,7 +29,7 @@ export default function useBarDragManagement() {
       return
     }
     getChartRows().forEach((row) => {
-      row.forEach((bar) => {
+      row.bars.forEach((bar) => {
         if (bar.ganttBarConfig.bundle === bundle) {
           const dragEndHandler = bar === mainBar ? onEndDrag : () => null
           const { initDrag } = createBarDrag(bar, onDrag, dragEndHandler, config)
@@ -92,7 +92,7 @@ export default function useBarDragManagement() {
 
   const getOverlapBarAndType = (ganttBar: GanttBarObject) => {
     let overlapLeft, overlapRight, overlapInBetween
-    const allBarsInRow = getChartRows().find((row) => row.includes(ganttBar)) || []
+    const allBarsInRow = getChartRows().find((row) => row.bars.includes(ganttBar))?.bars ?? []
     const ganttBarStart = toDayjs(ganttBar[barStart.value])
     const ganttBarEnd = toDayjs(ganttBar[barEnd.value])
     const overlapBar = allBarsInRow.find((otherBar) => {
@@ -128,7 +128,7 @@ export default function useBarDragManagement() {
       return
     }
     getChartRows().forEach((row) => {
-      row.forEach((bar) => {
+      row.bars.forEach((bar) => {
         if (bar.ganttBarConfig.bundle === pushedBar.ganttBarConfig.bundle && bar !== pushedBar) {
           addBarToMovedBars(bar)
           moveBarByMinutes(bar, minutes, direction)

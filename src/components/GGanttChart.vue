@@ -1,27 +1,46 @@
 <template>
-  <div
-    ref="ganttChart"
-    class="g-gantt-chart"
-    :style="{ width, background: colors.background, fontFamily: font }"
-  >
-    <g-gantt-timeaxis v-if="!hideTimeaxis">
-      <template #upper-timeunit="{ label, value, date }">
-        <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
-        <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
-      </template>
-      <template #timeunit="{ label, value, date }">
-        <!-- expose timeunit slot of g-gantt-timeaxis-->
-        <slot name="timeunit" :label="label" :value="value" :date="date" />
-      </template>
-    </g-gantt-timeaxis>
-
-    <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
-
-    <div class="g-gantt-rows-container">
-      <slot />
-      <!-- the g-gantt-row components go here -->
+  <div>
+    <div :class="[{ 'labels-in-column': !!labelColumnTitle }]">
+      <g-gantt-label-column
+        v-if="labelColumnTitle"
+        :style="{
+          width: labelColumnWidth
+        }"
+      >
+        <template #label-column-title>
+          <slot name="label-column-title" />
+        </template>
+        <template #label-column-row="{ label }">
+          <slot name="label-column-row" :label="label" />
+        </template>
+      </g-gantt-label-column>
+      <div
+        ref="ganttChart"
+        :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
+        :style="{ width, background: colors.background, fontFamily: font }"
+      >
+        <g-gantt-timeaxis v-if="!hideTimeaxis">
+          <template #upper-timeunit="{ label, value, date }">
+            <!-- expose upper-timeunit slot of g-gantt-timeaxis-->
+            <slot name="upper-timeunit" :label="label" :value="value" :date="date" />
+          </template>
+          <template #timeunit="{ label, value, date }">
+            <!-- expose timeunit slot of g-gantt-timeaxis-->
+            <slot name="timeunit" :label="label" :value="value" :date="date" />
+          </template>
+        </g-gantt-timeaxis>
+        <g-gantt-grid v-if="grid" :highlighted-units="highlightedUnits" />
+        <g-gantt-current-time v-if="currentTime">
+          <template #current-time-label>
+            <slot name="current-time-label" />
+          </template>
+        </g-gantt-current-time>
+        <div class="g-gantt-rows-container">
+          <slot />
+          <!-- the g-gantt-row components go here -->
+        </div>
+      </div>
     </div>
-
     <g-gantt-bar-tooltip :model-value="showTooltip || isDragging" :bar="tooltipBar">
       <template #default>
         <slot name="bar-tooltip" :bar="tooltipBar" />
@@ -41,23 +60,34 @@ import {
   type Ref,
   type ToRefs
 } from "vue"
-import GGanttTimeaxis from "./GGanttTimeaxis.vue"
-import GGanttGrid from "./GGanttGrid.vue"
-import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 
-import { colorSchemes, type ColorScheme } from "../color-schemes.js"
-import type { ColorSchemeKey } from "../color-schemes.js"
-import { CHART_ROWS_KEY, CONFIG_KEY, EMIT_BAR_EVENT_KEY } from "../provider/symbols.js"
+import GGanttGrid from "./GGanttGrid.vue"
+import GGanttLabelColumn from "./GGanttLabelColumn.vue"
+import GGanttTimeaxis from "./GGanttTimeaxis.vue"
+import GGanttBarTooltip from "./GGanttBarTooltip.vue"
+import GGanttCurrentTime from "./GGanttCurrentTime.vue"
+
 import type { GanttBarObject } from "../types"
-import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
+import type { ColorSchemeKey } from "../color-schemes.js"
+
 import { useElementSize } from "@vueuse/core"
+import { DEFAULT_DATE_FORMAT } from "../composables/useDayjsHelper"
+import { colorSchemes, type ColorScheme } from "../color-schemes.js"
+import {
+  CHART_ROWS_KEY,
+  CONFIG_KEY,
+  EMIT_BAR_EVENT_KEY,
+  type ChartRow
+} from "../provider/symbols.js"
 
 export interface GGanttChartProps {
   chartStart: string | Date
   chartEnd: string | Date
-  precision?: "hour" | "day" | "month"
+  precision?: "hour" | "day" | "date" | "week" | "month"
   barStart: string
   barEnd: string
+  currentTime?: boolean
+  currentTimeLabel?: string
   dateFormat?: string | false
   width?: string
   hideTimeaxis?: boolean
@@ -68,6 +98,8 @@ export interface GGanttChartProps {
   rowHeight?: number
   highlightedUnits?: number[]
   font?: string
+  labelColumnTitle?: string
+  labelColumnWidth?: string
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
@@ -79,6 +111,7 @@ export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
 }
 
 const props = withDefaults(defineProps<GGanttChartProps>(), {
+  currentTimeLabel: "",
   dateFormat: DEFAULT_DATE_FORMAT,
   precision: "day",
   width: "100%",
@@ -89,7 +122,9 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   noOverlap: false,
   rowHeight: 40,
   highlightedUnits: () => [],
-  font: "inherit"
+  font: "inherit",
+  labelColumnTitle: "",
+  labelColumnWidth: "150px"
 })
 
 const emit = defineEmits<{
@@ -128,24 +163,24 @@ const colors = computed(() =>
 )
 const getChartRows = () => {
   const defaultSlot = slots.default?.()
-  const allBars: GanttBarObject[][] = []
+  const allBars: ChartRow[] = []
 
   if (!defaultSlot) {
     return allBars
   }
   defaultSlot.forEach((child) => {
     if (child.props?.bars) {
-      const bars = child.props.bars as GanttBarObject[]
-      allBars.push(bars)
+      const { label, bars } = child.props
+      allBars.push({ label, bars })
       // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
     } else if (Array.isArray(child.children)) {
       child.children.forEach((grandchild) => {
         const granchildNode = grandchild as {
-          props?: { bars?: GanttBarObject[] }
+          props?: ChartRow
         }
         if (granchildNode?.props?.bars) {
-          const bars = granchildNode.props.bars as GanttBarObject[]
-          allBars.push(bars)
+          const { label, bars } = granchildNode.props
+          allBars.push({ label, bars })
         }
       })
     }
@@ -236,11 +271,23 @@ provide(EMIT_BAR_EVENT_KEY, emitBarEvent)
   overflow-x: hidden;
   -webkit-touch-callout: none;
   user-select: none;
-  border-radius: 5px;
   font-variant-numeric: tabular-nums;
+  border-radius: 5px;
+}
+
+.with-column {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .g-gantt-rows-container {
   position: relative;
+}
+
+.labels-in-column {
+  display: flex;
+  flex-direction: row;
 }
 </style>

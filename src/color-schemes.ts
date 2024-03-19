@@ -8,6 +8,7 @@ export type ColorScheme = {
   ternary: Color
   quartenary: Color
   hoverHighlight: Color
+  markerCurrentTime: Color
   text: Color
   background: Color
   toast?: Color
@@ -20,6 +21,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#F5F5F5",
     quartenary: "#ededed",
     hoverHighlight: "rgba(204, 216, 219, 0.5)",
+    markerCurrentTime: "#000",
     text: "#404040",
     background: "white"
   },
@@ -30,6 +32,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#fff6f0",
     quartenary: "#f7ece6",
     hoverHighlight: "rgba(230, 221, 202, 0.5)",
+    markerCurrentTime: "#000",
     text: "#542d05",
     background: "white"
   },
@@ -40,6 +43,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#db4f56",
     quartenary: "#ce5f64",
     hoverHighlight: "rgba(196, 141, 141, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   },
@@ -50,6 +54,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#353535",
     quartenary: "#383838",
     hoverHighlight: "rgba(159, 160, 161, 0.5)",
+    markerCurrentTime: "#fff",
     text: "white",
     background: "#525252",
     toast: "#1f1f1f"
@@ -61,6 +66,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#5e5145",
     quartenary: "#665648",
     hoverHighlight: "rgba(196, 141, 141, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   },
@@ -71,6 +77,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#ff7da6",
     quartenary: "#f2799f",
     hoverHighlight: "rgba(196, 141, 141, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   },
@@ -81,6 +88,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#72b585",
     quartenary: "#65a577",
     hoverHighlight: "rgba(160, 219, 171, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   },
@@ -91,6 +99,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#42a5f5",
     quartenary: "#409fed",
     hoverHighlight: "rgba(110, 165, 196, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   },
@@ -101,6 +110,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#d6f7ff",
     quartenary: "#d0edf4",
     hoverHighlight: "rgba(193, 202, 214, 0.5)",
+    markerCurrentTime: "#000",
     text: "#022c47",
     background: "white"
   },
@@ -111,6 +121,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#35394d",
     quartenary: "#2c3044",
     hoverHighlight: "rgba(179, 162, 127, 0.5)",
+    markerCurrentTime: "#fff",
     text: "#ffe0b3",
     background: "#38383b",
     toast: "#1f1f1f"
@@ -122,6 +133,7 @@ export const colorSchemes: Record<string, ColorScheme> = {
     ternary: "#35495E",
     quartenary: "#2a3d51",
     hoverHighlight: "rgba(160, 219, 171, 0.5)",
+    markerCurrentTime: "#000",
     text: "white",
     background: "white"
   }
