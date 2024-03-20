@@ -9,7 +9,7 @@
     @mouseleave="isHovering = false"
   >
     <div
-      v-if="!isBlank(label)"
+      v-if="!isBlank(label) && !labelColumnTitle"
       class="g-gantt-row-label"
       :style="{ background: colors.primary, color: colors.text }"
     >
