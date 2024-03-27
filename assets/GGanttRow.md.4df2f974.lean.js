@@ -1,0 +1,1 @@
+import{_ as t,o as e,c as o,S as a}from"./chunks/framework.1583d43a.js";const m=JSON.parse('{"title":"API: GGanttRow","description":"","frontmatter":{},"headers":[],"relativePath":"GGanttRow.md","filePath":"GGanttRow.md"}'),d={name:"GGanttRow.md"},r=a("",8),n=[r];function c(s,h,i,l,p,b){return e(),o("div",null,n)}const u=t(d,[["render",c]]);export{m as __pageData,u as default};
