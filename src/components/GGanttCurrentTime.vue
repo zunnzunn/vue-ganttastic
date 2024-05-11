@@ -24,13 +24,14 @@ import { ref, computed } from "vue"
 import useTimePositionMapping from "../composables/useTimePositionMapping.js"
 import dayjs from "dayjs"
 import provideConfig from "../provider/provideConfig.js"
+import { useNow } from "@vueuse/core"
 
 const { mapTimeToPosition } = useTimePositionMapping()
-const currentMoment = ref(dayjs())
+const currentMoment = useNow()
 const { colors, dateFormat, currentTimeLabel } = provideConfig()
 const xDist = computed(() => {
   const format = dateFormat.value || "YYYY-MM-DD HH:mm"
-  return mapTimeToPosition(dayjs(currentMoment.value, format).format(format))
+  return mapTimeToPosition(dayjs(currentMoment.value).format(format))
 })
 </script>
 
