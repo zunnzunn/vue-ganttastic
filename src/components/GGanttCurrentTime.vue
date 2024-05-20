@@ -40,6 +40,7 @@ const xDist = computed(() => {
   height: 100%;
   display: flex;
   z-index: 5;
+  pointer-events: none;
 }
 
 .g-grid-current-time-marker {
