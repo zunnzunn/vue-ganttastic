@@ -52,13 +52,15 @@
 <script setup lang="ts">
 import {
   computed,
+  isVNode,
   provide,
   ref,
   toRefs,
   useSlots,
   type ComputedRef,
   type Ref,
-  type ToRefs
+  type ToRefs,
+  type VNode
 } from "vue"
 
 import GGanttGrid from "./GGanttGrid.vue"
@@ -161,30 +163,24 @@ const colors = computed(() =>
     ? colorScheme.value
     : colorSchemes[colorScheme.value as ColorSchemeKey] || colorSchemes.default
 )
-const getChartRows = () => {
+function getChartRows() {
   const defaultSlot = slots.default?.()
   const allBars: ChartRow[] = []
 
-  if (!defaultSlot) {
-    return allBars
+  if (!defaultSlot) return allBars
+
+  function getBars(children: VNode[]) {
+    children.forEach((child) => {
+      if (child.props?.bars) {
+        const { label, bars } = child.props
+        allBars.push({ label, bars })
+      } else if (Array.isArray(child.children)) {
+        getBars(child.children.filter(isVNode))
+      }
+    })
   }
-  defaultSlot.forEach((child) => {
-    if (child.props?.bars) {
-      const { label, bars } = child.props
-      allBars.push({ label, bars })
-      // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
-    } else if (Array.isArray(child.children)) {
-      child.children.forEach((grandchild) => {
-        const granchildNode = grandchild as {
-          props?: ChartRow
-        }
-        if (granchildNode?.props?.bars) {
-          const { label, bars } = granchildNode.props
-          allBars.push({ label, bars })
-        }
-      })
-    }
-  })
+
+  getBars(defaultSlot)
   return allBars
 }
 
