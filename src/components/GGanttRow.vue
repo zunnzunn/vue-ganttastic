@@ -28,13 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, toRefs, computed, type StyleValue, provide } from "vue"
+import { computed, provide, ref, toRefs, type Ref, type StyleValue } from "vue";
 
-import useTimePositionMapping from "../composables/useTimePositionMapping.js"
-import provideConfig from "../provider/provideConfig.js"
-import type { GanttBarObject } from "../types"
-import GGanttBar from "./GGanttBar.vue"
-import { BAR_CONTAINER_KEY } from "../provider/symbols"
+import useTimePositionMapping from "../composables/useTimePositionMapping.js";
+import provideConfig from "../provider/provideConfig.js";
+import { BAR_CONTAINER_KEY } from "../provider/symbols";
+import type { GanttBarObject } from "../types";
+import GGanttBar from "./GGanttBar.vue";
 
 const props = defineProps<{
   label: string
@@ -46,13 +46,43 @@ const emit = defineEmits<{
   (e: "drop", value: { e: MouseEvent; datetime: string | Date }): void
 }>()
 
-const { rowHeight, colors, labelColumnTitle } = provideConfig()
+const { rowHeight, colors, labelColumnTitle, multipleRows, barStart, barEnd } = provideConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
 
+const maxOverLaps = computed(() => {
+  let maxOverlaps = 0
+
+  // Count the number of overlaps for each bar
+  for (const bar of props.bars) {
+    const start = bar[barStart.value]
+    const end = bar[barEnd.value]
+
+    let overlaps = 0
+    for (const otherBar of props.bars) {
+      if (bar === otherBar) continue
+
+      const otherStart = otherBar[barStart.value]
+      const otherEnd = otherBar[barEnd.value]
+
+      if (start > otherEnd || end < otherStart) continue
+
+      if (start <= otherEnd && end >= otherStart) {
+        overlaps++
+      }
+
+      maxOverlaps = Math.max(maxOverlaps, overlaps)
+    }
+  }
+
+  return maxOverlaps + 1
+})
+console.log(maxOverLaps.value)
+
 const rowStyle = computed(() => {
   return {
-    height: `${rowHeight.value}px`,
+    height: multipleRows ? `${maxOverLaps.value * rowHeight.value}px` : `${rowHeight.value}px`,
+    minHeight: multipleRows ? `${rowHeight.value}px` : undefined,
     background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
   } as StyleValue
 })
@@ -76,7 +106,6 @@ const onDrop = (e: MouseEvent) => {
 const isBlank = (str: string) => {
   return (!str || /^\s*$/.test(str))
 }
-
 </script>
 
 <style>

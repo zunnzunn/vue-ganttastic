@@ -1,5 +1,6 @@
 <template>
   <g-gantt-chart
+    multiple-rows
     :chart-start="chartStart"
     :chart-end="chartEnd"
     precision="week"
@@ -35,9 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import type { GanttBarObject } from "./types"
-import dayjs from "dayjs"
+import dayjs from "dayjs";
+import { ref } from "vue";
+import type { GanttBarObject } from "./types";
 
 const format = ref("DD.MM.YYYY HH:mm")
 const chartStart = ref(dayjs().startOf("day").format(format.value))
@@ -83,7 +84,7 @@ const bars2 = ref([
     }
   },
   {
-    beginDate: dayjs().add(1, "day").hour(4).startOf("hour").format(format.value),
+    beginDate: dayjs().hour(4).startOf("hour").format(format.value),
     endDate: dayjs().add(1, "day").hour(16).startOf("hour").format(format.value),
     ganttBarConfig: {
       id: "9716981641",

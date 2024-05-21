@@ -78,7 +78,7 @@ import {
   CONFIG_KEY,
   EMIT_BAR_EVENT_KEY,
   type ChartRow
-} from "../provider/symbols.js"
+} from "../provider/symbols.js";
 
 export interface GGanttChartProps {
   chartStart: string | Date
@@ -100,6 +100,7 @@ export interface GGanttChartProps {
   font?: string
   labelColumnTitle?: string
   labelColumnWidth?: string
+  multipleRows?: boolean
 }
 
 export type GGanttChartConfig = ToRefs<Required<GGanttChartProps>> & {
@@ -124,7 +125,8 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   highlightedUnits: () => [],
   font: "inherit",
   labelColumnTitle: "",
-  labelColumnWidth: "150px"
+  labelColumnWidth: "150px",
+  multipleRows: false
 })
 
 const emit = defineEmits<{
